@@ -1,0 +1,44 @@
+# TODO: Create Kubernetes Deployment for your Temporal worker application
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: temporal-worker
+  # TODO: Add appropriate labels
+  labels:
+    app: temporal-worker
+spec:
+  # TODO: Set replica count
+  replicas: 1
+  selector:
+    matchLabels:
+      app: temporal-worker
+  template:
+    metadata:
+      labels:
+        app: temporal-worker
+    spec:
+      containers:
+      - name: temporal-worker
+        # TODO: Set your Docker image
+        image: temporal-worker:latest
+        # TODO: Add environment variables
+        env:
+        - name: TEMPORAL_FRONTEND_ADDRESS
+          value: "temporal-service:7233"
+        # TODO: Add resource limits and requests
+        # resources:
+        #   limits:
+        #     memory: "512Mi"
+        #     cpu: "500m"
+        #   requests:
+        #     memory: "256Mi"
+        #     cpu: "250m"
+        # TODO: Add health checks
+        # livenessProbe:
+        #   httpGet:
+        #     path: /health
+        #     port: 8080
+        # readinessProbe:
+        #   httpGet:
+        #     path: /health
+        #     port: 8080 
