@@ -1,5 +1,5 @@
 Generate Lessons 5 to 10 of a beginner-friendly Temporal Workflow bootcamp using Kotlin and Spring Boot. Place everything under the `/class/` folder.
-Follow this structure for each lesson by reference and use the guideline from@prompt.md.
+Follow this structure for each lesson by reference and use the guideline from@main_prompt.md.
 
 🧱 For Each Lesson (lesson_5 to lesson_10):
 Create 3 folders under `/class/`:

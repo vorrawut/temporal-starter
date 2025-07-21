@@ -1,5 +1,5 @@
 Generate Lessons 11 to 16 of a beginner-friendly Temporal Workflow bootcamp using Kotlin and Spring Boot. 
-Follow this structure for each lesson by reference and use the guideline from@prompt.md.
+Follow this structure for each lesson by reference and use the guideline from@main_prompt.md.
 
 Place all lesson content under the `/class/` folder.
 
