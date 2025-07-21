@@ -57,7 +57,7 @@ tasks.withType<Test> {
 sourceSets {
 	main {
 		kotlin {
-			setSrcDirs(listOf("src/main/kotlin", "src/workshop", "src/answer"))
+			setSrcDirs(listOf("src/main/kotlin"))
 		}
 		resources {
 			setSrcDirs(listOf("src/main/resources"))
