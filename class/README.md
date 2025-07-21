@@ -1,160 +1,208 @@
-# 📚 Temporal Workflow Bootcamp: Lessons 5-10
+# 📚 Temporal Workflow Bootcamp: Lessons 1–17
 
-Welcome to the advanced section of the Temporal Workflow bootcamp! This section builds on the foundational concepts from lessons 1-4 and introduces intermediate to advanced Temporal patterns.
+Welcome to the Temporal Workflow Bootcamp! This hands-on curriculum takes you from zero to production-ready Temporal development using **Kotlin** and **Spring Boot**. We’ve broken the lessons into progressive tracks to help you grow confidently through the Temporal ecosystem.
 
-## 🎯 Learning Progression
+---
 
-### **Lesson 5: Adding a Simple Activity**
-**Focus**: Basic workflow-activity pattern
-- Simple calculator workflow calling a math activity
-- Activity stubs and timeout configuration
-- Basic workflow-activity communication
+## 🚦 Learning Tracks
 
-### **Lesson 6: Workflow & Activity Separation** 
-**Focus**: Clean architecture and separation of concerns
-- Multi-step user onboarding workflow
-- Three distinct activities (validation, account creation, notification)
-- Single Responsibility Principle in practice
-- Error handling: critical vs non-critical failures
+### 🧱 1–6: Foundation & Fundamentals
 
-### **Lesson 7: Workflow Input/Output**
-**Focus**: Complex data modeling and validation
-- Rich input objects with nested data structures
-- Comprehensive output objects with detailed results
-- Input validation patterns
-- Data transformation between workflow and activities
+Core principles of Temporal development: workflows, activities, architecture, and basic patterns.
 
-### **Lesson 8: Activity Retry + Timeout**
-**Focus**: Resilience and fault tolerance
-- Custom retry policies for different operation types
-- Exponential backoff and timeout strategies
-- Handling different failure types (retriable vs non-retriable)
-- Activity heartbeats for long-running operations
+### 🔁 7–12: Intermediate Workflows
 
-### **Lesson 9: Error Handling in Workflows**
-**Focus**: Comprehensive error management
-- Custom business exceptions
-- Try-catch patterns in workflows
-- Compensation logic (saga pattern)
-- Circuit breaker patterns for external services
+Diving deeper into Temporal’s features, including retries, error handling, and signals.
 
-### **Lesson 10: Signals**
-**Focus**: Interactive and reactive workflows
-- Signal and query methods
-- Long-running workflows that respond to external events
-- Approval workflow patterns
-- Multiple signal handlers
+### 🔬 13–15: Advanced Use Cases
+
+Building child workflows, timers, and long-running patterns like cron workflows.
+
+### 🧪 16: Testing Workflows
+
+How to test workflows effectively using Temporal's testing utilities.
+
+### 🚢 17: Deployment
+
+Packaging and deploying your Temporal services using Docker, Docker Compose, and Kubernetes.
+
+---
 
 ## 📁 Folder Structure
 
-Each lesson follows this consistent structure:
+Each lesson uses a consistent layout to separate learning materials, starter code, and answers:
 
 ```
 class/
 ├── workshop/lesson_x/          # Starter code with TODOs
-├── answer/lesson_x/            # Complete working solution
-└── modules/lesson_x/
-    ├── workshop_x.md          # Step-by-step build instructions
-    └── concept.md             # Theory and best practices
+└── modules
+        /lesson_x/
+            ├── workshop_x.md    # Step-by-step build instructions
+            └── concept.md       # Theory and best practices
+        /answer/lesson_x/        # Complete working solution
 ```
 
-## 🚀 How to Use This Bootcamp
+---
 
-### For Students:
-1. **Start with the workshop code** in `/workshop/lesson_x/`
-2. **Follow the instructions** in `/modules/lesson_x/workshop_x.md`
-3. **Build incrementally** - don't look at the answer too quickly!
-4. **Compare your solution** with `/answer/lesson_x/` when complete
-5. **Read the concepts** in `/modules/lesson_x/concept.md` for deeper understanding
+## 🧱 Lessons 1–6: Foundation & Fundamentals
 
-### For Instructors:
-- Each lesson is self-contained and can be taught separately
-- Workshop guides provide step-by-step instructions
-- Concept guides explain the theory and best practices
-- Answer code demonstrates production-ready patterns
+### Lesson 1: Hello Temporal
 
-## 🛠️ Prerequisites
+* Set up Kotlin + Spring Boot with Temporal SDK
+* Start Temporal server locally
+* Run your first Hello Workflow
 
-Before starting these lessons, ensure you have:
+### Lesson 2: Your First Workflow
 
-- **Completed lessons 1-4** (basic Temporal setup and HelloWorkflow)
-- **Temporal server running locally** (`temporal server start-dev`)
-- **Kotlin/Spring Boot development environment** set up
-- **Basic understanding** of workflows and activities
+* Define workflow + activity interfaces and implementations
+* Register with worker
+* Execute and observe on Temporal Web UI
 
-## 🔧 Running the Code
+### Lesson 3: Workflow Options
 
-### General Pattern:
-```kotlin
-// 1. Register components with worker
-worker.registerWorkflowImplementationTypes(YourWorkflowImpl::class.java)
-worker.registerActivitiesImplementations(YourActivityImpl())
+* Configure `WorkflowOptions` (timeouts, IDs, task queues)
+* Introduce custom workflow IDs and routing
 
-// 2. Create workflow stub
-val workflow = workflowClient.newWorkflowStub(
-    YourWorkflow::class.java,
-    WorkflowOptions.newBuilder()
-        .setTaskQueue("your-queue")
-        .setWorkflowId("your-workflow-id")
-        .build()
-)
+### Lesson 4: Custom Task Queues
 
-// 3. Execute workflow
-val result = workflow.yourMethod(inputData)
-```
+* Create multiple workers with distinct task queues
+* Show how queues route traffic to activities
 
-### Verification:
-- Check console output for logging
-- Visit Temporal Web UI at http://localhost:8233
-- Verify workflow executions and activity details
+### Lesson 5: Adding a Simple Activity
 
-## 📊 Progressive Complexity
+* Calculator example using activity stubs
+* Add timeout handling
+* Simple workflow-activity communication
 
-| Lesson | Complexity | Key Concepts | Best For |
-|--------|------------|--------------|----------|
-| 5 | ⭐ | Basic patterns | Understanding fundamentals |
-| 6 | ⭐⭐ | Clean architecture | Production readiness |
-| 7 | ⭐⭐ | Data modeling | Complex business logic |
-| 8 | ⭐⭐⭐ | Resilience | Fault-tolerant systems |
-| 9 | ⭐⭐⭐ | Error handling | Enterprise applications |
-| 10 | ⭐⭐⭐⭐ | Interactive workflows | Advanced use cases |
+### Lesson 6: Workflow & Activity Separation
+
+* User onboarding use case
+* Clean architecture: multiple activities
+* Error handling (critical vs non-critical failures)
+
+---
+
+## 🔁 Lessons 7–12: Intermediate Workflows
+
+### Lesson 7: Workflow Input/Output
+
+* Use complex input/output models
+* Input validation and transformation
+* Return structured result objects
+
+### Lesson 8: Activity Retry + Timeout
+
+* Add custom retry policies and backoff
+* Long-running activities with heartbeat
+* Handle non-retriable failures
+
+### Lesson 9: Error Handling in Workflows
+
+* Try/catch inside workflows
+* Compensation logic with Saga pattern
+* Circuit breaker for unstable dependencies
+
+### Lesson 10: Signals
+
+* Implement signal handlers
+* Long-running workflows that respond to external input
+* Approval workflows, status updates via signal
+
+### Lesson 11: Queries
+
+* Add query methods to inspect workflow state
+* Combine signals + queries for interactive flows
+* Use cases: real-time dashboards, manual overrides
+
+### Lesson 12: Workflow Versioning
+
+* Demonstrate `WorkflowImplementationOptions`
+* Add `Workflow.getVersion()` usage
+* Safe refactoring for long-lived workflows
+
+---
+
+## 🔬 Lessons 13–15: Advanced Use Cases
+
+### Lesson 13: Child Workflows
+
+* Create and invoke child workflows
+* Model workflows that represent real-life sub-processes
+* Isolate errors and propagate results
+
+### Lesson 14: Workflow Timers
+
+* Schedule with `Workflow.sleep()`
+* Build reminder or timeout workflows
+* Control time inside unit tests
+
+### Lesson 15: Cron Workflows
+
+* Define scheduled (cron) workflows
+* Use retry + expiration with cron
+* Explore use cases: reports, recurring notifications
+
+---
+
+## 🧪 Lesson 16: Workflow Testing
+
+* Set up Temporal's test framework in Kotlin
+* Write unit tests for activities
+* Simulate workflow logic in tests
+* Control virtual time and mock dependencies
+
+---
+
+## 🚢 Lesson 17: Deploying to Production
+
+* Create a Dockerfile for your Spring Boot worker app
+* Build a `docker-compose.yaml` that spins up:
+
+    * Temporal server (auto-setup)
+    * PostgreSQL DB
+    * Your worker service
+* Configure your app to point to containerized Temporal
+* Deploy to Kubernetes using Helm or YAML
+* Explore Helm chart structure and how to package + release
+* Best practices for secrets, networking, observability
+
+---
+
+## 📊 Progressive Complexity Table
+
+| Lesson Range | Track        | Complexity | Focus Area                           |
+| ------------ | ------------ | ---------- | ------------------------------------ |
+| 1–6          | Foundation   | ⭐–⭐⭐       | Basics, first workflows, setup       |
+| 7–12         | Intermediate | ⭐⭐–⭐⭐⭐     | Retry, signals, input/output, errors |
+| 13–15        | Advanced     | ⭐⭐⭐⭐       | Child, timers, cron                  |
+| 16           | Testing      | ⭐⭐         | Testing and mocks                    |
+| 17           | Deployment   | ⭐⭐⭐⭐       | Docker, Kubernetes, Helm             |
+
+---
 
 ## 🎓 Learning Outcomes
 
-After completing lessons 5-10, you'll be able to:
+After this bootcamp, you will:
 
-✅ **Design clean, maintainable workflow architectures**
-✅ **Handle complex input/output data models** 
-✅ **Implement robust error handling and retry strategies**
-✅ **Build resilient, fault-tolerant distributed systems**
-✅ **Create interactive workflows with signals and queries**
-✅ **Apply production-ready patterns and best practices**
-
-## 🔄 Next Steps
-
-After mastering lessons 5-10, you'll be ready for advanced topics:
-
-- **Child workflows and workflow chaining**
-- **Workflow versioning and migration**
-- **Timers and cron workflows** 
-- **Testing strategies and patterns**
-- **Production deployment and scaling**
-- **Observability and monitoring**
-
-## 🤝 Getting Help
-
-If you encounter issues:
-
-1. **Check the concept.md** files for detailed explanations
-2. **Review the complete answers** in `/answer/` folders
-3. **Verify Temporal server** is running (`temporal server start-dev`)
-4. **Check the Temporal Web UI** for workflow execution details
-5. **Review console logs** for error messages
+✅ Understand core Temporal concepts and architecture
+✅ Build production-ready workflows and activities
+✅ Handle errors, retries, and stateful logic reliably
+✅ Use signals, queries, and timers for interactivity
+✅ Test workflows using mocks and time travel
+✅ Deploy your workflows with Docker and Kubernetes
 
 ---
 
-**Happy Learning!** 🚀 These lessons will transform you from a Temporal beginner into a confident workflow architect ready to build production-grade distributed systems.
+## 💬 Getting Help
+
+If you get stuck:
+
+* Read `concept.md` inside the lesson folder
+* Review the `answer/` code
+* Check Temporal Web UI: [http://localhost:8233](http://localhost:8233)
+* Ensure Docker or Temporal CLI is running
+* Ask in the Temporal Slack community
 
 ---
 
-*For questions or contributions, please refer to the main project documentation.* 
+**Let’s build some powerful, fault-tolerant, distributed applications. Happy hacking! 🚀**
