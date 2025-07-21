@@ -4,7 +4,6 @@ This folder contains the starter code for creating your first Temporal workflow 
 
 ## What's Provided
 
-- `TemporalBootcampApplication.kt` - Spring Boot main class
 - `workflow/HelloWorkflow.kt` - Empty workflow interface with TODO comments
 - `workflow/HelloWorkflowImpl.kt` - Empty workflow implementation with TODO comments  
 - `activity/GreetingActivity.kt` - Empty activity interface with TODO comments

@@ -1,7 +1,8 @@
-Generate the first 4 lessons of a beginner-friendly Temporal Workflow bootcamp using Kotlin and Spring Boot. Follow this structure for each lesson by reference and use the guideline from@prompt.md.
+Generate the first 4 lessons of a beginner-friendly Temporal Workflow bootcamp using Kotlin and Spring Boot. 
+Follow this structure for each lesson by reference and use the guideline from@prompt.md.
 
 🧱 For Each Lesson (lesson_1 to lesson_4):
-Create 3 folders under `/src/`:
+Create 3 folders under `/class/`:
 - `/workshop/lesson_x/` → Starter Kotlin + Spring Boot code scaffold
 - `/answer/lesson_x/` → Full working solution
 - `/modules/lesson_x/` → Contains 2 Markdown files:

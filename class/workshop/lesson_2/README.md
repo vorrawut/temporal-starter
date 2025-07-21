@@ -4,7 +4,6 @@ This folder contains the minimal Spring Boot application scaffold for Lesson 2.
 
 ## What's Provided
 
-- `TemporalBootcampApplication.kt` - Basic Spring Boot main class
 - `config/TemporalConfig.kt` - Empty configuration class with hints
 
 ## What You Need To Do
