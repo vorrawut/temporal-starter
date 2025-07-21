@@ -30,8 +30,7 @@ dependencies {
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8")
 	
 	// Temporal SDK
-	implementation("io.temporal:temporal-sdk:1.22.3")
-	implementation("io.temporal:temporal-kotlin:1.22.3")
+	implementation("io.temporal:temporal-sdk:1.23.1")
 	
 	// Logging
 	implementation("io.github.microutils:kotlin-logging:3.0.5")
@@ -39,7 +38,7 @@ dependencies {
 	// Testing
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
-	testImplementation("io.temporal:temporal-testing:1.22.3")
+	testImplementation("io.temporal:temporal-testing:1.23.1")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 

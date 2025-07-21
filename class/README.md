@@ -34,12 +34,12 @@ Each lesson uses a consistent layout to separate learning materials, starter cod
 
 ```
 class/
-├── workshop/lesson_x/          # Starter code with TODOs
+├── workshop/lesson_x/         # Starter code (scaffold with TODOs)
 └── modules
         /lesson_x/
-            ├── workshop_x.md    # Step-by-step build instructions
-            └── concept.md       # Theory and best practices
-        /answer/lesson_x/        # Complete working solution
+            ├── workshop_x.md      # Step-by-step instructions
+            └── concept.md         # Theory, patterns, best practices
+        /answer/lesson_x/          # Complete solution code
 ```
 
 ---
@@ -158,9 +158,9 @@ class/
 * Create a Dockerfile for your Spring Boot worker app
 * Build a `docker-compose.yaml` that spins up:
 
-    * Temporal server (auto-setup)
-    * PostgreSQL DB
-    * Your worker service
+  * Temporal server (auto-setup)
+  * PostgreSQL DB
+  * Your worker service
 * Configure your app to point to containerized Temporal
 * Deploy to Kubernetes using Helm or YAML
 * Explore Helm chart structure and how to package + release

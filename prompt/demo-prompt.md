@@ -205,9 +205,9 @@ After running this demo, you'll understand:
 
 ## 📖 Related Documentation
 
-- [Demo Guidelines](demo/demo-guideline.md) - Complete usage instructions
-- [Architecture Diagrams](demo/demo-diagram.md) - Visual system overview
-- [Expected Results](demo/demo-result.md) - Verification guide
+- [Demo Guidelines](demo-guideline.md) - Complete usage instructions
+- [Architecture Diagrams](demo-diagram.md) - Visual system overview
+- [Expected Results](demo-result.md) - Verification guide
 
 ## 🤝 Contributing
 
