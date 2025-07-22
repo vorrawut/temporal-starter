@@ -16,17 +16,17 @@ This guide provides a complete testing strategy for the Temporal Loan Applicatio
                   /    🔍     \
                  /  Manual     \
                 /   Testing     \
-               /________________\
-              /                  \
+               /_________________\
+              /                   \
              /  Integration Tests  \
-            /     🔗 Temporal      \
-           /    Workflow Tests      \
-          /_______________________\
-         /                         \
-        /       Unit Tests          \
-       /   🧪 Activities &         \
-      /     Business Logic          \
-     /__________________________\
+            /     🔗 Temporal       \
+           /    Workflow Tests       \
+          /___________________________\
+         /                             \
+        /       Unit Tests              \
+       /   🧪 Activities &               \
+      /     Business Logic                \
+     /_____________________________________\
 ```
 
 ### **Coverage Areas**
