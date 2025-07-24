@@ -119,6 +119,7 @@ class LoanApplicationControllerTest {
     fun `should approve loan successfully`() {
         // Given: Approval request
         val approvalRequest = ApprovalRequest(
+            genId = "test-gen-id-123",
             approvedBy = "manager-123",
             notes = "Application meets all criteria"
         )
@@ -139,6 +140,7 @@ class LoanApplicationControllerTest {
     fun `should reject loan successfully`() {
         // Given: Rejection request
         val rejectionRequest = RejectionRequest(
+            genId = "test-gen-id-456",
             rejectedBy = "manager-123",
             reason = "Insufficient income documentation",
             notes = "Need more documents"

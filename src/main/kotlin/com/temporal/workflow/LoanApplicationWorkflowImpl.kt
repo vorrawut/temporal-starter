@@ -5,6 +5,7 @@ import com.temporal.model.*
 import io.temporal.activity.ActivityOptions
 import io.temporal.common.RetryOptions
 import io.temporal.failure.ApplicationFailure
+import io.temporal.workflow.ChildWorkflowOptions
 import io.temporal.workflow.Workflow
 import java.time.Duration
 import java.time.LocalDateTime
@@ -73,7 +74,10 @@ class LoanApplicationWorkflowImpl : LoanApplicationWorkflow {
     )
     
     private val followUpWorkflow = Workflow.newChildWorkflowStub(
-        FollowUpWorkflow::class.java
+        FollowUpWorkflow::class.java,
+        ChildWorkflowOptions.newBuilder()
+            .setTaskQueue("follow-up-queue")
+            .build()
     )
     
     // Workflow state

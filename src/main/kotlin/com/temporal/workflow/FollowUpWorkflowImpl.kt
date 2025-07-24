@@ -83,7 +83,7 @@ class FollowUpWorkflowImpl : FollowUpWorkflow {
             )
             
             // Continue with annual check-ins using continueAsNew pattern
-            continueAsNewAnnualFollowUp(applicationId, userId)
+//            continueAsNewAnnualFollowUp(applicationId, userId)
             
         } catch (e: Exception) {
             logger.error("Follow-up workflow failed for $applicationId", e)
