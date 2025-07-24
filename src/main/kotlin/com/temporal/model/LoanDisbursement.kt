@@ -1,17 +1,19 @@
 package com.temporal.model
 
+import com.fasterxml.jackson.annotation.JsonCreator
+import com.fasterxml.jackson.annotation.JsonProperty
 import java.math.BigDecimal
 import java.time.LocalDateTime
 
-data class LoanDisbursement(
-    val applicationId: String,
-    val transactionId: String,
-    val amount: BigDecimal,
-    val bankAccount: String,
-    val routingNumber: String,
-    val status: DisbursementStatus,
-    val disbursedAt: LocalDateTime = LocalDateTime.now(),
-    val failureReason: String? = null
+data class LoanDisbursement @JsonCreator constructor(
+    @JsonProperty("applicationId") val applicationId: String,
+    @JsonProperty("transactionId") val transactionId: String,
+    @JsonProperty("amount") val amount: BigDecimal,
+    @JsonProperty("bankAccount") val bankAccount: String,
+    @JsonProperty("routingNumber") val routingNumber: String,
+    @JsonProperty("status") val status: DisbursementStatus,
+    @JsonProperty("disbursedAt") val disbursedAt: LocalDateTime = LocalDateTime.now(),
+    @JsonProperty("failureReason") val failureReason: String? = null
 )
 
 enum class DisbursementStatus {

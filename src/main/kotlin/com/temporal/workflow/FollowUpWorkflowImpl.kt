@@ -37,8 +37,8 @@ class FollowUpWorkflowImpl : FollowUpWorkflow {
     
     private fun scheduleFollowUps(applicationId: String, userId: String) {
         try {
-            // Follow-up #1: 30 days after disbursement - Welcome check-in
-            Workflow.sleep(Duration.ofDays(30))
+            // Follow-up #1: 1 second after disbursement - Welcome check-in
+            Workflow.sleep(Duration.ofSeconds(1))
             logger.info("Sending 30-day follow-up for $applicationId")
             
             notificationActivity.sendFollowUpReminder(
@@ -46,8 +46,8 @@ class FollowUpWorkflowImpl : FollowUpWorkflow {
                 "Welcome follow-up: How are you enjoying your loan? We're here to help with any questions."
             )
             
-            // Follow-up #2: 90 days after disbursement - Payment reminder
-            Workflow.sleep(Duration.ofDays(60)) // Additional 60 days (90 total)
+            // Follow-up #2: 5 seconds after disbursement - Payment reminder
+            Workflow.sleep(Duration.ofSeconds(5)) // Additional 60 days (90 total)
             logger.info("Sending 90-day follow-up for $applicationId")
             
             notificationActivity.sendFollowUpReminder(
@@ -55,8 +55,8 @@ class FollowUpWorkflowImpl : FollowUpWorkflow {
                 "Payment reminder: Your next payment is due soon. Set up automatic payments to never miss a due date."
             )
             
-            // Follow-up #3: 180 days after disbursement - Account review
-            Workflow.sleep(Duration.ofDays(90)) // Additional 90 days (180 total)
+            // Follow-up #3: 5 seconds after disbursement - Account review
+            Workflow.sleep(Duration.ofSeconds(5)) // Additional 90 days (180 total)
             logger.info("Sending 180-day follow-up for $applicationId")
             
             notificationActivity.sendFollowUpReminder(
@@ -64,8 +64,8 @@ class FollowUpWorkflowImpl : FollowUpWorkflow {
                 "Account review: You're halfway through your loan term! Check if you qualify for better rates or additional services."
             )
             
-            // Follow-up #4: 270 days after disbursement - Satisfaction survey
-            Workflow.sleep(Duration.ofDays(90)) // Additional 90 days (270 total)
+            // Follow-up #4: 5 seconds after disbursement - Satisfaction survey
+            Workflow.sleep(Duration.ofSeconds(5)) // Additional 90 days (270 total)
             logger.info("Sending 270-day follow-up for $applicationId")
             
             notificationActivity.sendFollowUpReminder(
@@ -73,8 +73,8 @@ class FollowUpWorkflowImpl : FollowUpWorkflow {
                 "Satisfaction survey: Help us improve our services by sharing your experience with our loan process."
             )
             
-            // Follow-up #5: 365 days after disbursement - Annual review
-            Workflow.sleep(Duration.ofDays(95)) // Additional 95 days (365 total)
+            // Follow-up #5: 5 seconds after disbursement - Annual review
+            Workflow.sleep(Duration.ofSeconds(5)) // Additional 95 days (365 total)
             logger.info("Sending annual follow-up for $applicationId")
             
             notificationActivity.sendFollowUpReminder(

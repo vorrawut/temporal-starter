@@ -1,15 +1,17 @@
 package com.temporal.model
 
+import com.fasterxml.jackson.annotation.JsonCreator
+import com.fasterxml.jackson.annotation.JsonProperty
 import java.math.BigDecimal
 import java.time.LocalDateTime
 
-data class RiskAssessment(
-    val applicationId: String,
-    val creditScore: Int,
-    val riskLevel: RiskLevel,
-    val debtToIncomeRatio: BigDecimal,
-    val riskFactors: List<String>,
-    val assessedAt: LocalDateTime = LocalDateTime.now()
+data class RiskAssessment @JsonCreator constructor(
+    @JsonProperty("applicationId") val applicationId: String,
+    @JsonProperty("creditScore") val creditScore: Int,
+    @JsonProperty("riskLevel") val riskLevel: RiskLevel,
+    @JsonProperty("debtToIncomeRatio") val debtToIncomeRatio: BigDecimal,
+    @JsonProperty("riskFactors") val riskFactors: List<String>,
+    @JsonProperty("assessedAt") val assessedAt: LocalDateTime = LocalDateTime.now()
 )
 
 enum class RiskLevel {
@@ -19,11 +21,11 @@ enum class RiskLevel {
     VERY_HIGH // Credit score below 500
 }
 
-data class CreditBureauResponse(
-    val creditScore: Int,
-    val creditHistory: String,
-    val outstandingDebts: BigDecimal,
-    val bankruptcyHistory: Boolean,
-    val latePayments: Int,
-    val creditUtilization: BigDecimal
+data class CreditBureauResponse @JsonCreator constructor(
+    @JsonProperty("creditScore") val creditScore: Int,
+    @JsonProperty("creditHistory") val creditHistory: String,
+    @JsonProperty("outstandingDebts") val outstandingDebts: BigDecimal,
+    @JsonProperty("bankruptcyHistory") val bankruptcyHistory: Boolean,
+    @JsonProperty("latePayments") val latePayments: Int,
+    @JsonProperty("creditUtilization") val creditUtilization: BigDecimal
 ) 

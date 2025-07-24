@@ -38,10 +38,11 @@ class TemporalConfig(
     @Value("\${temporal.namespace:default}")
     private lateinit var namespace: String
     
-    private var temporalWorkerFactory: WorkerFactory? = null
+    private var workerFactory: WorkerFactory? = null
     
     @Bean
     fun workflowServiceStubs(): WorkflowServiceStubs {
+        logger.info("Initializing Temporal WorkflowServiceStubs for $temporalHost:$temporalPort")
         val options = WorkflowServiceStubsOptions.newBuilder()
             .setTarget("$temporalHost:$temporalPort")
             .build()
@@ -51,6 +52,7 @@ class TemporalConfig(
     
     @Bean
     fun workflowClient(workflowServiceStubs: WorkflowServiceStubs): WorkflowClient {
+        logger.info("Initializing Temporal WorkflowClient for namespace: $namespace")
         val options = WorkflowClientOptions.newBuilder()
             .setNamespace(namespace)
             .build()
@@ -59,64 +61,72 @@ class TemporalConfig(
     }
     
     @Bean
-    fun workerFactory(workflowClient: WorkflowClient): WorkerFactory {
-        temporalWorkerFactory = WorkerFactory.newInstance(workflowClient)
-        return temporalWorkerFactory!!
+    fun temporalWorkerFactory(workflowClient: WorkflowClient): WorkerFactory {
+        logger.info("Creating Temporal WorkerFactory")
+        val factory = WorkerFactory.newInstance(workflowClient)
+        this.workerFactory = factory
+        
+        // Start workers immediately after factory creation
+        startWorkers(factory)
+        
+        return factory
     }
     
-    @PostConstruct
-    fun startWorkers() {
-        logger.info("Starting Temporal workers...")
+    private fun startWorkers(factory: WorkerFactory) {
+        logger.info("🚀 Starting Temporal workers initialization...")
         
-        try {
-            val factory = temporalWorkerFactory
-            if (factory == null) {
-                logger.warn("WorkerFactory not initialized, skipping worker startup")
-                return
-            }
-            
-            // Create main loan processing worker
-            val loanWorker = factory.newWorker("loan-processing-queue")
-            
-            // Register workflow implementations
-            loanWorker.registerWorkflowImplementationTypes(
-                LoanApplicationWorkflowImpl::class.java
-            )
-            
-            // Register activity implementations
-            loanWorker.registerActivitiesImplementations(
-                documentValidationActivity,
-                riskScoringActivity,
-                loanDisbursementActivity,
-                notificationActivity
-            )
-            
-            // Create follow-up worker for child workflows
-            val followUpWorker = factory.newWorker("follow-up-queue")
-            
-            // Register follow-up workflow
-            followUpWorker.registerWorkflowImplementationTypes(
-                FollowUpWorkflowImpl::class.java
-            )
-            
-            // Register notification activity for follow-up workflow
-            followUpWorker.registerActivitiesImplementations(
-                notificationActivity
-            )
-            
-            // Start all workers
-            factory.start()
-            
-            logger.info("Temporal workers started successfully")
-            logger.info("- Loan processing queue: loan-processing-queue")
-            logger.info("- Follow-up queue: follow-up-queue")
-            logger.info("- Namespace: $namespace")
-            logger.info("- Temporal server: $temporalHost:$temporalPort")
-            
-        } catch (e: Exception) {
-            logger.error("Failed to start Temporal workers", e)
-            // Don't throw exception in test environments
-        }
+        logger.info("✅ WorkerFactory initialized, creating workers...")
+        logger.info("🔧 Creating loan processing worker on queue: loan-processing-queue")
+        
+        // Create main loan processing worker
+        val loanWorker = factory.newWorker("loan-processing-queue")
+        
+        // Register workflow implementations
+        loanWorker.registerWorkflowImplementationTypes(
+            LoanApplicationWorkflowImpl::class.java
+        )
+        
+        // Register activity implementations
+        loanWorker.registerActivitiesImplementations(
+            documentValidationActivity,
+            riskScoringActivity,
+            loanDisbursementActivity,
+            notificationActivity
+        )
+        
+        logger.info("✅ Registered workflow: LoanApplicationWorkflowImpl")
+        logger.info("✅ Registered activities: DocumentValidation, RiskScoring, LoanDisbursement, Notification")
+        
+        // Create follow-up worker for child workflows
+        val followUpWorker = factory.newWorker("follow-up-queue")
+        
+        // Register follow-up workflow
+        followUpWorker.registerWorkflowImplementationTypes(
+            FollowUpWorkflowImpl::class.java
+        )
+        
+        // Register notification activity for follow-up workflow
+        followUpWorker.registerActivitiesImplementations(
+            notificationActivity
+        )
+        
+        logger.info("✅ Registered follow-up workflow: FollowUpWorkflowImpl")
+        
+        // Start all workers
+        logger.info("🔧 Starting WorkerFactory...")
+        factory.start()
+        
+        logger.info("🎉 Temporal workers started successfully!")
+        logger.info("✅ Loan processing queue: loan-processing-queue")
+        logger.info("✅ Follow-up queue: follow-up-queue")
+        logger.info("✅ Namespace: $namespace")
+        logger.info("✅ Temporal server: $temporalHost:$temporalPort")
+        logger.info("🔔 Check Temporal Web UI at: http://localhost:8233")
+        
+        // Verify workers are running
+        logger.info("🔍 Verifying worker registration...")
+        Thread.sleep(2000) // Give workers time to register
+        logger.info("✅ Worker registration verification complete")
     }
     
     @PreDestroy
@@ -124,13 +134,13 @@ class TemporalConfig(
         logger.info("Stopping Temporal workers...")
         
         try {
-            temporalWorkerFactory?.let { factory ->
+            workerFactory?.let { factory ->
                 factory.shutdownNow()
                 factory.awaitTermination(10, java.util.concurrent.TimeUnit.SECONDS)
-                logger.info("Temporal workers stopped successfully")
-            }
+                logger.info("✅ Temporal workers stopped successfully")
+            } ?: logger.warn("WorkerFactory was not initialized, nothing to stop")
         } catch (e: Exception) {
-            logger.error("Error stopping Temporal workers", e)
+            logger.error("❌ Error stopping Temporal workers", e)
         }
     }
 } 

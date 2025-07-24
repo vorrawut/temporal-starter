@@ -99,7 +99,7 @@ curl -X POST http://localhost:8080/api/loan/apply \
 
 ```bash
 # 2. Check workflow status
-curl http://localhost:8080/api/loan/status/user-123
+curl http://localhost:8080/api/loan/status/user-123/genId
 
 # Response: Shows current workflow state and progress
 ```
@@ -108,12 +108,12 @@ curl http://localhost:8080/api/loan/status/user-123
 # 3. Approve the loan (simulate manual approval)
 curl -X POST http://localhost:8080/api/loan/approve/user-123 \
   -H "Content-Type: application/json" \
-  -d '{"approvedBy": "manager-456", "notes": "Application meets all criteria"}'
+  -d '{"genId": "1753372004650","approvedBy": "manager-456", "notes": "Application meets all criteria"}'
 ```
 
 ```bash
 # 4. Check final status
-curl http://localhost:8080/api/loan/status/user-123
+curl http://localhost:8080/api/loan/status/user-123/genId
 
 # Response: Should show "DISBURSED" status with loan details
 ```
@@ -160,7 +160,7 @@ curl -X POST http://localhost:8080/api/loan/apply \
 # Reject the application
 curl -X POST http://localhost:8080/api/loan/reject/user-reject-test \
   -H "Content-Type: application/json" \
-  -d '{"rejectedBy": "manager-456", "reason": "Insufficient income"}'
+  -d '{"genId": "1753372004650", "rejectedBy": "manager-456", "reason": "Insufficient income"}'
 ```
 
 ### 🔍 Observability & Monitoring

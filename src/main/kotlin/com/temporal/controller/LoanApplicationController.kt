@@ -85,14 +85,11 @@ class LoanApplicationController(
         logger.info("Approving loan for user: $userId")
         
         return try {
-            val workflowId = findWorkflowIdByUserId(userId)
-            
-            if (workflowId == null) {
-                return ResponseEntity.badRequest().body(
+            val workflowId = findWorkflowIdByUserId(userId, decision.genId)
+                ?: return ResponseEntity.badRequest().body(
                     mapOf("error" to "No active loan application found for user: $userId")
                 )
-            }
-            
+
             val workflow = workflowClient.newWorkflowStub(
                 LoanApplicationWorkflow::class.java,
                 workflowId
@@ -133,14 +130,11 @@ class LoanApplicationController(
         logger.info("Rejecting loan for user: $userId")
         
         return try {
-            val workflowId = findWorkflowIdByUserId(userId)
-            
-            if (workflowId == null) {
-                return ResponseEntity.badRequest().body(
+            val workflowId = findWorkflowIdByUserId(userId, decision.genId)
+                ?: return ResponseEntity.badRequest().body(
                     mapOf("error" to "No active loan application found for user: $userId")
                 )
-            }
-            
+
             val workflow = workflowClient.newWorkflowStub(
                 LoanApplicationWorkflow::class.java,
                 workflowId
@@ -173,23 +167,20 @@ class LoanApplicationController(
         }
     }
     
-    @GetMapping("/status/{userId}")
-    fun getLoanStatus(@PathVariable userId: String): ResponseEntity<LoanStatusResponse> {
+    @GetMapping("/status/{userId}/{genId}")
+    fun getLoanStatus(@PathVariable userId: String, @PathVariable genId: String): ResponseEntity<LoanStatusResponse> {
         logger.info("Getting loan status for user: $userId")
         
         return try {
-            val workflowId = findWorkflowIdByUserId(userId)
-            
-            if (workflowId == null) {
-                return ResponseEntity.badRequest().body(
+            val workflowId = findWorkflowIdByUserId(userId, genId)
+                ?: return ResponseEntity.badRequest().body(
                     LoanStatusResponse(
                         workflowId = "",
                         status = ApplicationStatus.SUBMITTED,
                         message = "No loan application found for user: $userId"
                     )
                 )
-            }
-            
+
             val workflow = workflowClient.newWorkflowStub(
                 LoanApplicationWorkflow::class.java,
                 workflowId
@@ -224,17 +215,14 @@ class LoanApplicationController(
         }
     }
     
-    @GetMapping("/query/{userId}/state")
-    fun queryWorkflowState(@PathVariable userId: String): ResponseEntity<Map<String, Any?>> {
+    @GetMapping("/query/{userId}/{genId}/state")
+    fun queryWorkflowState(@PathVariable userId: String, @PathVariable genId: String): ResponseEntity<Map<String, Any?>> {
         return try {
-            val workflowId = findWorkflowIdByUserId(userId)
-            
-            if (workflowId == null) {
-                return ResponseEntity.badRequest().body(
+            val workflowId = findWorkflowIdByUserId(userId, genId)
+                ?: return ResponseEntity.badRequest().body(
                     mapOf("error" to "No active workflow found for user: $userId")
                 )
-            }
-            
+
             val workflow = workflowClient.newWorkflowStub(
                 LoanApplicationWorkflow::class.java,
                 workflowId
@@ -258,7 +246,30 @@ class LoanApplicationController(
         }
     }
     
-    private fun findWorkflowIdByUserId(userId: String): String? {
+    @GetMapping("/health")
+    fun getHealth(): ResponseEntity<Map<String, Any?>> {
+        return try {
+            val healthStatus = mapOf<String, Any?>(
+                "status" to "UP",
+                "temporal" to mapOf<String, Any?>(
+                    "taskQueues" to listOf("loan-processing-queue", "follow-up-queue"),
+                    "namespace" to "default",
+                    "server" to "localhost:7233"
+                ),
+                "timestamp" to System.currentTimeMillis()
+            )
+            ResponseEntity.ok(healthStatus)
+        } catch (e: Exception) {
+            val errorStatus = mapOf<String, Any?>(
+                "status" to "DOWN",
+                "error" to e.message,
+                "timestamp" to System.currentTimeMillis()
+            )
+            ResponseEntity.status(500).body(errorStatus)
+        }
+    }
+    
+    private fun findWorkflowIdByUserId(userId: String, workflowId: String): String? {
         // In a real application, you'd store this mapping in a database
         // For demo purposes, we'll use a simple pattern matching
         // This is a simplified approach - in production you'd use proper workflow search
@@ -266,7 +277,7 @@ class LoanApplicationController(
         return try {
             // For demo: assume workflow ID follows pattern "loan-app-{userId}-{timestamp}"
             // In real implementation, you'd query your database or use Temporal's search API
-            "loan-app-$userId-latest" // Simplified for demo
+            "loan-app-$userId-$workflowId" // Simplified for demo
         } catch (e: Exception) {
             null
         }
@@ -293,11 +304,13 @@ data class LoanApplicationResponse(
 )
 
 data class ApprovalRequest(
+    val genId:String,
     val approvedBy: String,
     val notes: String?
 )
 
 data class RejectionRequest(
+    val genId: String,
     val rejectedBy: String,
     val reason: String,
     val notes: String?

@@ -1,13 +1,15 @@
 package com.temporal.model
 
+import com.fasterxml.jackson.annotation.JsonCreator
+import com.fasterxml.jackson.annotation.JsonProperty
 import java.time.LocalDateTime
 
-data class ApprovalDecision(
-    val applicationId: String,
-    val approvedBy: String,
-    val status: ApprovalStatus,
-    val notes: String,
-    val decidedAt: LocalDateTime = LocalDateTime.now()
+data class ApprovalDecision @JsonCreator constructor(
+    @JsonProperty("applicationId") val applicationId: String,
+    @JsonProperty("approvedBy") val approvedBy: String,
+    @JsonProperty("status") val status: ApprovalStatus,
+    @JsonProperty("notes") val notes: String,
+    @JsonProperty("decidedAt") val decidedAt: LocalDateTime = LocalDateTime.now()
 )
 
 enum class ApprovalStatus {
@@ -17,10 +19,10 @@ enum class ApprovalStatus {
     REQUIRES_MORE_INFO
 }
 
-data class RejectionDecision(
-    val applicationId: String,
-    val rejectedBy: String,
-    val reason: String,
-    val notes: String,
-    val decidedAt: LocalDateTime = LocalDateTime.now()
+data class RejectionDecision @JsonCreator constructor(
+    @JsonProperty("applicationId") val applicationId: String,
+    @JsonProperty("rejectedBy") val rejectedBy: String,
+    @JsonProperty("reason") val reason: String,
+    @JsonProperty("notes") val notes: String,
+    @JsonProperty("decidedAt") val decidedAt: LocalDateTime = LocalDateTime.now()
 ) 
