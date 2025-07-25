@@ -103,6 +103,22 @@ Start your journey with the [Course Introduction](class/Introduction.md) and dis
 
 **Let's build resilient, scalable workflows together!**
 
+## 📖 **GitBook Documentation Site**
+
+This course is also available as a professional GitBook documentation site! 
+
+**🌐 Live Site**: Once deployed, your GitBook will be available at your GitHub Pages URL
+
+**⚙️ Setup**: Need to enable GitHub Pages? Follow the [GitHub Pages Setup Guide](GITHUB_PAGES_SETUP.md)
+
+**📚 Features**:
+- Professional navigation through all 17 lessons
+- Built-in search functionality
+- Mobile-responsive design
+- Automatic deployment on every update
+
 ---
 
 *This bootcamp is designed for developers who want to master distributed workflow orchestration and build production-ready systems that can handle real-world complexity.*
+
+<!-- GitBook deployment triggered at Fri Jul 25 16:07:23 +07 2025 -->
