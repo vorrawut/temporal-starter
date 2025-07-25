@@ -5,6 +5,7 @@
 * [Welcome to Temporal Workflows](class/Introduction.md)
 * [Temporal Architecture Overview](class/temporal-architecture.md)
 * [Visual Introduction](class/intro-diagram.md)
+* [Course README](class/README.md)
 
 ## Core Modules
 
@@ -114,7 +115,3 @@
 * [Lesson 15 Solution](class/workshop/answer/lesson_15/README.md)
 * [Lesson 16 Solution](class/workshop/answer/lesson_16/README.md)
 * [Lesson 17 Solution](class/workshop/answer/lesson_17/README.md)
-
-## Additional Resources
-
-* [Course README](class/README.md) 
