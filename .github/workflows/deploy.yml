@@ -1,8 +1,8 @@
-name: Deploy GitBook to GitHub Pages
+name: Deploy HonKit GitBook to GitHub Pages
 
 on:
   push:
-    branches: [main]
+    branches: ["main"]
   workflow_dispatch:
 
 permissions:
@@ -21,6 +21,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup Pages environment
+        uses: actions/configure-pages@v5
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -32,7 +35,7 @@ jobs:
           npm install -g honkit
           npm install
 
-      - name: Build GitBook
+      - name: Build with HonKit
         run: npx honkit build
 
       - name: Upload Pages artifact
@@ -45,11 +48,8 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: github-pages
-      url: ${{ steps.deploy-pages.outputs.page_url }}
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Configure GitHub Pages
-        uses: actions/configure-pages@v5
-
       - name: Deploy to GitHub Pages
-        id: deploy-pages
+        id: deployment
         uses: actions/deploy-pages@v4
