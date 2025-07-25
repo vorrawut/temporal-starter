@@ -38,3 +38,11 @@ out/
 
 ### Kotlin ###
 .kotlin
+
+### GitBook / HonKit ###
+_book/
+node_modules/
+*.pdf
+*.epub
+*.mobi
+.honkit/

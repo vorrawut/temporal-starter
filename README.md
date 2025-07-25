@@ -1,120 +1,108 @@
-# 🚀 Temporal Workflow Bootcamp
+# Temporal Workflow Bootcamp
 
-Welcome to the **Temporal Workflow Bootcamp**! This repository is designed to help you learn Temporal through hands-on, structured lessons—from basic concepts to advanced production-ready patterns.
+**Master production-ready distributed systems with Temporal workflows**
 
----
+## 🚀 Welcome to Your Journey
 
-## 📦 What’s Inside
+This comprehensive bootcamp takes you from zero to production-ready distributed workflows using Temporal, Kotlin, and Spring Boot. By the end of this course, you'll be building **fault-tolerant, scalable workflow systems** that can survive server crashes, network failures, and entire data center outages.
 
-The bootcamp is organized into progressive tracks:
+## 📚 What You'll Learn
 
-### 🔰 Beginner & Foundation (Lessons 1–6)
+### Core Concepts
+- **Temporal fundamentals** and architecture patterns
+- **Workflow and activity** design principles
+- **Error handling and reliability** patterns
+- **Advanced orchestration** with signals, queries, and child workflows
+- **Production deployment** and operational best practices
 
-* Introduction to workflows and activities
-* Basic project setup
-* Execution and result handling
+### Practical Skills
+- Building workflows with **Kotlin** and **Spring Boot**
+- Implementing **retry logic** and **timeout handling**
+- **Testing strategies** for distributed systems
+- **Monitoring and observability** for production systems
+- **Containerization and deployment** with Docker and Kubernetes
 
-### 🚀 Intermediate (Lessons 7–12)
+## 🎯 Course Structure
 
-* Error handling, retry strategies, signals, queries
-* Clean architecture, data modeling, heartbeat timeouts
+This bootcamp includes **17 comprehensive lessons**, each building on the previous one:
 
-### 🧠 Advanced (Lessons 13–15)
+### **Foundations (Lessons 1-4)**
+- Introduction to Temporal concepts
+- Setting up your development environment
+- Creating your first workflows and activities
 
-* Child workflows
-* Workflow versioning
-* Long-running and cron workflows
+### **Core Patterns (Lessons 5-9)**
+- Activity design and separation
+- Input/output handling
+- Retry mechanisms and error handling
 
-### 🧪 Testing (Lesson 16)
+### **Advanced Features (Lessons 10-13)**
+- Interactive workflows with signals and queries
+- Child workflows and orchestration
+- Workflow versioning and evolution
 
-* Unit testing and integration testing
-* Temporal test environment usage
+### **Production Readiness (Lessons 14-17)**
+- Timer-based workflows and scheduling
+- External service integration
+- Testing and production deployment
+- Infrastructure and monitoring
 
-### 📦 Deployment (Lesson 17)
+## 🛠 Prerequisites
 
-* Docker and docker-compose setup
-* Helm and Kubernetes overview for Temporal
+- **Java/Kotlin knowledge**: Familiarity with JVM-based development
+- **Spring Boot basics**: Understanding of dependency injection and web applications
+- **Docker fundamentals**: Basic containerization concepts
+- **Distributed systems awareness**: Understanding of microservices challenges
 
----
+## 🏃‍♂️ Quick Start
 
-## 📁 Project Structure
+1. **Explore the Introduction**: Start with [Welcome to Temporal Workflows](class/Introduction.md)
+2. **Understand the Architecture**: Review [Temporal Architecture Overview](class/temporal-architecture.md)
+3. **Follow the Lessons**: Work through each lesson sequentially
+4. **Practice with Workshops**: Complete hands-on exercises for each topic
+5. **Deploy to Production**: Apply your knowledge with real deployment scenarios
 
-```bash
-.
-├── class/                  # Lessons 5–10 (clean architecture examples)
-│   ├── modules/            # Readme and concept docs
-│   └── workshop/           # Starter templates with TODOs
-│       ├── answer/         # Completed code per lesson
-├── src/                    # Lessons 1–4 and 11–16
-├── deploy/                 # Lesson 17: Docker, Docker Compose, Helm
-└── README.md               # This file
-```
+## 📖 Navigation
 
-Each lesson includes:
+- **[Course Introduction](class/Introduction.md)** - Start here for motivation and overview
+- **[Lesson Modules](class/modules/)** - 17 comprehensive lessons with concepts and workshops
+- **[Workshop Guides](class/workshop/)** - Hands-on exercises and solutions
+- **[Visual Diagrams](class/intro-diagram.md)** - Architecture and flow visualizations
 
-* `workshop/lesson_x/` - Starter code with TODOs
-* `workshop/answer/lesson_x/` - Completed reference solution
-* `modules/lesson_x/workshop_x.md` - Guided instructions
-* `modules/lesson_x/concept.md` - Concepts, theory, and best practices
+## 🎓 Learning Path
 
----
+### **Beginner Track** (Lessons 1-6)
+Perfect for developers new to Temporal or distributed workflows:
+- Core concepts and terminology
+- Basic workflow and activity patterns
+- Local development setup
 
-## 🛠️ Getting Started
+### **Intermediate Track** (Lessons 7-12)
+For developers ready to build production workflows:
+- Advanced patterns and orchestration
+- Error handling and reliability
+- Interactive workflow features
 
-### 🔧 Prerequisites
+### **Expert Track** (Lessons 13-17)
+For teams preparing for production deployment:
+- Workflow evolution and versioning
+- External service integration
+- Testing, monitoring, and deployment
 
-* Java 17+
-* Kotlin
-* Gradle
-* Docker (for running Temporal server locally)
+## 🌟 What Makes This Course Special
 
-### 🚀 Running Temporal Locally
+- **Hands-on approach**: Every concept is backed by practical exercises
+- **Production focus**: Learn patterns that work in real-world scenarios
+- **Complete coverage**: From basic concepts to production deployment
+- **Modern stack**: Kotlin, Spring Boot, and cloud-native deployment
+- **Visual learning**: Comprehensive diagrams and architectural overviews
 
-Start a local Temporal server:
+## 🚀 Ready to Begin?
 
-```bash
-temporal server start-dev
-```
+Start your journey with the [Course Introduction](class/Introduction.md) and discover how Temporal can transform your approach to distributed systems.
 
-Access the UI at [http://localhost:8233](http://localhost:8233)
-
-### ▶️ Running a Lesson
-
-1. Go to `workshop/lesson_x/`
-2. Follow `modules/lesson_x/workshop_x.md`
-3. Run the code using your IDE or Gradle
-4. Compare with `answer/lesson_x/` if needed
-5. Review theory in `concept.md`
-
----
-
-## 👨‍🏫 For Instructors
-
-* Each module is **self-contained**
-* Step-by-step workshop guides help walkthrough the coding
-* Concepts explain **why**, not just **how**
-
----
-
-## 🎯 Learning Outcomes
-
-By the end of this bootcamp, you will be able to:
-
-* Design scalable Temporal workflows
-* Understand core patterns: signals, retries, heartbeats, etc.
-* Handle errors, compensation, and long-running jobs
-* Write tests and prepare for production deployments
+**Let's build resilient, scalable workflows together!**
 
 ---
 
-## 🤝 Contributing & Feedback
-
-Feel free to fork this repo, submit pull requests, or use it to run internal workshops.
-
-If you find issues or have suggestions, please open a GitHub Issue.
-
----
-
-Happy Learning! 🧠✨
-
-> “Code is like humor. When you have to explain it, it’s bad.” – Cory House
+*This bootcamp is designed for developers who want to master distributed workflow orchestration and build production-ready systems that can handle real-world complexity.*
