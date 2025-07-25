@@ -42,11 +42,8 @@ jobs:
           npm install -g honkit
           npm install
 
-      - name: Install GitBook plugins
-        run: honkit install
-
       - name: Build with HonKit
-        run: honkit build
+        run: npx honkit build
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
