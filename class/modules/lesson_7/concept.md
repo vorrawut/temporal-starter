@@ -1,14 +1,36 @@
-# Concept 7: Workflow Input/Output
+---
+marp: true
+theme: gaia
+paginate: true
+backgroundColor: #1e1e2f
+color: white
+---
 
-## Objective
+# Workflow Input/Output
 
-Master advanced data modeling patterns for Temporal workflows, including complex input validation, rich output structures, and data transformation strategies between workflows and activities.
+## Lesson 7: Advanced Data Modeling Patterns
 
-## Key Concepts
+Master advanced data modeling patterns for Temporal workflows, including complex input validation, rich output structures, and data transformation strategies.
 
-### 1. **Complex Input Data Modeling**
+---
 
-#### **Structured Input Objects**
+# Objective
+
+By the end of this lesson, you will understand:
+
+- ✅ **Complex input data modeling** with structured objects
+- ✅ **Input validation patterns** for robust workflows
+- ✅ **Rich output data structures** with comprehensive results
+- ✅ **Data transformation strategies** between workflows and activities
+- ✅ **Serialization considerations** for Temporal compatibility
+- ✅ **Error context in results** for better debugging
+
+---
+
+# 1. **Complex Input Data Modeling**
+
+## **Structured Input Objects**
+
 ```kotlin
 data class OrderRequest(
     val customerId: String,
@@ -26,7 +48,12 @@ data class OrderItem(
 )
 ```
 
-#### **Input Validation Patterns**
+**Build complex, structured data models for realistic business scenarios**
+
+---
+
+# Input Validation Patterns
+
 ```kotlin
 class OrderProcessingWorkflowImpl : OrderProcessingWorkflow {
     
@@ -47,9 +74,26 @@ class OrderProcessingWorkflowImpl : OrderProcessingWorkflow {
 }
 ```
 
-### 2. **Rich Output Data Structures**
+---
 
-#### **Comprehensive Result Objects**
+# Why Validate Early?
+
+## **Benefits of Early Validation:**
+
+- ✅ **Fail fast** - Don't waste time on invalid data
+- ✅ **Clear error messages** - Specific validation feedback
+- ✅ **Resource efficiency** - Don't consume workflow/activity resources
+- ✅ **Better debugging** - Know exactly what went wrong
+- ✅ **User experience** - Immediate feedback on problems
+
+**Always validate in workflows before calling activities**
+
+---
+
+# 2. **Rich Output Data Structures**
+
+## **Comprehensive Result Objects**
+
 ```kotlin
 data class OrderResult(
     val orderId: String,
@@ -68,7 +112,13 @@ data class ProcessingStep(
     val duration: Duration,
     val details: Map<String, Any> = emptyMap()
 )
+```
 
+---
+
+# More Result Structures
+
+```kotlin
 data class OrderMetadata(
     val processingTime: Duration,
     val version: String,
@@ -76,9 +126,20 @@ data class OrderMetadata(
 )
 ```
 
-### 3. **Data Transformation Strategies**
+## **Why Rich Results Matter:**
 
-#### **Workflow-to-Activity Data Flow**
+- ✅ **Audit trail** - Track what happened and when
+- ✅ **Debugging** - Understand processing flow
+- ✅ **Monitoring** - Performance metrics and timing
+- ✅ **Business intelligence** - Rich data for analysis
+- ✅ **User feedback** - Detailed status information
+
+---
+
+# 3. **Data Transformation Strategies**
+
+## **Workflow-to-Activity Data Flow**
+
 ```kotlin
 class OrderProcessingWorkflowImpl : OrderProcessingWorkflow {
     
@@ -105,7 +166,10 @@ class OrderProcessingWorkflowImpl : OrderProcessingWorkflow {
 }
 ```
 
-#### **Activity-Specific Data Models**
+---
+
+# Activity-Specific Data Models
+
 ```kotlin
 // Validation activity input/output
 data class ValidationInput(
@@ -123,7 +187,13 @@ data class ValidationInput(
         }
     }
 }
+```
 
+---
+
+# More Data Transformation
+
+```kotlin
 // Pricing activity input/output
 data class PricingInput(
     val items: List<PricingItem>,
@@ -142,9 +212,14 @@ data class PricingInput(
 }
 ```
 
-### 4. **Serialization Considerations**
+**Each activity gets exactly the data it needs in the format it expects**
 
-#### **Temporal-Safe Data Types**
+---
+
+# 4. **Serialization Considerations**
+
+## **Temporal-Safe Data Types**
+
 ```kotlin
 // Good: Temporal-serializable types
 data class OrderRequest(
@@ -154,7 +229,15 @@ data class OrderRequest(
     val items: List<OrderItem>,               // ✅ List of data classes
     val metadata: Map<String, String>         // ✅ Map with serializable types
 )
+```
 
+**Stick to standard, serializable types for reliable data transfer**
+
+---
+
+# Avoid Non-Serializable Types
+
+```kotlin
 // Avoid: Non-serializable types
 data class BadOrderRequest(
     val customerId: String,
@@ -164,7 +247,17 @@ data class BadOrderRequest(
 )
 ```
 
-#### **Version-Safe Evolution**
+## **Safe Data Types for Temporal:**
+- ✅ **Primitives**: String, Int, Long, Double, Boolean
+- ✅ **Collections**: List, Set, Map (with serializable contents)
+- ✅ **Time**: LocalDate, LocalDateTime, Instant, Duration
+- ✅ **Numbers**: BigDecimal, BigInteger
+- ✅ **Data classes**: With serializable properties
+
+---
+
+# Version-Safe Evolution
+
 ```kotlin
 data class OrderRequest(
     val customerId: String,
@@ -183,9 +276,14 @@ data class OrderRequest(
 }
 ```
 
-### 5. **Error Context in Results**
+**Add new fields as optional with defaults to maintain backward compatibility**
 
-#### **Rich Error Information**
+---
+
+# 5. **Error Context in Results**
+
+## **Rich Error Information**
+
 ```kotlin
 sealed class OrderResult {
     abstract val orderId: String
@@ -206,7 +304,13 @@ sealed class OrderResult {
         val recoveryActions: List<RecoveryAction>,
         override val processingSteps: List<ProcessingStep>
     ) : OrderResult()
-    
+```
+
+---
+
+# More Result Types
+
+```kotlin
     data class PartialSuccess(
         override val orderId: String,
         val completedSteps: List<String>,
@@ -217,135 +321,190 @@ sealed class OrderResult {
 }
 ```
 
-## Best Practices
-
-### ✅ Input Design
-
-1. **Use Data Classes**
-   ```kotlin
-   // Good: Immutable data classes
-   data class CreateUserRequest(
-       val email: String,
-       val name: String,
-       val preferences: UserPreferences
-   )
-   
-   // Bad: Mutable classes
-   class CreateUserRequest {
-       var email: String? = null
-       var name: String? = null
-   }
-   ```
-
-2. **Validate Early**
-   ```kotlin
-   override fun processOrder(request: OrderRequest): OrderResult {
-       // Validate in workflow before calling activities
-       validateOrderRequest(request)
-       
-       // Now safe to process
-       return processValidatedOrder(request)
-   }
-   ```
-
-3. **Use Builders for Complex Objects**
-   ```kotlin
-   class OrderRequestBuilder {
-       private var customerId: String? = null
-       private var items: MutableList<OrderItem> = mutableListOf()
-       
-       fun customerId(id: String) = apply { this.customerId = id }
-       fun addItem(item: OrderItem) = apply { this.items.add(item) }
-       
-       fun build(): OrderRequest {
-           requireNotNull(customerId) { "Customer ID is required" }
-           require(items.isNotEmpty()) { "At least one item required" }
-           
-           return OrderRequest(
-               customerId = customerId!!,
-               items = items.toList()
-           )
-       }
-   }
-   ```
-
-### ✅ Output Design
-
-1. **Include Processing Context**
-   ```kotlin
-   data class ProcessingResult(
-       val success: Boolean,
-       val data: ResultData?,
-       val error: ErrorInfo?,
-       val processingTime: Duration,
-       val stepResults: List<StepResult>
-   )
-   ```
-
-2. **Use Sealed Classes for Status**
-   ```kotlin
-   sealed class OrderStatus {
-       object Processing : OrderStatus()
-       object Confirmed : OrderStatus()
-       data class Shipped(val trackingNumber: String) : OrderStatus()
-       data class Failed(val reason: String) : OrderStatus()
-   }
-   ```
-
-3. **Provide Audit Trail**
-   ```kotlin
-   data class OrderResult(
-       val orderId: String,
-       val finalStatus: OrderStatus,
-       val auditTrail: List<AuditEvent>
-   )
-   
-   data class AuditEvent(
-       val timestamp: Instant,
-       val action: String,
-       val actor: String,
-       val details: Map<String, Any>
-   )
-   ```
-
-### ❌ Common Anti-Patterns
-
-1. **Overly Complex Input Objects**
-   ```kotlin
-   // Bad: Too many nested levels
-   data class OverlyComplexRequest(
-       val level1: Level1Data,
-       val level2: Map<String, Level2Data>,
-       val level3: List<Map<String, List<Level3Data>>>
-   )
-   ```
-
-2. **Stringly Typed Data**
-   ```kotlin
-   // Bad: Everything as strings
-   data class BadRequest(
-       val amount: String,           // Should be BigDecimal
-       val date: String,            // Should be LocalDate
-       val status: String           // Should be enum
-   )
-   ```
-
-3. **Missing Error Context**
-   ```kotlin
-   // Bad: Minimal error info
-   data class BadResult(
-       val success: Boolean,
-       val error: String?
-   )
-   
-   // Good: Rich error context
-   data class GoodResult(
-       val success: Boolean,
-       val data: ResultData?,
-       val error: DetailedError?
-   )
-   ```
+**Use sealed classes to represent different outcome scenarios clearly**
 
 ---
 
-**Next**: Lesson 8 will cover activity retry and timeout strategies for building resilient workflows! 
+# Best Practices
+
+## ✅ **Input Design**
+
+### **1. Use Data Classes**
+
+```kotlin
+// Good: Immutable data classes
+data class CreateUserRequest(
+    val email: String,
+    val name: String,
+    val preferences: UserPreferences
+)
+
+// Bad: Mutable classes
+class CreateUserRequest {
+    var email: String? = null
+    var name: String? = null
+}
+```
+
+**Immutable data classes provide thread safety and clear contracts**
+
+---
+
+# More Input Best Practices
+
+### **2. Validate Early**
+
+```kotlin
+override fun processOrder(request: OrderRequest): OrderResult {
+    // Validate in workflow before calling activities
+    validateOrderRequest(request)
+    
+    // Now safe to process
+    return processValidatedOrder(request)
+}
+```
+
+### **3. Use Builders for Complex Objects**
+
+```kotlin
+class OrderRequestBuilder {
+    private var customerId: String? = null
+    private var items: MutableList<OrderItem> = mutableListOf()
+    
+    fun customerId(id: String) = apply { this.customerId = id }
+    fun addItem(item: OrderItem) = apply { this.items.add(item) }
+    
+    fun build(): OrderRequest {
+        requireNotNull(customerId) { "Customer ID is required" }
+        require(items.isNotEmpty()) { "At least one item required" }
+        
+        return OrderRequest(customerId = customerId!!, items = items.toList())
+    }
+}
+```
+
+---
+
+# ✅ Output Design
+
+### **1. Include Processing Context**
+
+```kotlin
+data class ProcessingResult(
+    val success: Boolean,
+    val data: ResultData?,
+    val error: ErrorInfo?,
+    val processingTime: Duration,
+    val stepResults: List<StepResult>
+)
+```
+
+### **2. Use Sealed Classes for Status**
+
+```kotlin
+sealed class OrderStatus {
+    object Processing : OrderStatus()
+    object Confirmed : OrderStatus()
+    data class Shipped(val trackingNumber: String) : OrderStatus()
+    data class Failed(val reason: String) : OrderStatus()
+}
+```
+
+---
+
+# More Output Best Practices
+
+### **3. Provide Audit Trail**
+
+```kotlin
+data class OrderResult(
+    val orderId: String,
+    val finalStatus: OrderStatus,
+    val auditTrail: List<AuditEvent>
+)
+
+data class AuditEvent(
+    val timestamp: Instant,
+    val action: String,
+    val actor: String,
+    val details: Map<String, Any>
+)
+```
+
+**Rich audit trails enable debugging and compliance**
+
+---
+
+# ❌ Common Anti-Patterns
+
+### **1. Overly Complex Input Objects**
+
+```kotlin
+// Bad: Too many nested levels
+data class OverlyComplexRequest(
+    val level1: Level1Data,
+    val level2: Map<String, Level2Data>,
+    val level3: List<Map<String, List<Level3Data>>>
+)
+```
+
+### **2. Stringly Typed Data**
+
+```kotlin
+// Bad: Everything as strings
+data class BadRequest(
+    val amount: String,           // Should be BigDecimal
+    val date: String,            // Should be LocalDate
+    val status: String           // Should be enum
+)
+```
+
+---
+
+# Final Anti-Pattern
+
+### **3. Missing Error Context**
+
+```kotlin
+// Bad: Minimal error info
+data class BadResult(
+    val success: Boolean,
+    val error: String?
+)
+
+// Good: Rich error context
+data class GoodResult(
+    val success: Boolean,
+    val data: ResultData?,
+    val error: DetailedError?
+)
+```
+
+**Always provide enough context for debugging and user feedback**
+
+---
+
+# 💡 Key Takeaways
+
+## **What You've Learned:**
+
+- ✅ **Structured input objects** with proper validation
+- ✅ **Rich output structures** with audit trails and metadata
+- ✅ **Data transformation patterns** for activity-specific models
+- ✅ **Serialization best practices** for Temporal compatibility
+- ✅ **Error-rich results** with detailed context
+- ✅ **Version-safe evolution** for long-term maintainability
+
+---
+
+# 🚀 Next Steps
+
+**You now master workflow data modeling!**
+
+## **Lesson 8 will cover:**
+- Activity retry and timeout strategies
+- Building resilient fault-tolerant workflows
+- Handling external service failures
+- Advanced retry patterns and circuit breakers
+
+**Ready to build bulletproof workflows? Let's continue! 🎉** 

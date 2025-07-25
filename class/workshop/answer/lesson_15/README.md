@@ -1,41 +1,95 @@
-# Lesson 15: External Service Integration - Complete Solution
+---
+marp: true
+theme: gaia
+paginate: true
+backgroundColor: #1e1e2f
+color: white
+---
 
-## Solution Overview
+# Lesson 15: External Service Integration
 
-This lesson demonstrates a production-ready user registration workflow that integrates with multiple external services while handling failures gracefully and providing comprehensive result reporting.
+## Complete Solution
 
-## Key Implementation Features
+*Production-ready user registration workflow that integrates with multiple external services while handling failures gracefully and providing comprehensive result reporting*
 
-### 1. **Service Separation**
-- **UserProfileService**: External API calls for user profile management
-- **PaymentService**: External payment gateway integration
-- **DatabaseService**: Internal database operations
-- **NotificationService**: Multi-channel notification delivery
+---
 
-### 2. **Configuration Strategy**
-- **External API Options**: 5-minute timeout, 5 retry attempts, exponential backoff
-- **Internal Service Options**: 2-minute timeout, 3 retry attempts, faster backoff
-- Service-specific configurations based on criticality and expected latency
+# Solution Overview
 
-### 3. **Error Handling Pattern**
-- **Graceful Degradation**: Continue processing even if non-critical services fail
-- **Error Aggregation**: Collect all errors without failing the entire workflow
-- **Detailed Reporting**: Return comprehensive results showing partial success/failure
-- **Activity Logging**: Track each operation for debugging and monitoring
+This lesson demonstrates a **production-ready user registration workflow** that integrates with multiple external services while:
 
-### 4. **Data Flow**
-1. **Profile Creation**: Create user profile in external system
-2. **Payment Processing**: Process optional initial payment
-3. **Notification Delivery**: Send welcome, payment confirmation, and verification messages
-4. **Database Logging**: Record all activities and final status
+- ✅ **Handling failures gracefully**
+- ✅ **Providing comprehensive result reporting**
+- ✅ **Following real-world integration patterns**
 
-### 5. **Production Patterns**
-- **Correlation IDs**: Track operations across service boundaries
-- **Conditional Processing**: Handle optional operations gracefully
-- **Status Management**: Update user status based on operation results
-- **Metadata Collection**: Capture rich context for each operation
+---
 
-## Testing the Solution
+# Key Implementation Features
+
+## **1. Service Separation**
+
+- ✅ **UserProfileService**: External API calls for user profile management
+- ✅ **PaymentService**: External payment gateway integration
+- ✅ **DatabaseService**: Internal database operations
+- ✅ **NotificationService**: Multi-channel notification delivery
+
+**Clean separation enables focused testing and maintenance**
+
+---
+
+# Configuration Strategy
+
+## **2. Service-Specific Configuration**
+
+| Service Type | Timeout | Retries | Backoff | Reasoning |
+|--------------|---------|---------|---------|-----------|
+| **External APIs** | 5 minutes | 5 attempts | Exponential | High latency tolerance |
+| **Internal Services** | 2 minutes | 3 attempts | Faster | Lower latency expected |
+
+**Different services require different resilience strategies**
+
+---
+
+# Error Handling Pattern
+
+## **3. Graceful Degradation Strategy**
+
+- ✅ **Continue processing** even if non-critical services fail
+- ✅ **Collect all errors** without failing the entire workflow
+- ✅ **Return detailed results** showing partial success/failure
+- ✅ **Activity logging** for debugging and monitoring
+
+**Maximize workflow completion while maintaining observability**
+
+---
+
+# Data Flow Architecture
+
+## **4. Service Orchestration Steps**
+
+1. ✅ **Profile Creation**: Create user profile in external system
+2. ✅ **Payment Processing**: Process optional initial payment
+3. ✅ **Notification Delivery**: Send welcome, payment confirmation, and verification messages
+4. ✅ **Database Logging**: Record all activities and final status
+
+**Clear orchestration with proper error boundaries**
+
+---
+
+# Production Patterns
+
+## **5. Enterprise-Ready Features**
+
+- ✅ **Correlation IDs**: Track operations across service boundaries
+- ✅ **Conditional Processing**: Handle optional operations gracefully
+- ✅ **Status Management**: Update user status based on operation results
+- ✅ **Metadata Collection**: Capture rich context for each operation
+
+---
+
+# Testing the Solution
+
+## **Example Usage:**
 
 ```kotlin
 val userData = mapOf(
@@ -54,9 +108,12 @@ val userData = mapOf(
 val result = workflow.processUserRegistration("john.doe@example.com", userData)
 ```
 
-## Expected Results
+---
 
-### Success Scenario
+# Expected Results
+
+## **Success Scenario:**
+
 ```json
 {
   "userId": "user_john.doe_1234567890",
@@ -71,7 +128,12 @@ val result = workflow.processUserRegistration("john.doe@example.com", userData)
 }
 ```
 
-### Partial Failure Scenario
+**Complete success with detailed tracking**
+
+---
+
+# Partial Failure Scenario
+
 ```json
 {
   "userId": "user_john.doe_1234567890",
@@ -87,27 +149,48 @@ val result = workflow.processUserRegistration("john.doe@example.com", userData)
 }
 ```
 
-## Production Considerations
+**Graceful degradation with error collection**
 
-### Security
-- External service credentials managed through secure configuration
-- Request/response data validation
-- Audit logging for payment operations
+---
 
-### Monitoring
-- Activity-level success/failure metrics
-- External service latency tracking
-- Error rate monitoring by service type
+# Production Considerations
 
-### Scalability
-- Connection pooling for database activities
-- Async notification delivery
-- Proper resource cleanup
+## **Security**
+- ✅ External service credentials managed through secure configuration
+- ✅ Request/response data validation
+- ✅ Audit logging for payment operations
 
-## Key Learning Points
+## **Monitoring**
+- ✅ Activity-level success/failure metrics
+- ✅ External service latency tracking
+- ✅ Error rate monitoring by service type
 
-1. **Service Encapsulation**: External calls isolated within activities
-2. **Configuration Flexibility**: Different options for different service types
-3. **Resilience Patterns**: Graceful handling of partial failures
-4. **Observability**: Rich logging and result reporting
-5. **Production Readiness**: Real-world patterns for service integration 
+## **Scalability**
+- ✅ Connection pooling for database activities
+- ✅ Async notification delivery
+- ✅ Proper resource cleanup
+
+---
+
+# 💡 Key Learning Points
+
+## **What This Solution Demonstrates:**
+
+1. ✅ **Service Encapsulation**: External calls isolated within activities
+2. ✅ **Configuration Flexibility**: Different options for different service types
+3. ✅ **Resilience Patterns**: Graceful handling of partial failures
+4. ✅ **Observability**: Rich logging and result reporting
+5. ✅ **Production Readiness**: Real-world patterns for service integration
+
+---
+
+# 🚀 Production Success
+
+**This solution shows how to build resilient, observable, production-ready workflows that integrate with complex external service ecosystems!**
+
+You now understand how to:
+- Handle external service complexity
+- Implement graceful degradation
+- Provide comprehensive observability
+
+**Ready for production integrations! 🎉** 

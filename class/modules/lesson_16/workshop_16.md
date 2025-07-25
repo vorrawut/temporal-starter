@@ -1,22 +1,46 @@
-# Lesson 16: Testing + Production Readiness
+---
+marp: true
+theme: gaia
+paginate: true
+backgroundColor: #1e1e2f
+color: white
+---
 
-## What we want to build
+# Workshop 16: Testing + Production Readiness
 
-A comprehensive testing framework and production-ready configuration for Temporal workflows, including unit tests, integration tests, mock activity implementations, worker configuration, and scalability considerations. This final lesson covers everything needed to deploy and maintain Temporal workflows in production.
+## Building Production-Grade Temporal Systems
 
-## Expecting Result
+*A comprehensive testing framework and production-ready configuration for Temporal workflows, including unit tests, integration tests, mock activity implementations, worker configuration, and scalability considerations*
 
-A complete testing and deployment solution that includes:
-- Unit tests for workflows and activities using `TestWorkflowRule`
-- Mock activity implementations for isolated testing
-- Production worker configuration with proper scaling
-- Comprehensive error handling and monitoring patterns
-- Performance optimization strategies
-- Deployment best practices and environment setup
+---
 
-## Code Steps
+# What we want to build
 
-### Step 1: Define Comprehensive Data Models
+A **comprehensive testing framework** and **production-ready configuration** for Temporal workflows, including:
+
+- **Unit tests** for workflows and activities using `TestWorkflowRule`
+- **Mock activity implementations** for isolated testing
+- **Production worker configuration** with proper scaling
+- **Comprehensive error handling** and monitoring patterns
+
+---
+
+# Expecting Result
+
+## A complete testing and deployment solution that includes:
+
+- ✅ **Unit tests** for workflows and activities using `TestWorkflowRule`
+- ✅ **Mock activity implementations** for isolated testing
+- ✅ **Production worker configuration** with proper scaling
+- ✅ **Comprehensive error handling** and monitoring patterns
+- ✅ **Performance optimization** strategies
+- ✅ **Deployment best practices** and environment setup
+
+---
+
+# Code Steps
+
+## Step 1: Define Comprehensive Data Models
 
 Create rich data classes that support both testing and production scenarios:
 
@@ -43,11 +67,13 @@ data class OrderResult(
 )
 ```
 
-Include detailed result classes for each step that capture both success and failure scenarios.
+**Include detailed result classes for each step that capture both success and failure scenarios**
 
-### Step 2: Create Activity Interfaces with Testing in Mind
+---
 
-Design activity interfaces that are easy to mock and test:
+# Step 2: Create Activity Interfaces with Testing in Mind
+
+## Design activity interfaces that are easy to mock and test:
 
 ```kotlin
 @ActivityInterface
@@ -63,11 +89,13 @@ interface OrderValidationActivity {
 }
 ```
 
-Create separate interfaces for each business domain to enable focused testing.
+**Create separate interfaces for each business domain to enable focused testing**
 
-### Step 3: Implement Production-Ready Activity Options
+---
 
-Configure different activity options for different operation types:
+# Step 3: Implement Production-Ready Activity Options
+
+## Configure different activity options for different operation types:
 
 ```kotlin
 // Standard operations
@@ -99,184 +127,236 @@ private val criticalActivityOptions = ActivityOptions.newBuilder()
     .build()
 ```
 
-### Step 4: Build Testable Workflow Implementation
+---
 
-Create workflow implementation with comprehensive error handling and compensation logic:
-
-```kotlin
-override fun processOrder(request: OrderRequest): OrderResult {
-    val startTime = Workflow.currentTimeMillis()
-    val errors = mutableListOf<String>()
-    
-    // Step 1: Validation with early return on failure
-    val validationResult = try {
-        orderValidationActivity.validateOrder(request)
-    } catch (e: Exception) {
-        errors.add("Validation failed: ${e.message}")
-        ValidationResult(false, Workflow.currentTimeMillis(), listOf(e.message ?: "Unknown error"))
-    }
-    
-    if (!validationResult.isValid) {
-        return createFailureResult(request.orderId, validationResult, errors, startTime)
-    }
-    
-    // Continue with remaining steps with compensation logic...
-}
-```
-
-### Step 5: Create Mock Activity Implementations
-
-Implement mock activities for testing that simulate various scenarios:
+# Step 4: Create Unit Tests with TestWorkflowRule
 
 ```kotlin
-class MockOrderValidationActivityImpl : OrderValidationActivity {
-    override fun validateOrder(request: OrderRequest): ValidationResult {
-        val issues = mutableListOf<String>()
-        
-        if (request.customerId.isBlank()) issues.add("Customer ID is required")
-        if (request.items.isEmpty()) issues.add("Order must contain at least one item")
-        if (request.items.any { it.quantity <= 0 }) issues.add("Item quantities must be positive")
-        
-        return ValidationResult(
-            isValid = issues.isEmpty(),
-            validatedAt = System.currentTimeMillis(),
-            issues = issues
+class OrderWorkflowTest {
+    
+    @Rule
+    @JvmField
+    val testWorkflowRule: TestWorkflowRule = TestWorkflowRule.newBuilder()
+        .setWorkflowTypes(OrderWorkflowImpl::class.java)
+        .setActivityImplementations(
+            MockOrderValidationActivity(),
+            MockInventoryActivity(),
+            MockPaymentActivity(),
+            MockShippingActivity()
         )
+        .build()
+    
+    @Test
+    fun testSuccessfulOrderProcessing() {
+        val workflow = testWorkflowRule.workflowClient.newWorkflowStub(
+            OrderWorkflow::class.java
+        )
+        
+        val orderRequest = OrderRequest(
+            orderId = "test-order-123",
+            customerId = "customer-456",
+            items = listOf(OrderItem("product-1", 2, BigDecimal("29.99"))),
+            shippingAddress = Address("123 Test St", "Test City", "TC", "12345", "US"),
+            paymentMethod = PaymentMethod.CREDIT_CARD
+        )
+        
+        val result = workflow.processOrder(orderRequest)
+        
+        assertEquals(OrderStatus.COMPLETED, result.status)
+        assertTrue(result.validationResult.isValid)
+        assertTrue(result.paymentResult.success)
+        assertTrue(result.errors.isEmpty())
     }
 }
 ```
 
-Include mocks that can simulate both success and failure scenarios.
+---
 
-### Step 6: Build Test Framework
-
-Create a comprehensive test runner using `TestWorkflowRule`:
+# Step 5: Create Mock Activity Implementations
 
 ```kotlin
-class TestWorkflowRunner(private val config: TestConfiguration = TestConfiguration()) {
+class MockOrderValidationActivity : OrderValidationActivity {
     
-    fun createTestWorkflowRule(): TestWorkflowRule {
-        return TestWorkflowRule.newBuilder()
-            .setWorkflowTypes(TestableWorkflowImpl::class.java)
+    override fun validateOrder(request: OrderRequest): ValidationResult {
+        // Simulate validation logic
+        return if (request.items.isNotEmpty() && request.customerId.isNotBlank()) {
+            ValidationResult.success("Order validation passed")
+        } else {
+            ValidationResult.failure("Invalid order data")
+        }
+    }
+    
+    override fun validateCustomer(customerId: String): Boolean {
+        // Mock customer validation
+        return !customerId.startsWith("invalid")
+    }
+    
+    override fun validateAddress(address: Address): Boolean {
+        // Mock address validation
+        return address.zipCode.length == 5
+    }
+}
+
+class MockPaymentActivity : PaymentActivity {
+    
+    override fun processPayment(request: PaymentRequest): PaymentResult {
+        // Simulate payment processing
+        return if (request.amount > BigDecimal.ZERO) {
+            PaymentResult.success("txn-${System.currentTimeMillis()}", request.amount)
+        } else {
+            PaymentResult.failure("Invalid payment amount")
+        }
+    }
+}
+```
+
+---
+
+# Step 6: Production Worker Configuration
+
+```kotlin
+@Configuration
+class TemporalWorkerConfiguration {
+    
+    @Bean
+    fun temporalWorker(
+        workflowClient: WorkflowClient,
+        orderValidationActivity: OrderValidationActivity,
+        inventoryActivity: InventoryActivity,
+        paymentActivity: PaymentActivity,
+        shippingActivity: ShippingActivity
+    ): Worker {
+        
+        val workerFactory = WorkerFactory.newInstance(workflowClient)
+        
+        val worker = workerFactory.newWorker(
+            "order-processing-queue",
+            WorkerOptions.newBuilder()
+                .setMaxConcurrentActivityExecutions(20)
+                .setMaxConcurrentWorkflowExecutions(10)
+                .setMaxConcurrentLocalActivityExecutions(10)
+                .build()
+        )
+        
+        // Register workflows
+        worker.registerWorkflowImplementationTypes(
+            OrderWorkflowImpl::class.java
+        )
+        
+        // Register activities
+        worker.registerActivitiesImplementations(
+            orderValidationActivity,
+            inventoryActivity,
+            paymentActivity,
+            shippingActivity
+        )
+        
+        workerFactory.start()
+        
+        return worker
+    }
+}
+```
+
+---
+
+# Production Configuration Patterns
+
+## **Worker Scaling Guidelines:**
+
+| Metric | Recommendation | Reasoning |
+|--------|----------------|-----------|
+| **Max Concurrent Activities** | 20-50 per worker | Balance throughput with resource usage |
+| **Max Concurrent Workflows** | 10-20 per worker | Workflows are lightweight |
+| **Workers per Instance** | 1-3 | Avoid resource contention |
+| **Task Queue Strategy** | Domain-specific | Separate queues for different workflow types |
+
+## **Environment-Specific Settings:**
+- **Development**: Lower concurrency, verbose logging
+- **Staging**: Production-like settings, extended timeouts
+- **Production**: Optimized settings, minimal logging
+
+---
+
+# Step 7: Integration Testing
+
+```kotlin
+@SpringBootTest
+@TestPropertySource(properties = ["temporal.enabled=false"])
+class OrderWorkflowIntegrationTest {
+    
+    private lateinit var testWorkflowRule: TestWorkflowRule
+    
+    @BeforeEach
+    fun setUp() {
+        testWorkflowRule = TestWorkflowRule.newBuilder()
+            .setWorkflowTypes(OrderWorkflowImpl::class.java)
             .setActivityImplementations(
-                MockOrderValidationActivityImpl(),
-                MockInventoryActivityImpl(),
-                MockPaymentActivityImpl(),
-                MockShippingActivityImpl()
+                RealOrderValidationActivity(),  // Real implementations
+                RealInventoryActivity(),
+                MockPaymentActivity(),          // Mock external services
+                MockShippingActivity()
             )
-            .setTaskQueue(config.taskQueue)
             .build()
     }
     
-    fun runOrderProcessingTest(request: OrderRequest): CompletableFuture<OrderResult> {
-        val testRule = createTestWorkflowRule()
-        val client = testRule.workflowClient
-        val workflow = client.newWorkflowStub(TestableWorkflow::class.java)
+    @Test
+    fun testEndToEndOrderProcessing() {
+        val workflow = testWorkflowRule.workflowClient.newWorkflowStub(
+            OrderWorkflow::class.java
+        )
         
-        return CompletableFuture.supplyAsync {
-            workflow.processOrder(request)
-        }
+        // Test with realistic data
+        val result = workflow.processOrder(createRealisticOrderRequest())
+        
+        // Verify end-to-end flow
+        assertNotNull(result)
+        assertEquals(OrderStatus.COMPLETED, result.status)
+        assertTrue(result.totalProcessingTime > 0)
     }
 }
 ```
 
-### Step 7: Configure Production Workers
+---
 
-Set up production-ready worker configuration:
+# Testing Strategies Summary
 
-```kotlin
-class ProductionWorkerConfig {
-    companion object {
-        fun createWorker(client: WorkflowClient, taskQueue: String): Worker {
-            val workerOptions = WorkerOptions.newBuilder()
-                .setMaxConcurrentActivityExecutions(10)
-                .setMaxConcurrentWorkflowExecutions(5)
-                .setMaxConcurrentLocalActivityExecutions(10)
-                .build()
-            
-            val worker = client.newWorker(taskQueue, workerOptions)
-            
-            // Register implementations
-            worker.registerWorkflowImplementationTypes(TestableWorkflowImpl::class.java)
-            worker.registerActivitiesImplementations(/* production activities */)
-            
-            return worker
-        }
-    }
-}
-```
+## **Testing Pyramid:**
 
-### Step 8: Add Production Workflow Options
+- ✅ **Unit Tests**: Fast, isolated, mock all dependencies
+- ✅ **Integration Tests**: Real activities, mock external services
+- ✅ **End-to-End Tests**: Full system with real Temporal cluster
+- ✅ **Load Tests**: Performance validation under stress
 
-Configure workflow options for production use:
+## **Mock Strategy:**
+- **Mock external services** (payment gateways, APIs)
+- **Use real business logic** in activities when possible
+- **Test error scenarios** with controlled failures
+- **Validate retry behavior** and timeout handling
 
-```kotlin
-fun getProductionWorkflowOptions(orderId: String): WorkflowOptions {
-    return WorkflowOptions.newBuilder()
-        .setWorkflowId("order-processing-$orderId")
-        .setTaskQueue("production-order-queue")
-        .setWorkflowExecutionTimeout(Duration.ofHours(24))
-        .setWorkflowRunTimeout(Duration.ofHours(12))
-        .setWorkflowTaskTimeout(Duration.ofMinutes(1))
-        .build()
-}
-```
+---
 
-### Step 9: Implement Test Cases
+# 💡 Key Testing & Production Patterns
 
-Create comprehensive test scenarios covering:
+## **What You've Learned:**
 
-- **Happy Path Testing**: All operations succeed
-- **Validation Failures**: Invalid input handling
-- **Partial Failures**: Some operations fail, others succeed
-- **Compensation Logic**: Rollback scenarios
-- **Timeout Testing**: Long-running operation handling
-- **Retry Logic**: Activity retry behavior
+- ✅ **Comprehensive testing** with `TestWorkflowRule`
+- ✅ **Mock activity implementations** for isolated testing
+- ✅ **Production worker configuration** with proper scaling
+- ✅ **Integration testing** strategies
+- ✅ **Performance optimization** approaches
+- ✅ **Deployment best practices** for production systems
 
-### Step 10: Add Production Monitoring
+---
 
-Include logging and monitoring patterns:
+# 🚀 Final Achievement
 
-```kotlin
-// In workflow implementation
-try {
-    val result = paymentActivity.processPayment(orderId, totalAmount, paymentMethod)
-    // Log success metrics
-    return result
-} catch (e: Exception) {
-    errors.add("Payment processing failed: ${e.message}")
-    // Log failure metrics and attempt compensation
-    compensateInventoryReservation(inventoryResult.reservationId)
-    throw e
-}
-```
+**You now master production-ready Temporal development!**
 
-## How to Run
+## **Lesson 17 will cover:**
+- Deployment strategies and environments
+- Monitoring and observability
+- Production operational patterns
+- Advanced scaling and optimization
 
-### Testing
-1. **Unit Tests**: Use `TestWorkflowRule` to test workflow logic in isolation
-2. **Integration Tests**: Test with real Temporal server and mock external services
-3. **Load Testing**: Verify performance under concurrent execution
-
-Example test execution:
-```kotlin
-val testRunner = TestWorkflowRunner()
-val orderRequest = OrderRequest(/* test data */)
-val result = testRunner.runOrderProcessingTest(orderRequest).get()
-
-assert(result.status == OrderStatus.SHIPPED)
-assert(result.errors.isEmpty())
-```
-
-### Production Deployment
-1. **Worker Setup**: Configure workers with appropriate scaling
-2. **Task Queue Configuration**: Set up dedicated task queues for different workloads
-3. **Monitoring**: Implement metrics collection and alerting
-4. **Environment Configuration**: Manage secrets and environment-specific settings
-
-Example production startup:
-```kotlin
-val client = WorkflowClient.newInstance(service)
-val worker = ProductionWorkerConfig.createWorker(client, "production-order-queue")
-worker.start()
-``` 
+**Ready for production deployment mastery? Let's finish strong! 🎉** 

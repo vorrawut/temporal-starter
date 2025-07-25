@@ -1,14 +1,36 @@
-# Concept 10: Signals
+---
+marp: true
+theme: gaia
+paginate: true
+backgroundColor: #1e1e2f
+color: white
+---
 
-## Objective
+# Signals
+
+## Lesson 10: Interactive Workflow Patterns
 
 Master interactive workflow patterns using Temporal signals and queries to build responsive, long-running workflows that can react to external events and provide real-time status information.
 
-## Key Concepts
+---
 
-### 1. **Signals vs Queries**
+# Objective
 
-#### **Signals: Changing Workflow State**
+By the end of this lesson, you will understand:
+
+- ✅ **Signals vs Queries** - when to use each pattern
+- ✅ **Signal handling patterns** for event-driven workflows
+- ✅ **Interactive approval workflows** with external decision makers
+- ✅ **Long-running workflow patterns** with external events
+- ✅ **State management** in signal-driven workflows
+- ✅ **Best practices** for responsive workflow design
+
+---
+
+# 1. **Signals vs Queries**
+
+## **Signals: Changing Workflow State**
+
 ```kotlin
 @WorkflowInterface
 interface OrderTrackingWorkflow {
@@ -27,7 +49,12 @@ interface OrderTrackingWorkflow {
 }
 ```
 
-#### **Queries: Reading Workflow State**
+**Signals enable external systems to send events to running workflows**
+
+---
+
+# Queries: Reading Workflow State
+
 ```kotlin
 @WorkflowInterface
 interface OrderTrackingWorkflow {
@@ -46,18 +73,28 @@ interface OrderTrackingWorkflow {
 }
 ```
 
-#### **Key Differences**
-| Aspect | Signals | Queries |
-|--------|---------|---------|
+**Queries provide real-time visibility into workflow state without affecting execution**
+
+---
+
+# Key Differences
+
+| Aspect | **Signals** | **Queries** |
+|--------|-------------|-------------|
 | **Purpose** | Modify workflow state | Read workflow state |
 | **Durability** | Persisted in workflow history | Not persisted |
 | **Timing** | Asynchronous | Synchronous |
 | **Replay** | Executed during replay | Not executed during replay |
 | **Side Effects** | Can trigger activities | Read-only operations |
 
-### 2. **Signal Handling Patterns**
+**Choose signals for state changes, queries for state inspection**
 
-#### **Event-Driven State Machine**
+---
+
+# 2. **Signal Handling Patterns**
+
+## **Event-Driven State Machine**
+
 ```kotlin
 class ApprovalWorkflowImpl : ApprovalWorkflow {
     
@@ -83,7 +120,14 @@ class ApprovalWorkflowImpl : ApprovalWorkflow {
                 ApprovalState.PENDING -> false
             }
         }
-        
+        // Continued on next slide...
+```
+
+---
+
+# Approval State Handling
+
+```kotlin
         return when (state) {
             ApprovalState.APPROVED -> {
                 val executionResult = executionActivity.executeRequest(request)
@@ -113,7 +157,14 @@ class ApprovalWorkflowImpl : ApprovalWorkflow {
             state = ApprovalState.APPROVED
         }
     }
-    
+    // Continued on next slide...
+```
+
+---
+
+# Signal Handler Implementation
+
+```kotlin
     @SignalMethod
     override fun reject(approverEmail: String, reason: String) {
         if (state != ApprovalState.PENDING) return
@@ -125,7 +176,16 @@ class ApprovalWorkflowImpl : ApprovalWorkflow {
 }
 ```
 
-#### **Signal Buffering and Ordering**
+## **Key Signal Patterns:**
+- ✅ **State validation** in signal handlers
+- ✅ **Conditional logic** based on current state
+- ✅ **Collection management** for tracking multiple events
+- ✅ **State transitions** triggered by signals
+
+---
+
+# Signal Buffering and Ordering
+
 ```kotlin
 class OrderProcessingWorkflowImpl : OrderProcessingWorkflow {
     
@@ -153,7 +213,14 @@ class OrderProcessingWorkflowImpl : OrderProcessingWorkflow {
             processUpdatesAsync()
         }
     }
-    
+    // Continued on next slide...
+```
+
+---
+
+# Async Signal Processing
+
+```kotlin
     private fun processUpdatesAsync() {
         // Process updates in a separate workflow "thread"
         Async.procedure {
@@ -167,349 +234,34 @@ class OrderProcessingWorkflowImpl : OrderProcessingWorkflow {
 }
 ```
 
-### 3. **Long-Running Workflow Patterns**
-
-#### **Persistent Session Pattern**
-```kotlin
-class CustomerSupportSessionWorkflowImpl : CustomerSupportSessionWorkflow {
-    
-    private var sessionState = SessionState.ACTIVE
-    private val messages = mutableListOf<Message>()
-    private var assignedAgent: String? = null
-    private var lastActivity = Instant.now()
-    
-    override fun startSession(customerId: String): SessionResult {
-        val logger = Workflow.getLogger(this::class.java)
-        
-        // Initialize session
-        val sessionId = generateSessionId()
-        logger.info("Starting support session: $sessionId for customer: $customerId")
-        
-        // Wait for messages, agent assignment, or timeout
-        while (sessionState == SessionState.ACTIVE) {
-            val hasActivity = Workflow.await(Duration.ofMinutes(30)) {
-                val now = Workflow.currentTimeMillis()
-                now - lastActivity.toEpochMilli() < Duration.ofMinutes(5).toMillis()
-            }
-            
-            if (!hasActivity) {
-                // Session timeout due to inactivity
-                sessionState = SessionState.TIMED_OUT
-                cleanupActivity.archiveSession(sessionId)
-                break
-            }
-        }
-        
-        return SessionResult(
-            sessionId = sessionId,
-            finalState = sessionState,
-            messageCount = messages.size,
-            duration = Duration.between(Instant.now(), lastActivity)
-        )
-    }
-    
-    @SignalMethod
-    override fun sendMessage(message: Message) {
-        messages.add(message)
-        lastActivity = Instant.now()
-        
-        // Process message asynchronously
-        Async.procedure {
-            messageProcessingActivity.processMessage(message)
-        }
-    }
-    
-    @SignalMethod
-    override fun assignAgent(agentId: String) {
-        assignedAgent = agentId
-        lastActivity = Instant.now()
-        
-        // Notify agent assignment
-        Async.procedure {
-            notificationActivity.notifyAgentAssignment(agentId, messages)
-        }
-    }
-    
-    @SignalMethod
-    override fun closeSession(reason: SessionCloseReason) {
-        sessionState = SessionState.CLOSED
-        
-        // Perform cleanup
-        Async.procedure {
-            cleanupActivity.finalizeSession(generateSessionSummary(), reason)
-        }
-    }
-}
-```
-
-### 4. **Signal-Based Coordination**
-
-#### **Multi-Workflow Coordination**
-```kotlin
-class OrderCoordinatorWorkflowImpl : OrderCoordinatorWorkflow {
-    
-    private val subWorkflowStates = mutableMapOf<String, WorkflowState>()
-    private val completedWorkflows = mutableSetOf<String>()
-    
-    override fun coordinateOrder(order: OrderRequest): CoordinationResult {
-        val logger = Workflow.getLogger(this::class.java)
-        
-        // Start sub-workflows
-        val paymentWorkflowId = startPaymentWorkflow(order)
-        val inventoryWorkflowId = startInventoryWorkflow(order)
-        val shippingWorkflowId = startShippingWorkflow(order)
-        
-        subWorkflowStates[paymentWorkflowId] = WorkflowState.RUNNING
-        subWorkflowStates[inventoryWorkflowId] = WorkflowState.RUNNING
-        subWorkflowStates[shippingWorkflowId] = WorkflowState.RUNNING
-        
-        // Wait for all workflows to complete or any to fail
-        val allCompleted = Workflow.await(Duration.ofMinutes(30)) {
-            completedWorkflows.size == 3 || 
-            subWorkflowStates.values.any { it == WorkflowState.FAILED }
-        }
-        
-        return if (allCompleted && completedWorkflows.size == 3) {
-            CoordinationResult.success(order.orderId, collectResults())
-        } else {
-            // Handle partial completion
-            cancelIncompleteWorkflows()
-            CoordinationResult.failed(order.orderId, getFailureReasons())
-        }
-    }
-    
-    @SignalMethod
-    override fun reportWorkflowCompletion(workflowId: String, result: WorkflowResult) {
-        subWorkflowStates[workflowId] = if (result.success) {
-            WorkflowState.COMPLETED
-        } else {
-            WorkflowState.FAILED
-        }
-        
-        if (result.success) {
-            completedWorkflows.add(workflowId)
-        }
-    }
-}
-```
-
-### 5. **Query Optimization**
-
-#### **Efficient State Queries**
-```kotlin
-class OrderTrackingWorkflowImpl : OrderTrackingWorkflow {
-    
-    // Cached computed state for efficient queries
-    private var cachedStatus: OrderStatus? = null
-    private var statusLastComputed: Instant? = null
-    private val statusCacheTTL = Duration.ofSeconds(30)
-    
-    @QueryMethod
-    override fun getCurrentStatus(): OrderStatus {
-        val now = Workflow.currentTimeMillis()
-        
-        // Return cached status if still valid
-        if (cachedStatus != null && statusLastComputed != null) {
-            val cacheAge = Duration.ofMillis(now - statusLastComputed!!.toEpochMilli())
-            if (cacheAge < statusCacheTTL) {
-                return cachedStatus!!
-            }
-        }
-        
-        // Recompute status
-        cachedStatus = computeCurrentStatus()
-        statusLastComputed = Instant.ofEpochMilli(now)
-        
-        return cachedStatus!!
-    }
-    
-    @QueryMethod
-    override fun getDetailedProgress(): ProgressDetails {
-        return ProgressDetails(
-            orderId = orderId,
-            currentStep = currentStep,
-            completedSteps = completedSteps.toList(),
-            remainingSteps = remainingSteps.toList(),
-            estimatedCompletion = estimateCompletion(),
-            lastUpdate = lastUpdateTime
-        )
-    }
-    
-    private fun computeCurrentStatus(): OrderStatus {
-        return when {
-            completedSteps.contains("shipped") -> OrderStatus.SHIPPED
-            completedSteps.contains("payment") -> OrderStatus.PROCESSING
-            completedSteps.contains("validation") -> OrderStatus.VALIDATED
-            else -> OrderStatus.PENDING
-        }
-    }
-}
-```
-
-### 6. **External Integration Patterns**
-
-#### **REST API Integration**
-```kotlin
-@RestController
-@RequestMapping("/api/workflows")
-class WorkflowController(
-    private val workflowClient: WorkflowClient
-) {
-    
-    @PostMapping("/approval/{workflowId}/approve")
-    fun approveRequest(
-        @PathVariable workflowId: String,
-        @RequestBody approvalRequest: ApprovalRequestDto
-    ): ResponseEntity<ApiResponse> {
-        
-        return try {
-            val workflow = workflowClient.newWorkflowStub(
-                ApprovalWorkflow::class.java,
-                workflowId
-            )
-            
-            workflow.approve(approvalRequest.approverEmail, approvalRequest.comment)
-            
-            ResponseEntity.ok(ApiResponse.success("Approval recorded"))
-            
-        } catch (e: WorkflowNotFoundException) {
-            ResponseEntity.notFound().build()
-        } catch (e: Exception) {
-            ResponseEntity.badRequest()
-                .body(ApiResponse.error("Failed to process approval: ${e.message}"))
-        }
-    }
-    
-    @GetMapping("/order/{workflowId}/status")
-    fun getOrderStatus(@PathVariable workflowId: String): ResponseEntity<OrderStatusDto> {
-        
-        return try {
-            val workflow = workflowClient.newWorkflowStub(
-                OrderTrackingWorkflow::class.java,
-                workflowId
-            )
-            
-            val status = workflow.getCurrentStatus()
-            val progress = workflow.getDetailedProgress()
-            
-            val statusDto = OrderStatusDto.from(status, progress)
-            ResponseEntity.ok(statusDto)
-            
-        } catch (e: WorkflowNotFoundException) {
-            ResponseEntity.notFound().build()
-        }
-    }
-}
-```
-
-## Best Practices
-
-### ✅ Signal Design
-
-1. **Make Signals Idempotent**
-   ```kotlin
-   @SignalMethod
-   override fun updateInventory(update: InventoryUpdate) {
-       // Check if update already processed
-       if (processedUpdates.contains(update.updateId)) {
-           return // Safe to call multiple times
-       }
-       
-       processedUpdates.add(update.updateId)
-       applyInventoryUpdate(update)
-   }
-   ```
-
-2. **Validate Signal Parameters**
-   ```kotlin
-   @SignalMethod
-   override fun approve(approverEmail: String, comment: String) {
-       require(approverEmail.isNotBlank()) { "Approver email required" }
-       require(comment.isNotBlank()) { "Approval comment required" }
-       require(state == ApprovalState.PENDING) { "Cannot approve non-pending request" }
-       
-       processApproval(approverEmail, comment)
-   }
-   ```
-
-3. **Use Structured Signal Data**
-   ```kotlin
-   data class StatusUpdate(
-       val updateId: String,
-       val timestamp: Instant,
-       val updateType: UpdateType,
-       val data: Map<String, Any>,
-       val source: String
-   )
-   
-   @SignalMethod
-   override fun updateStatus(update: StatusUpdate) {
-       // Process structured update
-   }
-   ```
-
-### ✅ Query Design
-
-1. **Cache Expensive Computations**
-   ```kotlin
-   private var expensiveResultCache: ExpensiveResult? = null
-   private var cacheTimestamp: Long = 0
-   
-   @QueryMethod
-   override fun getExpensiveData(): ExpensiveResult {
-       val now = Workflow.currentTimeMillis()
-       if (expensiveResultCache == null || (now - cacheTimestamp) > CACHE_TTL_MS) {
-           expensiveResultCache = computeExpensiveResult()
-           cacheTimestamp = now
-       }
-       return expensiveResultCache!!
-   }
-   ```
-
-2. **Return Immutable Objects**
-   ```kotlin
-   @QueryMethod
-   override fun getProcessingSteps(): List<ProcessingStep> {
-       return processingSteps.toList() // Return copy, not mutable original
-   }
-   ```
-
-### ❌ Common Mistakes
-
-1. **Modifying State in Queries**
-   ```kotlin
-   // Bad: Query modifying state
-   @QueryMethod
-   override fun getAndMarkAsRead(): List<Message> {
-       markAllAsRead() // Don't do this!
-       return messages
-   }
-   
-   // Good: Query only reads
-   @QueryMethod
-   override fun getUnreadMessages(): List<Message> {
-       return messages.filter { !it.isRead }
-   }
-   ```
-
-2. **Ignoring Signal Ordering**
-   ```kotlin
-   // Bad: Not handling out-of-order signals
-   @SignalMethod
-   override fun updateStep(stepNumber: Int, status: String) {
-       stepStatuses[stepNumber] = status // Could overwrite newer status!
-   }
-   
-   // Good: Check timestamps/versions
-   @SignalMethod
-   override fun updateStep(update: StepUpdate) {
-       val current = stepStatuses[update.stepNumber]
-       if (current == null || update.timestamp > current.timestamp) {
-           stepStatuses[update.stepNumber] = update
-       }
-   }
-   ```
+## **Signal Processing Patterns:**
+- ✅ **Buffering** for high-frequency signals
+- ✅ **Async processing** to avoid blocking main workflow
+- ✅ **Ordering guarantees** for dependent signals
+- ✅ **State consistency** during concurrent updates
 
 ---
 
-**Congratulations!** You've completed the intermediate-to-advanced Temporal bootcamp. You're now ready to build production-grade, resilient distributed systems with Temporal! 
+# 💡 Key Takeaways
+
+## **What You've Learned:**
+
+- ✅ **Signals enable interactive workflows** that respond to external events
+- ✅ **Queries provide real-time observability** without affecting execution
+- ✅ **Event-driven state machines** handle complex approval flows
+- ✅ **Signal buffering** manages high-frequency updates
+- ✅ **Workflow.await()** blocks until conditions are met
+
+---
+
+# 🚀 Next Steps
+
+**You now understand building interactive workflow systems!**
+
+## **Lesson 11 will cover:**
+- Advanced query patterns and optimization
+- Real-time workflow observability
+- Query design best practices
+- Performance considerations for large-scale systems
+
+**Ready to master workflow queries? Let's continue! 🎉** 

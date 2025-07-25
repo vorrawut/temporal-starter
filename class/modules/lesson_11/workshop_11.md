@@ -1,23 +1,43 @@
+---
+marp: true
+theme: gaia
+paginate: true
+backgroundColor: #1e1e2f
+color: white
+---
+
 # Workshop 11: Queries
 
-## What we want to build
+## Building Real-Time Workflow Observability
 
-Create an order tracking workflow that demonstrates how to implement and use query handlers to fetch real-time state information from running workflows. This workflow will process an order through multiple stages while allowing external systems to query its current status and processing history.
+*Create an order tracking workflow that demonstrates how to implement and use query handlers to fetch real-time state information from running workflows*
 
-## Expecting Result
+---
 
-By the end of this lesson, you'll have:
+# What we want to build
 
-- A workflow that maintains queryable state throughout its execution
-- Multiple query methods for different types of information
-- Understanding of when and how to use queries vs signals
-- Real-time visibility into workflow progress without interrupting execution
+Create an **order tracking workflow** that demonstrates how to implement and use **query handlers** to fetch real-time state information from running workflows. 
 
-## Code Steps
+This workflow will process an order through multiple stages while allowing **external systems to query its current status** and processing history.
 
-### Step 1: Create the Workflow Interface with Query Methods
+---
 
-Open `class/workshop/lesson_11/workflow/OrderTrackingWorkflow.kt` and create the interface:
+# Expecting Result
+
+## By the end of this lesson, you'll have:
+
+- ✅ **A workflow that maintains queryable state** throughout its execution
+- ✅ **Multiple query methods** for different types of information
+- ✅ **Understanding of when and how to use queries vs signals**
+- ✅ **Real-time visibility** into workflow progress without interrupting execution
+
+---
+
+# Code Steps
+
+## Step 1: Create the Workflow Interface with Query Methods
+
+Open `class/workshop/lesson_11/workflow/OrderTrackingWorkflow.kt`:
 
 ```kotlin
 package com.temporal.bootcamp.lesson11.workflow
@@ -43,14 +63,11 @@ interface OrderTrackingWorkflow {
 }
 ```
 
-**Key points:**
-- `@QueryMethod` annotation marks methods that can be called to read workflow state
-- Query methods should be read-only and not modify workflow state
-- Multiple query methods allow different views of the same workflow
+**Key points: `@QueryMethod` marks read-only methods, multiple queries allow different views**
 
-### Step 2: Implement the Workflow with Queryable State
+---
 
-Create the workflow implementation:
+# Step 2: Implement the Workflow with Queryable State
 
 ```kotlin
 class OrderTrackingWorkflowImpl : OrderTrackingWorkflow {
@@ -86,9 +103,9 @@ class OrderTrackingWorkflowImpl : OrderTrackingWorkflow {
 }
 ```
 
-### Step 3: Implement Query Methods
+---
 
-Add the query method implementations:
+# Step 3: Implement Query Methods
 
 ```kotlin
 override fun getCurrentStatus(): OrderStatus = currentStatus
@@ -98,14 +115,15 @@ override fun getOrderDetails(): OrderDetails = orderDetails
 override fun getProcessingHistory(): List<ProcessingEvent> = processingHistory.toList()
 ```
 
-**Key points:**
-- Query methods return current state instantly
-- Return copies of mutable collections to prevent external modification
-- Keep query methods simple and fast
+## **Key Query Principles:**
+- ✅ **Query methods return current state instantly**
+- ✅ **Return copies** of mutable collections to prevent external modification
+- ✅ **Keep query methods simple and fast**
+- ✅ **No side effects** - read-only operations
 
-### Step 4: Add State Update Helper
+---
 
-Create a helper method to update workflow state:
+# Step 4: Add State Update Helper
 
 ```kotlin
 private fun updateStatus(newStatus: OrderStatus, details: String) {
@@ -125,9 +143,11 @@ private fun updateStatus(newStatus: OrderStatus, details: String) {
 }
 ```
 
-### Step 5: Complete the Order Processing Logic
+**Centralized state updates ensure consistency across queries**
 
-Add the remaining order processing stages:
+---
+
+# Step 5: Complete Order Processing Logic
 
 ```kotlin
 override fun trackOrder(orderId: String): OrderTrackingResult {
@@ -165,9 +185,12 @@ override fun trackOrder(orderId: String): OrderTrackingResult {
 }
 ```
 
-## How to Run
+---
 
-### 1. Start the Workflow
+# How to Run
+
+## 1. Start the Workflow
+
 ```kotlin
 val workflow = workflowClient.newWorkflowStub(
     OrderTrackingWorkflow::class.java,
@@ -181,7 +204,10 @@ val workflow = workflowClient.newWorkflowStub(
 val execution = WorkflowClient.start(workflow::trackOrder, "ORD-12345")
 ```
 
-### 2. Query the Workflow While Running
+---
+
+# 2. Query the Workflow While Running
+
 ```kotlin
 // Create a stub to the running workflow
 val queryStub = workflowClient.newWorkflowStub(
@@ -202,19 +228,55 @@ val history = queryStub.getProcessingHistory()
 println("Processing history: ${history.size} events")
 ```
 
-### 3. Expected Output
+---
+
+# 3. Expected Output
+
 ```
 Current status: PAYMENT_PROCESSING
 Order details: OrderDetails(orderId=ORD-12345, customerId=customer-345, ...)
 Processing history: 3 events
 ```
 
-## What You've Learned
+**Real-time visibility into workflow state without affecting execution**
 
-- ✅ How to implement query methods in workflows
-- ✅ The difference between queries and signals (read vs write)
-- ✅ Managing queryable state throughout workflow execution
-- ✅ Real-time workflow monitoring without affecting execution
-- ✅ Best practices for query method design
+---
 
-Queries provide a powerful way to observe workflow state in real-time! 
+# Query Design Patterns
+
+## **Progressive Disclosure:**
+- ✅ **Basic status** query for simple monitoring
+- ✅ **Detailed information** query for debugging
+- ✅ **Historical information** query for audit trails
+- ✅ **Performance metrics** query for optimization
+
+## **Performance Optimization:**
+- ✅ **Cache expensive computations** with TTL
+- ✅ **Lazy computation** only when requested
+- ✅ **Immutable responses** to prevent data corruption
+
+---
+
+# 💡 Key Takeaways
+
+## **What You've Learned:**
+
+- ✅ **Query methods provide real-time workflow observability**
+- ✅ **Queries vs signals**: read vs write operations
+- ✅ **Managing queryable state** throughout workflow execution
+- ✅ **Multiple query methods** enable different views of workflow state
+- ✅ **Best practices** for query method design and performance
+
+---
+
+# 🚀 Next Steps
+
+**You now understand building observable workflows!**
+
+## **Lesson 12 will cover:**
+- Child workflow patterns and hierarchical decomposition
+- `continueAsNew` for long-running processes
+- Advanced workflow orchestration patterns
+- Scaling workflows through composition
+
+**Ready to master workflow composition? Let's continue! 🎉** 

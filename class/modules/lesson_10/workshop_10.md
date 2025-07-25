@@ -1,19 +1,42 @@
+---
+marp: true
+theme: gaia
+paginate: true
+backgroundColor: #1e1e2f
+color: white
+---
+
 # Workshop 10: Signals
 
-## What we want to build
+## Building Interactive Workflow Systems
 
-Create workflows that can receive and respond to external signals while running. This enables interactive workflows that can change behavior based on external events.
+*Create workflows that can receive and respond to external signals while running*
 
-## Expecting Result
+---
 
-- Long-running workflows that listen for signals
-- Signal handlers that modify workflow behavior
-- Querying workflow state from external systems
-- Interactive approval workflows
+# What we want to build
 
-## Code Steps
+Create **workflows that can receive and respond to external signals** while running. 
 
-### Step 1: Define Workflow with Signals
+This enables **interactive workflows** that can change behavior based on external events.
+
+---
+
+# Expecting Result
+
+## By the end of this workshop, you'll have:
+
+- ✅ **Long-running workflows** that listen for signals
+- ✅ **Signal handlers** that modify workflow behavior
+- ✅ **Querying workflow state** from external systems
+- ✅ **Interactive approval workflows**
+
+---
+
+# Code Steps
+
+## Step 1: Define Workflow with Signals
+
 ```kotlin
 @WorkflowInterface
 interface ApprovalWorkflow {
@@ -35,7 +58,12 @@ interface ApprovalWorkflow {
 }
 ```
 
-### Step 2: Implement Signal Handling
+**Key concepts: `@SignalMethod` for external events, `@QueryMethod` for state reading**
+
+---
+
+# Step 2: Implement Signal Handling
+
 ```kotlin
 class ApprovalWorkflowImpl : ApprovalWorkflow {
     
@@ -54,7 +82,14 @@ class ApprovalWorkflowImpl : ApprovalWorkflow {
         
         // Send notification to approvers
         notificationActivity.notifyApprovers(request.requiredApprovers, request)
-        
+        // Continued on next slide...
+```
+
+---
+
+# Signal Waiting Pattern
+
+```kotlin
         // Wait for approval or timeout
         val approvalDeadline = Workflow.newTimer(Duration.ofDays(7))
         
@@ -78,7 +113,14 @@ class ApprovalWorkflowImpl : ApprovalWorkflow {
                     executionResult = executionResult
                 )
             }
-            
+            // Continued on next slide...
+```
+
+---
+
+# Complete Status Handling
+
+```kotlin
             ApprovalStatus.REJECTED -> {
                 logger.info("Request rejected: $rejectionReason")
                 
@@ -104,7 +146,14 @@ class ApprovalWorkflowImpl : ApprovalWorkflow {
             }
         }
     }
-    
+    // Continued on next slide...
+```
+
+---
+
+# Signal Handlers Implementation
+
+```kotlin
     override fun approve(approverComment: String) {
         val logger = Workflow.getLogger(this::class.java)
         logger.info("Approval signal received with comment: $approverComment")
@@ -127,7 +176,12 @@ class ApprovalWorkflowImpl : ApprovalWorkflow {
 }
 ```
 
-### Step 3: Send Signals from External System
+**Signal handlers update workflow state and trigger condition checks**
+
+---
+
+# Step 3: Send Signals from External System
+
 ```kotlin
 // Start the approval workflow
 val workflow = workflowClient.newWorkflowStub(
@@ -154,7 +208,10 @@ val currentStatus = workflowStub.getStatus()
 println("Current approval status: $currentStatus")
 ```
 
-### Step 4: Multiple Signal Handlers
+---
+
+# Step 4: Multiple Signal Handlers
+
 ```kotlin
 class OrderTrackingWorkflowImpl : OrderTrackingWorkflow {
     
@@ -180,7 +237,14 @@ class OrderTrackingWorkflowImpl : OrderTrackingWorkflow {
             orderStatus = OrderStatus.COMPLETED
         }
     }
-    
+    // Continued on next slide...
+```
+
+---
+
+# More Signal Handlers
+
+```kotlin
     @SignalMethod
     fun reportIssue(issue: OrderIssue) {
         statusHistory.add(StatusUpdate.issue(issue))
@@ -199,9 +263,14 @@ class OrderTrackingWorkflowImpl : OrderTrackingWorkflow {
 }
 ```
 
-## How to Run
+**Multiple signal handlers enable rich interaction patterns**
 
-Start workflow and send signals:
+---
+
+# How to Run
+
+## Start workflow and send signals:
+
 ```kotlin
 // Start the workflow
 val approvalRequest = ApprovalRequest(
@@ -228,4 +297,46 @@ println("Status: $status")
 
 // Send approval
 workflow.approve("Deployment approved after security review")
-``` 
+```
+
+---
+
+# Signal vs Query Patterns
+
+## **Signals (Write Operations):**
+- ✅ **Modify workflow state** asynchronously
+- ✅ **Trigger workflow logic** changes
+- ✅ **Persisted in workflow history** for replay
+- ✅ **Enable external interaction** with running workflows
+
+## **Queries (Read Operations):**
+- ✅ **Read current state** synchronously
+- ✅ **No side effects** on workflow execution
+- ✅ **Fast response** without persistence
+- ✅ **Real-time monitoring** and observability
+
+---
+
+# 💡 Key Takeaways
+
+## **What You've Learned:**
+
+- ✅ **Signals enable interactive workflows** that respond to external events
+- ✅ **Workflow.await()** blocks until conditions are met
+- ✅ **Signal handlers** update state and trigger logic changes
+- ✅ **Queries provide** real-time state visibility
+- ✅ **Asynchronous workflow execution** with external interaction
+
+---
+
+# 🚀 Next Steps
+
+**You now understand building interactive workflow systems!**
+
+## **Lesson 11 will cover:**
+- Advanced query patterns and optimization
+- Real-time workflow observability
+- Query design best practices
+- Performance considerations
+
+**Ready to master workflow queries? Let's continue! 🎉** 

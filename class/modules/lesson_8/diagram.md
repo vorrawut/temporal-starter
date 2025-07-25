@@ -1,6 +1,20 @@
+---
+marp: true
+theme: gaia
+paginate: true
+backgroundColor: #1e1e2f
+color: white
+---
+
 # 📜 Diagram for Lesson 8: Activity Retry + Timeout
 
-This diagram visualizes the retry patterns and timeout strategies for resilient activity execution.
+## Visualizing Resilient Activity Execution
+
+*Retry patterns and timeout strategies for resilient activity execution*
+
+---
+
+# Activity Retry Flow with Exponential Backoff
 
 ```mermaid
 sequenceDiagram
@@ -33,20 +47,73 @@ sequenceDiagram
     ES->>A: Success Response
     A->>TS: Activity Completed
     TS->>W: Activity Result
-    
-    Note over W,ES: Different Retry Strategies by Activity Type
-    
-    rect rgb(255, 245, 245)
-        Note over W,ES: Critical Activity (Payment)<br/>MaxAttempts: 5, LongTimeout
-    end
-    
-    rect rgb(245, 255, 245)  
-        Note over W,ES: Standard Activity (Validation)<br/>MaxAttempts: 3, MediumTimeout
-    end
-    
-    rect rgb(245, 245, 255)
-        Note over W,ES: Long-Running Activity (File Processing)<br/>MaxAttempts: 10, Heartbeat
-    end
 ```
 
-> 💡 This sequence diagram shows how Temporal automatically retries failed activities with exponential backoff, and demonstrates different retry strategies for different types of activities based on their criticality and expected duration. 
+---
+
+# Retry Strategy by Activity Type
+
+```mermaid
+graph TD
+    A[Activity Type] --> B{Operation Category}
+    
+    B -->|Critical| C[Payment Processing]
+    B -->|Standard| D[Validation]
+    B -->|Long-Running| E[File Processing]
+    
+    C --> F[MaxAttempts: 5<br/>LongTimeout<br/>Conservative Backoff]
+    D --> G[MaxAttempts: 3<br/>MediumTimeout<br/>Standard Backoff]
+    E --> H[MaxAttempts: 10<br/>Heartbeat Required<br/>Aggressive Backoff]
+    
+    style C fill:#ffebee
+    style D fill:#e8f5e8
+    style E fill:#e3f2fd
+    style F fill:#ffcdd2
+    style G fill:#c8e6c9
+    style H fill:#bbdefb
+```
+
+---
+
+# 💡 Key Insights from the Diagram
+
+## **Retry Flow Characteristics:**
+
+- ✅ **Automatic retry handling** by Temporal Server
+- ✅ **Exponential backoff** prevents service overload
+- ✅ **Configurable max attempts** prevents infinite retries
+- ✅ **Success on final attempt** shows resilience in action
+
+## **Strategy Differentiation:**
+
+- 🔴 **Critical activities** (payments) → **Conservative, fewer attempts**
+- 🟢 **Standard activities** (validation) → **Balanced approach**
+- 🔵 **Long-running activities** (file processing) → **More attempts, heartbeats**
+
+---
+
+# Timeout and Heartbeat Strategy
+
+## **Timeout Hierarchy:**
+- **ScheduleToStartTimeout** → Maximum queue wait time
+- **StartToCloseTimeout** → Single execution time limit
+- **ScheduleToCloseTimeout** → Total time including all retries
+- **HeartbeatTimeout** → Progress reporting frequency
+
+## **Benefits:**
+- **Prevents stuck workflows** through proper timeout configuration
+- **Enables progress monitoring** through heartbeat reporting
+- **Balances resilience** with resource efficiency
+
+---
+
+# 🚀 Production Resilience
+
+**This diagram demonstrates production-ready patterns for:**
+
+- ✅ **Service failure recovery** through smart retry policies
+- ✅ **Resource protection** via timeout boundaries
+- ✅ **System stability** through exponential backoff
+- ✅ **Operational visibility** via heartbeat monitoring
+
+**Building fault-tolerant distributed systems! 🎉** 

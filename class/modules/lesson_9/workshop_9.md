@@ -1,19 +1,45 @@
+---
+marp: true
+theme: gaia
+paginate: true
+backgroundColor: #1e1e2f
+color: white
+---
+
 # Workshop 9: Error Handling in Workflows
 
-## What we want to build
+## Building Resilient Distributed Systems
 
-Implement comprehensive error handling strategies in workflows including try-catch blocks, custom exceptions, compensation logic, and graceful degradation patterns.
+*Implement comprehensive error handling strategies in workflows including try-catch blocks, custom exceptions, compensation logic, and graceful degradation patterns*
 
-## Expecting Result
+---
 
-- Workflows that handle errors gracefully without failing
-- Custom business exceptions with proper context
-- Compensation logic for partial failures
-- Circuit breaker patterns to prevent cascading failures
+# What we want to build
 
-## Code Steps
+Implement **comprehensive error handling strategies** in workflows including:
 
-### Step 1: Custom Business Exceptions
+- **Try-catch blocks** and custom exceptions
+- **Compensation logic** for partial failures  
+- **Circuit breaker patterns** to prevent cascading failures
+- **Graceful degradation** for non-critical services
+
+---
+
+# Expecting Result
+
+## By the end of this workshop, you'll have:
+
+- ✅ **Workflows that handle errors gracefully** without failing
+- ✅ **Custom business exceptions** with proper context
+- ✅ **Compensation logic** for partial failures
+- ✅ **Circuit breaker patterns** to prevent cascading failures
+
+---
+
+# Code Steps
+
+## Step 1: Custom Business Exceptions
+
 ```kotlin
 // Define custom exception types
 class InsufficientInventoryException(
@@ -33,7 +59,12 @@ class ShippingUnavailableException(
 ) : Exception("Shipping unavailable to ${address.zipCode}: $reason")
 ```
 
-### Step 2: Error Handling Patterns in Workflows
+**Specific, contextual exceptions enable better error handling**
+
+---
+
+# Step 2: Error Handling Patterns in Workflows
+
 ```kotlin
 class OrderWorkflowImpl : OrderWorkflow {
     
@@ -56,7 +87,14 @@ class OrderWorkflowImpl : OrderWorkflow {
                     compensationPerformed = true
                 )
             }
-            
+            // Continued on next slide...
+```
+
+---
+
+# Error Handling Continued
+
+```kotlin
             // Step 3: Shipping arrangement
             val shippingResult = try {
                 shippingActivity.arrangeShipping(order.shippingAddress)
@@ -77,7 +115,14 @@ class OrderWorkflowImpl : OrderWorkflow {
                 paymentId = paymentResult.transactionId,
                 shippingId = shippingResult.trackingId
             )
-            
+            // Continued on next slide...
+```
+
+---
+
+# Global Error Handling
+
+```kotlin
         } catch (e: InsufficientInventoryException) {
             // Fail fast - no compensation needed
             logger.warn("Order failed due to insufficient inventory: ${e.message}")
@@ -111,7 +156,10 @@ class OrderWorkflowImpl : OrderWorkflow {
 }
 ```
 
-### Step 3: Circuit Breaker Pattern
+---
+
+# Step 3: Circuit Breaker Pattern
+
 ```kotlin
 class CircuitBreakerWorkflowImpl : CircuitBreakerWorkflow {
     
@@ -130,7 +178,14 @@ class CircuitBreakerWorkflowImpl : CircuitBreakerWorkflow {
             recordSuccess("external-service")
             
             ProcessingResult.success(result)
-            
+            // Continued on next slide...
+```
+
+---
+
+# Circuit Breaker Continued
+
+```kotlin
         } catch (e: Exception) {
             // Failure - record for circuit breaker
             recordFailure("external-service", e)
@@ -146,9 +201,17 @@ class CircuitBreakerWorkflowImpl : CircuitBreakerWorkflow {
 }
 ```
 
-## How to Run
+## **Circuit Breaker Benefits:**
+- ✅ **Prevents cascading failures** when services are down
+- ✅ **Fast failure** instead of waiting for timeouts
+- ✅ **Automatic recovery** when service becomes available
 
-Test error scenarios:
+---
+
+# How to Run
+
+## Test error scenarios:
+
 ```kotlin
 // Test insufficient inventory
 val orderWithTooManyItems = OrderRequest(
@@ -161,4 +224,48 @@ val orderWithBadPayment = OrderRequest(
     customerId = "customer123",
     paymentInfo = PaymentInfo(cardNumber = "invalid")
 )
-``` 
+
+val workflow = workflowClient.newWorkflowStub(OrderWorkflow::class.java)
+
+val result1 = workflow.processOrder(orderWithTooManyItems)
+val result2 = workflow.processOrder(orderWithBadPayment)
+```
+
+---
+
+# Error Handling Patterns
+
+## **Error Classification:**
+
+| Error Type | Strategy | Compensation | Example |
+|------------|----------|--------------|---------|
+| **Validation** | Fail fast | None | Invalid email |
+| **Business Rule** | Fail fast | None | Insufficient funds |
+| **Resource** | Retry + Compensate | Release resources | Database lock |
+| **External Service** | Circuit breaker | Full rollback | Payment gateway |
+
+---
+
+# 💡 Key Takeaways
+
+## **What You've Learned:**
+
+- ✅ **Custom exceptions** provide meaningful error context
+- ✅ **Compensation patterns** ensure data consistency
+- ✅ **Circuit breakers** prevent cascading failures
+- ✅ **Graceful degradation** maintains system stability
+- ✅ **Error classification** determines appropriate handling strategy
+
+---
+
+# 🚀 Next Steps
+
+**You now understand building error-resilient workflows!**
+
+## **Lesson 10 will cover:**
+- Interactive workflow patterns using Signals
+- Real-time workflow state queries
+- Event-driven workflow behavior
+- Long-running approval workflows
+
+**Ready to build interactive workflows? Let's continue! 🎉** 

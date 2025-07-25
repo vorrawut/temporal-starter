@@ -1,24 +1,50 @@
-# Lesson 15: External Service Integration
+---
+marp: true
+theme: gaia
+paginate: true
+backgroundColor: #1e1e2f
+color: white
+---
 
-## What we want to build
+# Workshop 15: External Service Integration
 
-A comprehensive user registration workflow that integrates with multiple external services including user profile APIs, payment gateways, databases, and notification systems. This lesson demonstrates how to properly encapsulate external service calls within Temporal activities and handle complex integration scenarios.
+## Building Production Integration Patterns
 
-## Expecting Result
+*A comprehensive user registration workflow that integrates with multiple external services including user profile APIs, payment gateways, databases, and notification systems*
 
-A working user registration workflow that:
-- Creates user profiles in external systems via HTTP APIs
-- Processes payments through external payment gateways
-- Saves data to databases
-- Sends multi-channel notifications (email, SMS)
-- Handles failures gracefully with proper error collection
-- Uses different timeout and retry configurations for different service types
+---
 
-## Code Steps
+# What we want to build
 
-### Step 1: Define Data Classes for External Integration
+A **comprehensive user registration workflow** that integrates with multiple external services including:
 
-Create data classes in `workflow/ExternalServiceWorkflow.kt` to represent the data structures:
+- **User profile APIs** via HTTP 
+- **Payment gateways** for processing
+- **Databases** for data persistence
+- **Notification systems** (email, SMS)
+
+This demonstrates **proper encapsulation** of external service calls within Temporal activities.
+
+---
+
+# Expecting Result
+
+## A working user registration workflow that:
+
+- ✅ **Creates user profiles** in external systems via HTTP APIs
+- ✅ **Processes payments** through external payment gateways
+- ✅ **Saves data** to databases
+- ✅ **Sends multi-channel notifications** (email, SMS)
+- ✅ **Handles failures gracefully** with proper error collection
+- ✅ **Uses different timeout and retry configurations** for different service types
+
+---
+
+# Code Steps
+
+## Step 1: Define Data Classes for External Integration
+
+Create data classes in `workflow/ExternalServiceWorkflow.kt`:
 
 ```kotlin
 data class UserProfile(
@@ -45,11 +71,11 @@ data class PaymentResult(
 )
 ```
 
-Add notification and integration result classes with proper enums.
+---
 
-### Step 2: Create Activity Interfaces
+# Step 2: Create Activity Interfaces
 
-Define separate activity interfaces for each external service:
+## Define separate activity interfaces for each external service:
 
 ```kotlin
 @ActivityInterface
@@ -74,11 +100,37 @@ interface PaymentService {
 }
 ```
 
-Continue with `DatabaseService` and `NotificationService` interfaces.
+**Separate interfaces enable focused responsibility and easier testing**
 
-### Step 3: Configure Activity Options
+---
 
-Set up different activity options for different service types:
+# Database and Notification Interfaces
+
+```kotlin
+@ActivityInterface
+interface DatabaseService {
+    @ActivityMethod
+    fun saveUserData(userId: String, data: Map<String, Any>): Boolean
+    
+    @ActivityMethod
+    fun getUserData(userId: String): Map<String, Any>?
+}
+
+@ActivityInterface
+interface NotificationService {
+    @ActivityMethod
+    fun sendWelcomeEmail(email: String, userName: String): Boolean
+    
+    @ActivityMethod
+    fun sendSMS(phoneNumber: String, message: String): Boolean
+}
+```
+
+---
+
+# Step 3: Configure Activity Options
+
+## Set up different activity options for different service types:
 
 ```kotlin
 // For external API calls (longer timeout, more retries)
@@ -101,104 +153,178 @@ private val defaultActivityOptions = ActivityOptions.newBuilder()
         RetryOptions.newBuilder()
             .setInitialInterval(Duration.ofSeconds(1))
             .setMaximumInterval(Duration.ofSeconds(30))
-            .setBackoffCoefficient(2.0)
+            .setBackoffCoefficient(1.5)
             .setMaximumAttempts(3)
             .build()
     )
     .build()
 ```
 
-### Step 4: Create Activity Stubs with Proper Configuration
+---
 
-Initialize activity stubs with appropriate configurations:
-
-```kotlin
-private val userProfileService = Workflow.newActivityStub(
-    UserProfileService::class.java, 
-    externalApiOptions
-)
-
-private val paymentService = Workflow.newActivityStub(
-    PaymentService::class.java, 
-    externalApiOptions
-)
-```
-
-### Step 5: Implement the Integration Workflow
-
-Create the main workflow method with proper error handling:
+# Workflow Implementation with Service Integration
 
 ```kotlin
-override fun processUserRegistration(
-    email: String,
-    userData: Map<String, Any>
-): IntegrationResult {
-    val userId = generateUserId(email)
-    val errors = mutableListOf<String>()
+class UserRegistrationWorkflowImpl : UserRegistrationWorkflow {
     
-    // Step 1: Create user profile
-    var profileCreated = false
-    try {
-        val userProfile = UserProfile(/* ... */)
-        userProfileService.createUserProfile(userProfile)
-        profileCreated = true
-        
-        // Log success
-        databaseService.logActivity(userId, "PROFILE_CREATED", mapOf(/* ... */))
-        
-    } catch (e: Exception) {
-        errors.add("Failed to create user profile: ${e.message}")
-    }
-    
-    // Continue with payment processing and notifications...
-}
-```
-
-### Step 6: Implement Service Orchestration
-
-Add logic for conditional processing and error collection:
-
-- Process payment only if payment data is provided
-- Send different notifications based on available contact methods
-- Collect all errors without failing the entire workflow
-- Update final status based on success/failure of individual steps
-
-### Step 7: Add Helper Methods
-
-Include utility methods for ID generation and data transformation:
-
-```kotlin
-private fun generateUserId(email: String): String {
-    return "user_${email.substringBefore("@")}_${Workflow.currentTimeMillis()}"
-}
-```
-
-## How to Run
-
-To test this lesson:
-
-1. **Create Test Activity Implementations**: Mock the external services for testing
-2. **Set up a Worker**: Configure worker to handle the workflow and activities
-3. **Execute the Workflow**: Use WorkflowClient to start the registration process
-
-Example test execution:
-
-```kotlin
-val userData = mapOf(
-    "fullName" to "John Doe",
-    "phoneNumber" to "+1234567890",
-    "initialPayment" to mapOf(
-        "amount" to 29.99,
-        "paymentMethod" to "credit_card"
-    ),
-    "preferences" to mapOf(
-        "newsletter" to true,
-        "sms_notifications" to false
+    private val userProfileService = Workflow.newActivityStub(
+        UserProfileService::class.java, externalApiOptions
     )
-)
-
-val result = workflow.processUserRegistration("john.doe@example.com", userData)
-println("Registration Result: $result")
+    
+    private val paymentService = Workflow.newActivityStub(
+        PaymentService::class.java, externalApiOptions
+    )
+    
+    private val databaseService = Workflow.newActivityStub(
+        DatabaseService::class.java, defaultActivityOptions
+    )
+    
+    private val notificationService = Workflow.newActivityStub(
+        NotificationService::class.java, defaultActivityOptions
+    )
+    
+    override fun registerUser(registrationRequest: UserRegistrationRequest): RegistrationResult {
+        val logger = Workflow.getLogger(this::class.java)
+        val errors = mutableListOf<String>()
+        var userProfileCreated = false
+        var paymentProcessed = false
+        
+        // Step 1: Create user profile (critical)
+        try {
+            val userId = userProfileService.createUserProfile(registrationRequest.userProfile)
+            userProfileCreated = true
+            logger.info("User profile created: $userId")
+        } catch (e: Exception) {
+            errors.add("Profile creation failed: ${e.message}")
+            return RegistrationResult.failed(errors)
+        }
+        // Continued on next slide...
 ```
 
-The workflow will coordinate all external service calls and return a comprehensive result showing what succeeded and what failed. 
+---
+
+# Service Integration Continued
+
+```kotlin
+        // Step 2: Process payment (critical)
+        try {
+            val paymentResult = paymentService.processPayment(registrationRequest.paymentRequest)
+            paymentProcessed = true
+            logger.info("Payment processed: ${paymentResult.transactionId}")
+        } catch (e: Exception) {
+            errors.add("Payment processing failed: ${e.message}")
+            // Cleanup: Remove user profile if payment fails
+            if (userProfileCreated) {
+                try {
+                    cleanupUserProfile(registrationRequest.userProfile.userId)
+                } catch (cleanupError: Exception) {
+                    logger.error("Cleanup failed: ${cleanupError.message}")
+                }
+            }
+            return RegistrationResult.failed(errors)
+        }
+        
+        // Step 3: Save to database (best effort)
+        try {
+            databaseService.saveUserData(registrationRequest.userProfile.userId, 
+                mapOf("registrationDate" to System.currentTimeMillis()))
+        } catch (e: Exception) {
+            errors.add("Database save failed: ${e.message}")
+            // Continue - not critical
+        }
+        
+        // Step 4: Send notifications (best effort)
+        try {
+            notificationService.sendWelcomeEmail(
+                registrationRequest.userProfile.email,
+                registrationRequest.userProfile.fullName
+            )
+        } catch (e: Exception) {
+            errors.add("Email notification failed: ${e.message}")
+            // Continue - not critical
+        }
+        
+        return RegistrationResult.success(registrationRequest.userProfile.userId, errors)
+    }
+}
+```
+
+---
+
+# Service Integration Patterns
+
+## **Error Handling Strategy:**
+
+| Service Type | Failure Impact | Strategy |
+|--------------|----------------|----------|
+| **User Profile** | Critical | Fail workflow, no cleanup needed |
+| **Payment** | Critical | Fail workflow, cleanup user profile |
+| **Database** | Non-critical | Log error, continue workflow |
+| **Notifications** | Non-critical | Log error, continue workflow |
+
+## **Timeout Strategy:**
+- **External APIs**: Longer timeouts (5+ minutes)
+- **Internal services**: Shorter timeouts (2 minutes)
+- **Payment gateways**: Conservative retries to avoid duplicate charges
+
+---
+
+# Activity Implementation Examples
+
+```kotlin
+@Component
+class UserProfileServiceImpl : UserProfileService {
+    
+    private val httpClient: RestTemplate = RestTemplate()
+    
+    override fun createUserProfile(userProfile: UserProfile): String {
+        val logger = LoggerFactory.getLogger(this::class.java)
+        
+        try {
+            val response = httpClient.postForEntity(
+                "https://api.userservice.com/profiles",
+                userProfile,
+                CreateProfileResponse::class.java
+            )
+            
+            if (response.statusCode.is2xxSuccessful && response.body != null) {
+                logger.info("User profile created successfully: ${response.body!!.userId}")
+                return response.body!!.userId
+            } else {
+                throw RuntimeException("Failed to create user profile: ${response.statusCode}")
+            }
+            
+        } catch (e: Exception) {
+            logger.error("User profile creation failed", e)
+            throw e
+        }
+    }
+}
+```
+
+---
+
+# 💡 Key Integration Patterns
+
+## **What You've Learned:**
+
+- ✅ **Service encapsulation** in activities with proper interfaces
+- ✅ **Different timeout strategies** for different service types
+- ✅ **Error classification** - critical vs non-critical failures
+- ✅ **Graceful degradation** for non-essential services
+- ✅ **Compensation patterns** for cleanup operations
+- ✅ **Production-ready** external service integration
+
+---
+
+# 🚀 Next Steps
+
+**You now understand external service integration!**
+
+## **Lesson 16 will cover:**
+- Comprehensive testing strategies
+- Production readiness patterns
+- Worker configuration and scaling
+- Monitoring and observability
+
+**Ready to deploy to production? Let's continue! 🎉** 

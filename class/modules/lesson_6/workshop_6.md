@@ -1,22 +1,42 @@
+---
+marp: true
+theme: gaia
+paginate: true
+backgroundColor: #1e1e2f
+color: white
+---
+
 # Workshop 6: Workflow & Activity Separation
 
-## What we want to build
+## Building Multi-Step User Onboarding
 
-Create a comprehensive user onboarding workflow that demonstrates clean separation of concerns across multiple activities. This workflow will show how to organize complex business processes into maintainable, testable components.
+*Create a comprehensive user onboarding workflow that demonstrates clean separation of concerns across multiple activities*
 
-## Expecting Result
+---
 
-By the end of this lesson, you'll have:
+# What we want to build
 
-- A multi-step user onboarding workflow with proper orchestration
-- Three distinct activities, each with a single responsibility
-- Proper error handling for critical vs non-critical failures
-- Different timeout configurations for different operation types
-- Clean data modeling with typed result objects
+Create a **comprehensive user onboarding workflow** that demonstrates clean separation of concerns across multiple activities. 
 
-## Code Steps
+This workflow will show how to organize **complex business processes** into maintainable, testable components.
 
-### Step 1: Create the Workflow Interface and Data Models
+---
+
+# Expecting Result
+
+## By the end of this lesson, you'll have:
+
+- ✅ **Multi-step user onboarding workflow** with proper orchestration
+- ✅ **Three distinct activities**, each with a single responsibility
+- ✅ **Proper error handling** for critical vs non-critical failures
+- ✅ **Different timeout configurations** for different operation types
+- ✅ **Clean data modeling** with typed result objects
+
+---
+
+# Code Steps
+
+## Step 1: Create the Workflow Interface and Data Models
 
 Open `class/workshop/lesson_6/workflow/UserOnboardingWorkflow.kt`:
 
@@ -32,7 +52,13 @@ interface UserOnboardingWorkflow {
     @WorkflowMethod
     fun onboardUser(email: String): OnboardingResult
 }
+```
 
+---
+
+# Data Models
+
+```kotlin
 data class OnboardingResult(
     val success: Boolean,
     val userId: String?,
@@ -41,7 +67,11 @@ data class OnboardingResult(
 )
 ```
 
-### Step 2: Create the Validation Activity
+**Clean, typed result objects provide clear contracts**
+
+---
+
+# Step 2: Create the Validation Activity
 
 Open `class/workshop/lesson_6/activity/UserValidationActivity.kt`:
 
@@ -64,7 +94,9 @@ data class ValidationResult(
 )
 ```
 
-### Step 3: Implement the Validation Activity
+---
+
+# Step 3: Implement the Validation Activity
 
 Open `class/workshop/lesson_6/activity/UserValidationActivityImpl.kt`:
 
@@ -87,7 +119,14 @@ class UserValidationActivityImpl : UserValidationActivity {
         if (!emailRegex.matches(email)) {
             return ValidationResult(false, "Invalid email format")
         }
-        
+        // Continued on next slide...
+```
+
+---
+
+# Validation Implementation Continued
+
+```kotlin
         // Check for existing users (simulated)
         val existingUsers = setOf("admin@example.com", "test@example.com")
         if (existingUsers.contains(email.lowercase())) {
@@ -100,7 +139,11 @@ class UserValidationActivityImpl : UserValidationActivity {
 }
 ```
 
-### Step 4: Create the Account Creation Activity
+**Single responsibility: Only handles user validation logic**
+
+---
+
+# Step 4: Create the Account Creation Activity
 
 Follow the same pattern for `AccountCreationActivity.kt`:
 
@@ -124,7 +167,9 @@ data class CreationResult(
 )
 ```
 
-### Step 5: Implement Account Creation
+---
+
+# Step 5: Implement Account Creation
 
 Create `AccountCreationActivityImpl.kt`:
 
@@ -155,7 +200,9 @@ class AccountCreationActivityImpl : AccountCreationActivity {
 }
 ```
 
-### Step 6: Create the Notification Activity
+---
+
+# Step 6: Create the Notification Activity
 
 Create `NotificationActivity.kt`:
 
@@ -178,7 +225,9 @@ data class NotificationResult(
 )
 ```
 
-### Step 7: Implement Notification
+---
+
+# Step 7: Implement Notification
 
 Create `NotificationActivityImpl.kt`:
 
@@ -210,7 +259,9 @@ class NotificationActivityImpl : NotificationActivity {
 }
 ```
 
-### Step 8: Implement the Main Workflow
+---
+
+# Step 8: Implement the Main Workflow (Part 1)
 
 Open `class/workshop/lesson_6/workflow/UserOnboardingWorkflowImpl.kt`:
 
@@ -231,7 +282,14 @@ class UserOnboardingWorkflowImpl : UserOnboardingWorkflow {
             .setStartToCloseTimeout(Duration.ofSeconds(10))
             .build()
     )
-    
+    // Continued on next slide...
+```
+
+---
+
+# Main Workflow Implementation (Part 2)
+
+```kotlin
     private val accountCreationActivity = Workflow.newActivityStub(
         AccountCreationActivity::class.java,
         ActivityOptions.newBuilder()
@@ -245,7 +303,16 @@ class UserOnboardingWorkflowImpl : UserOnboardingWorkflow {
             .setStartToCloseTimeout(Duration.ofMinutes(1))
             .build()
     )
-    
+    // Continued on next slide...
+```
+
+**Notice different timeouts based on operation characteristics**
+
+---
+
+# Main Workflow Logic (Part 3)
+
+```kotlin
     override fun onboardUser(email: String): OnboardingResult {
         val logger = Workflow.getLogger(this::class.java)
         val steps = mutableListOf<String>()
@@ -259,7 +326,14 @@ class UserOnboardingWorkflowImpl : UserOnboardingWorkflow {
         if (!validation.isValid) {
             return OnboardingResult(false, null, validation.errorMessage!!, steps)
         }
-        
+        // Continued on next slide...
+```
+
+---
+
+# Main Workflow Logic (Part 4)
+
+```kotlin
         // Step 2: Create Account
         val creation = accountCreationActivity.createAccount(email)
         steps.add("Account: ${if (creation.success) "Created" else "Failed"}")
@@ -283,9 +357,28 @@ class UserOnboardingWorkflowImpl : UserOnboardingWorkflow {
 }
 ```
 
-## How to Run
+---
 
-### 1. Register All Components
+# Key Design Patterns
+
+## **Error Handling Strategy:**
+- ✅ **Critical failures** (validation, account creation) → **Stop process**
+- ✅ **Non-critical failures** (email notification) → **Log and continue**
+
+## **Timeout Strategy:**
+- ✅ **Quick validation**: 10 seconds
+- ✅ **Database operations**: 30 seconds  
+- ✅ **External services**: 1 minute
+
+## **Single Responsibility:**
+- ✅ Each activity has **one focused job**
+
+---
+
+# How to Run
+
+## 1. Register All Components
+
 ```kotlin
 worker.registerWorkflowImplementationTypes(UserOnboardingWorkflowImpl::class.java)
 worker.registerActivitiesImplementations(
@@ -295,7 +388,12 @@ worker.registerActivitiesImplementations(
 )
 ```
 
-### 2. Execute the Workflow
+**Register workflow and all activity implementations**
+
+---
+
+# 2. Execute the Workflow
+
 ```kotlin
 val workflow = workflowClient.newWorkflowStub(
     UserOnboardingWorkflow::class.java,
@@ -309,7 +407,12 @@ val result = workflow.onboardUser("newuser@example.com")
 println("Result: $result")
 ```
 
-### 3. Expected Output
+**Create workflow stub and execute with test data**
+
+---
+
+# 3. Expected Output
+
 ```
 Starting onboarding for: newuser@example.com
 Validating user: newuser@example.com  
@@ -321,13 +424,32 @@ Creating account for: newuser@example.com
 Onboarding completed successfully
 ```
 
-## What You've Learned
+**Clean execution flow with detailed logging**
 
-- ✅ How to organize complex workflows with multiple activities
-- ✅ Single Responsibility Principle in workflow design
-- ✅ Different timeout strategies for different operation types
-- ✅ Error handling: critical vs non-critical failures
-- ✅ Clean data modeling with typed result objects
-- ✅ Best effort operations (notifications can fail without breaking the flow)
+---
 
-This demonstrates a production-ready pattern for complex business processes! 
+# What You've Learned
+
+## ✅ **Key Achievements:**
+
+- ✅ **How to organize complex workflows** with multiple activities
+- ✅ **Single Responsibility Principle** in workflow design
+- ✅ **Different timeout strategies** for different operation types
+- ✅ **Error handling**: critical vs non-critical failures
+- ✅ **Clean data modeling** with typed result objects
+- ✅ **Best effort operations** (notifications can fail without breaking the flow)
+
+---
+
+# 🚀 Production-Ready Pattern
+
+**This demonstrates a production-ready pattern for complex business processes!**
+
+## **Key Principles Applied:**
+- **Clean Architecture** - Clear separation of concerns
+- **Fault Tolerance** - Graceful degradation for non-critical failures
+- **Maintainability** - Each component has a single responsibility
+- **Observability** - Rich logging and step tracking
+- **Type Safety** - Strongly typed interfaces and results
+
+**Ready for more advanced patterns? Let's continue! 🎉** 

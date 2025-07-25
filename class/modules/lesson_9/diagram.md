@@ -1,6 +1,20 @@
+---
+marp: true
+theme: gaia
+paginate: true
+backgroundColor: #1e1e2f
+color: white
+---
+
 # 📜 Diagram for Lesson 9: Error Handling in Workflows
 
-This diagram visualizes the error handling patterns including the Saga pattern with compensation logic and circuit breaker implementation.
+## Visualizing Error Handling & Compensation Patterns
+
+*Error handling patterns including the Saga pattern with compensation logic and circuit breaker implementation*
+
+---
+
+# Error Handling Flow with Compensation
 
 ```mermaid
 flowchart TD
@@ -25,6 +39,23 @@ flowchart TD
     N --> P[Compensation: Release Inventory]
     P --> Q[Throw ShippingException]
     
+    style A fill:#e1f5fe
+    style M fill:#e8f5e8
+    style E fill:#ffebee
+    style H fill:#ffebee
+    style O fill:#ffebee
+    style Q fill:#ffebee
+    style K fill:#fff3e0
+    style N fill:#fff3e0
+    style P fill:#fff3e0
+```
+
+---
+
+# Error Handling Pattern Categories
+
+```mermaid
+graph TB
     subgraph "Error Handling Patterns"
         subgraph "Saga Pattern - Compensation"
             R[Success Path: Forward Operations]
@@ -47,15 +78,58 @@ flowchart TD
         end
     end
     
-    style A fill:#e1f5fe
-    style M fill:#e8f5e8
-    style E fill:#ffebee
-    style H fill:#ffebee
-    style O fill:#ffebee
-    style Q fill:#ffebee
-    style K fill:#fff3e0
-    style N fill:#fff3e0
-    style P fill:#fff3e0
+    style R fill:#e8f5e8
+    style S fill:#fff3e0
+    style V fill:#ffebee
+    style W fill:#e8f5e8
+    style X fill:#e3f2fd
+    style Y fill:#ffebee
+    style Z fill:#f3e5f5
 ```
 
-> 💡 This flowchart demonstrates the Saga pattern where each forward operation has a corresponding compensation operation, ensuring data consistency even when failures occur partway through a complex business process. The circuit breaker pattern prevents cascading failures by fast-failing when error thresholds are exceeded. 
+---
+
+# 💡 Key Insights from Error Handling
+
+## **Saga Pattern (Compensation):**
+
+- ✅ **Forward operations** create business value
+- ✅ **Compensation operations** undo changes on failure
+- ✅ **Order matters** - compensate in reverse order
+- ✅ **Idempotent compensations** are safe to retry
+
+## **Circuit Breaker Pattern:**
+
+- ✅ **Tracks failure rate** of external services
+- ✅ **Opens circuit** when threshold exceeded
+- ✅ **Fast fails** prevent resource waste
+- ✅ **Automatic recovery** when service stabilizes
+
+---
+
+# Exception Classification Strategy
+
+## **Error Handling Decision Matrix:**
+
+| Error Type | Action | Compensation | Recovery |
+|------------|--------|--------------|----------|
+| **Validation** | Fail Fast | None | Fix input |
+| **Business Rule** | Fail Fast | None | Change business logic |
+| **Resource** | Retry | Release | Wait and retry |
+| **External Service** | Circuit Breaker | Rollback | Service recovery |
+
+**Smart error classification enables appropriate response strategies**
+
+---
+
+# 🚀 Production Benefits
+
+**This error handling approach provides:**
+
+- ✅ **Data consistency** through compensation patterns
+- ✅ **System stability** via circuit breakers
+- ✅ **Fast failure detection** with custom exceptions
+- ✅ **Resource protection** through smart retry logic
+- ✅ **Operational visibility** with structured error context
+
+**Building bulletproof distributed systems! 🎉** 
