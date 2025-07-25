@@ -40,7 +40,7 @@ Think of this as creating the foundation - we're setting up the plumbing that wi
 
 Look at the starter code in `/src/workshop/lesson_2/`:
 
-- 📄 `TemporalBootcampApplication.kt` - Standard Spring Boot main class
+- 📄 `TemporalApplication.kt` - Standard Spring Boot main class
 - ⚙️ `config/TemporalConfig.kt` - Empty configuration class with hints
 
 **Note**: The Temporal dependencies are already added to `build.gradle.kts` for you.
@@ -49,7 +49,7 @@ Look at the starter code in `/src/workshop/lesson_2/`:
 
 # Step 2: Configure Temporal Connection
 
-Open `src/workshop/lesson_2/config/TemporalConfig.kt` and add the necessary imports:
+Create `config/TemporalConfig.kt` and add the necessary imports:
 
 ```kotlin
 import io.temporal.client.WorkflowClient
@@ -88,10 +88,7 @@ This creates the **connection to Temporal server**:
 @Bean
 fun workflowServiceStubs(): WorkflowServiceStubs {
     logger.info { "Creating Temporal service stubs for local server" }
-    return WorkflowServiceStubs.newLocalServiceStubs(
-        WorkflowServiceStubsOptions.newBuilder()
-            .build()
-    )
+    return WorkflowServiceStubs.newLocalServiceStubs()
 }
 ```
 
@@ -141,17 +138,27 @@ fun workerFactory(workflowClient: WorkflowClient): WorkerFactory {
 Add a method to **start the worker** after Spring finishes initializing:
 
 ```kotlin
-@PostConstruct
-fun startWorker() {
-    logger.info { "Starting Temporal worker..." }
-    
-    // Create a worker for a test task queue
-    val worker = workerFactory.newWorker("lesson2-test-queue")
-    
-    // Start the worker factory
-    workerFactory.start()
-    
-    logger.info { "✅ Temporal worker started successfully!" }
+/**
+ * Event listener that starts the Temporal worker factory when the application is ready.
+ * This ensures that the worker factory is properly initialized after all Spring beans are created.
+ *
+ * @param event ApplicationReadyEvent triggered when the application is fully started
+ */
+@Observed
+@EventListener(ApplicationReadyEvent::class)
+fun onApplicationReady(event: ApplicationReadyEvent) {
+    try {
+        logger.info { "Starting Temporal worker..." }
+
+        workerFactory.newWorker("lesson2-test-queue")
+
+        workerFactory.start()
+
+        logger.info { "✅ Temporal worker started successfully!" }
+    } catch (ex: Exception) {
+        logger.error(ex) { "❌ Failed to start Temporal worker!" }
+        throw ex // Optional: rethrow to still fail fast
+    }
 }
 ```
 
@@ -190,16 +197,6 @@ fun shutdown() {
 
 ---
 
-# Option 2: From Command Line
-
-```bash
-./gradlew bootRun --args="--spring.main.sources=com.temporal.workshop.lesson_2.TemporalBootcampApplication"
-```
-
-**This command tells Gradle to run your specific application class.**
-
----
-
 # Expected Output (Without Temporal Server)
 
 ```
@@ -207,7 +204,7 @@ Creating Temporal service stubs for local server
 Creating Temporal workflow client  
 Creating Temporal worker factory
 Starting Temporal worker...
-ERROR: Connection refused (Temporal server not running)
+❌ Failed to start Temporal worker!
 ```
 
 **🎯 This is exactly what we expect right now!**

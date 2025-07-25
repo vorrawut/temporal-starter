@@ -4,7 +4,7 @@ This folder contains the complete solution for Lesson 2: Kotlin + Spring Boot + 
 
 ## What's Included
 
-- `TemporalBootcampApplication.kt` - Spring Boot main class
+- `TemporalStarterApplication.kt` - Spring Boot main class
 - `config/TemporalConfig.kt` - Complete Temporal configuration with:
   - Connection to local Temporal server
   - Workflow client setup

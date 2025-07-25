@@ -1,5 +1,6 @@
-package com.temporal.answer.lesson_2.config
+package com.temporal.config
 
+import io.micrometer.observation.annotation.Observed
 import io.temporal.client.WorkflowClient
 import io.temporal.client.WorkflowClientOptions
 import io.temporal.serviceclient.WorkflowServiceStubs
@@ -7,19 +8,17 @@ import io.temporal.worker.WorkerFactory
 import jakarta.annotation.PostConstruct
 import jakarta.annotation.PreDestroy
 import mu.KotlinLogging
+import org.springframework.boot.context.event.ApplicationReadyEvent
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.event.EventListener
 
-/**
- * Complete Temporal configuration for Lesson 2.
- * Sets up connection to local Temporal server and creates a basic worker.
- */
 @Configuration
 class TemporalConfig {
-    
+
     private val logger = KotlinLogging.logger {}
     private lateinit var workerFactory: WorkerFactory
-    
+
     /**
      * Creates connection stubs to Temporal server.
      * By default, connects to localhost:7233
@@ -29,7 +28,7 @@ class TemporalConfig {
         logger.info { "Creating Temporal service stubs for local server" }
         return WorkflowServiceStubs.newLocalServiceStubs()
     }
-    
+
     /**
      * Creates the Temporal workflow client.
      * This is used to start workflows and interact with Temporal.
@@ -43,7 +42,7 @@ class TemporalConfig {
                 .build()
         )
     }
-    
+
     /**
      * Creates the worker factory.
      * Workers execute workflows and activities.
@@ -77,7 +76,7 @@ class TemporalConfig {
             throw ex // Optional: rethrow to still fail fast
         }
     }
-    
+
     /**
      * Gracefully shutdown the worker when application stops.
      */
@@ -87,4 +86,4 @@ class TemporalConfig {
         workerFactory.shutdown()
         logger.info { "❌ Temporal worker stopped" }
     }
-} 
+}
