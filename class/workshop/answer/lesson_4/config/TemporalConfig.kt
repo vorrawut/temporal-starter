@@ -75,8 +75,9 @@ class TemporalConfig {
     /**
      * Starts the worker and registers workflow and activity implementations.
      */
-    @PostConstruct
-    fun startWorker() {
+    @Observed
+    @EventListener(ApplicationReadyEvent::class)
+    fun onApplicationReady(event: ApplicationReadyEvent) {
         logger.info { "Starting Temporal worker for HelloWorkflow..." }
         
         // Create a worker that listens to our task queue
@@ -86,7 +87,7 @@ class TemporalConfig {
         worker.registerWorkflowImplementationTypes(HelloWorkflowImpl::class.java)
         
         // Register the activity implementation
-        worker.registerActivitiesImplementations(greetingActivity())
+//        worker.registerActivitiesImplementations(greetingActivity())
         
         // Start the worker factory
         workerFactory.start()

@@ -155,7 +155,7 @@ temporal operator namespace describe default
 
 ---
 
-🧠 What is namespace temporal-system?
+## **🧠 What is namespace temporal-system?**
 It’s the default internal namespace Temporal uses to run its own workflows — not yours.
 
 Think of it like Temporal’s “admin” namespace — 
@@ -279,9 +279,6 @@ lsof -i :8233
 ## **Database Issues:**
 - Remove corrupted DB file and restart if needed
 - Backup important dev data regularly
-
-## **Network Issues:**
-- Verify connectivity with `curl` or `telnet`
 
 ---
 

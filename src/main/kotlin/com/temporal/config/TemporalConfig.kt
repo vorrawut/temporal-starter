@@ -1,11 +1,13 @@
 package com.temporal.config
 
+import com.temporal.activity.GreetingActivityImpl
+import com.temporal.workflow.HelloWorkflowImpl
 import io.micrometer.observation.annotation.Observed
 import io.temporal.client.WorkflowClient
 import io.temporal.client.WorkflowClientOptions
 import io.temporal.serviceclient.WorkflowServiceStubs
+import io.temporal.worker.Worker
 import io.temporal.worker.WorkerFactory
-import jakarta.annotation.PostConstruct
 import jakarta.annotation.PreDestroy
 import mu.KotlinLogging
 import org.springframework.boot.context.event.ApplicationReadyEvent
@@ -16,12 +18,15 @@ import org.springframework.context.event.EventListener
 @Configuration
 class TemporalConfig {
 
+    companion object {
+        const val TASK_QUEUE = "lesson4-hello-queue"
+    }
+
     private val logger = KotlinLogging.logger {}
     private lateinit var workerFactory: WorkerFactory
 
     /**
      * Creates connection stubs to Temporal server.
-     * By default, connects to localhost:7233
      */
     @Bean
     fun workflowServiceStubs(): WorkflowServiceStubs {
@@ -31,7 +36,6 @@ class TemporalConfig {
 
     /**
      * Creates the Temporal workflow client.
-     * This is used to start workflows and interact with Temporal.
      */
     @Bean
     fun workflowClient(workflowServiceStubs: WorkflowServiceStubs): WorkflowClient {
@@ -45,7 +49,6 @@ class TemporalConfig {
 
     /**
      * Creates the worker factory.
-     * Workers execute workflows and activities.
      */
     @Bean
     fun workerFactory(workflowClient: WorkflowClient): WorkerFactory {
@@ -55,26 +58,36 @@ class TemporalConfig {
     }
 
     /**
-     * Event listener that starts the Temporal worker factory when the application is ready.
-     * This ensures that the worker factory is properly initialized after all Spring beans are created.
-     *
-     * @param event ApplicationReadyEvent triggered when the application is fully started
+     * Creates the activity implementation as a Spring bean.
+     */
+    @Bean
+    fun greetingActivity(): GreetingActivityImpl {
+        return GreetingActivityImpl()
+    }
+
+    /**
+     * Starts the worker and registers workflow and activity implementations.
      */
     @Observed
     @EventListener(ApplicationReadyEvent::class)
     fun onApplicationReady(event: ApplicationReadyEvent) {
-        try {
-            logger.info { "Starting Temporal worker..." }
+        logger.info { "Starting Temporal worker for HelloWorkflow..." }
 
-            workerFactory.newWorker("lesson2-test-queue")
+        // Create a worker that listens to our task queue
+        val worker: Worker = workerFactory.newWorker(TASK_QUEUE)
 
-            workerFactory.start()
+        // Register the workflow implementation
+        worker.registerWorkflowImplementationTypes(HelloWorkflowImpl::class.java)
 
-            logger.info { "✅ Temporal worker started successfully!" }
-        } catch (ex: Exception) {
-            logger.error(ex) { "❌ Failed to start Temporal worker!" }
-            throw ex // Optional: rethrow to still fail fast
-        }
+        // Register the activity implementation
+        worker.registerActivitiesImplementations(greetingActivity())
+
+        // Start the worker factory
+        workerFactory.start()
+
+        logger.info { "✅ Temporal worker started successfully for HelloWorkflow!" }
+        logger.info { "   Task Queue: $TASK_QUEUE" }
+        logger.info { "   Registered: HelloWorkflow, GreetingActivity" }
     }
 
     /**

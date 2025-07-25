@@ -269,8 +269,9 @@ class TemporalConfig {
 # Step 5: Configure Temporal (Part 3)
 
 ```kotlin
-    @PostConstruct
-    fun startWorker() {
+    @Observed
+    @EventListener(ApplicationReadyEvent::class)
+    fun onApplicationReady(event: ApplicationReadyEvent) {
         val worker: Worker = workerFactory.newWorker(TASK_QUEUE)
         
         // Register workflow and activity
@@ -345,11 +346,19 @@ class HelloWorkflowRunner(
                 .setWorkflowId("hello-workflow-${System.currentTimeMillis()}")
                 .build()
         )
-        
-        val result = workflow.sayHello("Temporal Learner")
-        
-        logger.info { "✅ Workflow completed! Result: $result" }
-        logger.info { "🌐 Check http://localhost:8233 to see your workflow!" }
+
+        WorkflowClient.start { 
+            val result = workflow.sayHello("Temporal Learner")
+    
+            // Print the result
+            logger.info { "✅ Workflow completed!" }
+            logger.info { "   Result: $result" }
+    
+            // Give some guidance to the user
+            logger.info { "" }
+            logger.info { "🌐 Check the Temporal Web UI at http://localhost:8233" }
+            logger.info { "   You should see your workflow execution in the 'Workflows' tab!" }
+        }
     }
 }
 ```
@@ -383,16 +392,6 @@ temporal server start-dev
 http://localhost:8233 should load
 
 **Make sure both are working before proceeding!**
-
----
-
-# Run Your Workflow
-
-```bash
-./gradlew bootRun --args="--spring.main.sources=com.temporal.answer.lesson_4.TemporalBootcampApplication"
-```
-
-**This command runs your specific HelloWorkflow application.**
 
 ---
 
@@ -464,16 +463,3 @@ Generated greeting: Hello, Temporal Learner! Welcome to Temporal workflows!
 - ✅ **Understood the basic** workflow → activity pattern
 
 ---
-
-# 🚀 Next Steps
-
-**You now have the foundation for building more complex workflows!**
-
-## **The next lessons will build on this pattern to show:**
-- 📊 **More complex workflows** with multiple activities
-- 📡 **Signals** for external interaction
-- 🔍 **Queries** for state inspection
-- ⏰ **Timers** for time-based logic
-- 🔄 **Error handling** and retry patterns
-
-**Let's keep building! 🎉** 

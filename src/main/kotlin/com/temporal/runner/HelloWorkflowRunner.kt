@@ -1,7 +1,7 @@
-package com.temporal.answer.lesson_4.runner
+package com.temporal.runner
 
-import com.temporal.answer.lesson_4.config.TemporalConfig
-import com.temporal.answer.lesson_4.workflow.HelloWorkflow
+import com.temporal.config.TemporalConfig
+import com.temporal.workflow.HelloWorkflow
 import io.temporal.client.WorkflowClient
 import io.temporal.client.WorkflowOptions
 import mu.KotlinLogging
@@ -36,10 +36,9 @@ class HelloWorkflowRunner(
                     .setWorkflowId("hello-workflow-${System.currentTimeMillis()}")
                     .build()
             )
-            
+
             // Execute the workflow
-            WorkflowClient.start {
-                val result = workflow.sayHello("Temporal Learner")
+            WorkflowClient.start { val result = workflow.sayHello("Temporal Learner")
 
                 // Print the result
                 logger.info { "✅ Workflow completed!" }
