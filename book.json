@@ -10,14 +10,19 @@
     "summary": "SUMMARY.md"
   },
   "plugins": [
-    "-highlight"
+    "-highlight",
+    "mermaid",
+    "-fontsettings"
   ],
+  "pluginsConfig": {
+    "fontsettings": {
+      "theme": "white",
+      "family": "sans",
+      "size": 2
+    }
+  },
   "variables": {
     "version": "1.0.0",
     "course": "Temporal Workflow Bootcamp"
-  },
-  "scripts": [
-    "https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js",
-    "scripts/init-mermaid.js"
-  ]
+  }
 } 
