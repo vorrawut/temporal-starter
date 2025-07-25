@@ -253,15 +253,3 @@ class OrderProcessingWorkflowImpl : OrderProcessingWorkflow {
 - ✅ **Workflow.await()** blocks until conditions are met
 
 ---
-
-# 🚀 Next Steps
-
-**You now understand building interactive workflow systems!**
-
-## **Lesson 11 will cover:**
-- Advanced query patterns and optimization
-- Real-time workflow observability
-- Query design best practices
-- Performance considerations for large-scale systems
-
-**Ready to master workflow queries? Let's continue! 🎉** 

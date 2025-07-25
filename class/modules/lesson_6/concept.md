@@ -500,15 +500,3 @@ if (validation.failed || creation.failed || notification.failed) {
 - ✅ **Testing strategies** ensure reliable, maintainable code
 
 ---
-
-# 🚀 Next Steps
-
-**You now understand clean architecture for Temporal workflows!**
-
-## **Lesson 7 will dive deeper into:**
-- Workflow input/output patterns
-- Complex data handling scenarios
-- Advanced parameter validation
-- State management techniques
-
-**Ready to master workflow data flow? Let's continue! 🎉** 

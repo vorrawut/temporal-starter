@@ -203,15 +203,3 @@ class CompensationActivityImpl : CompensationActivity {
 - ✅ **Error classification** determines retry vs fail-fast decisions
 
 ---
-
-# 🚀 Next Steps
-
-**You now understand building error-resilient distributed systems!**
-
-## **Lesson 10 will cover:**
-- Interactive workflow patterns using Signals
-- Real-time workflow state queries
-- Event-driven workflow behavior
-- Long-running approval workflows
-
-**Ready to build interactive workflows? Let's continue! 🎉** 

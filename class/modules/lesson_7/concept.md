@@ -496,15 +496,3 @@ data class GoodResult(
 - ✅ **Version-safe evolution** for long-term maintainability
 
 ---
-
-# 🚀 Next Steps
-
-**You now master workflow data modeling!**
-
-## **Lesson 8 will cover:**
-- Activity retry and timeout strategies
-- Building resilient fault-tolerant workflows
-- Handling external service failures
-- Advanced retry patterns and circuit breakers
-
-**Ready to build bulletproof workflows? Let's continue! 🎉** 

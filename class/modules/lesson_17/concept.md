@@ -164,12 +164,3 @@ spec:
 # 🎉 Congratulations!
 
 **You've completed the Temporal Workflow Bootcamp!**
-
-## **You now master:**
-- Temporal fundamentals and architecture
-- Workflow and activity patterns
-- Error handling and reliability
-- Testing and production readiness
-- Advanced patterns and scaling
-
-**You're ready to build production-grade distributed systems with Temporal! 🚀** 

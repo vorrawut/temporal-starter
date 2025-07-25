@@ -421,5 +421,3 @@ class WorkflowQueryController(
    ```
 
 ---
-
-**Next**: Lesson 12 will explore child workflows and `continueAsNew` patterns for managing complex workflow hierarchies! 

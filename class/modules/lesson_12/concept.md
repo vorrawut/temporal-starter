@@ -214,15 +214,3 @@ class DynamicOrderWorkflowImpl : DynamicOrderWorkflow {
 - ✅ **Clear decision criteria** for child workflows vs activities
 
 ---
-
-# 🚀 Next Steps
-
-**You now understand advanced workflow orchestration!**
-
-## **Lesson 13 will cover:**
-- Workflow versioning with `Workflow.getVersion()`
-- Safe workflow evolution patterns
-- Breaking vs additive changes
-- Migration and rollback strategies
-
-**Ready to master workflow evolution? Let's continue! 🎉** 

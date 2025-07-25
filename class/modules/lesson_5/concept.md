@@ -432,15 +432,3 @@ override fun calculateDiscount(order: Order): Double {
 - ✅ **Best practices** ensure maintainable code
 
 ---
-
-# 🚀 Next Steps
-
-**You now understand the fundamental workflow-activity pattern!**
-
-## **Lesson 6 will show you:**
-- How to organize workflows and activities into clean, maintainable structures
-- Software engineering best practices for Temporal applications
-- Complex multi-activity workflows
-- Advanced error handling patterns
-
-**Ready to build more sophisticated workflows? Let's continue! 🎉** 

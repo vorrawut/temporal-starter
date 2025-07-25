@@ -236,15 +236,3 @@ class PaymentActivityImpl : PaymentActivity {
 - ✅ **Smart retry policies** balance resilience with resource efficiency
 
 ---
-
-# 🚀 Next Steps
-
-**You now understand building fault-tolerant distributed systems!**
-
-## **Lesson 9 will cover:**
-- Comprehensive error handling strategies
-- Compensation patterns (Saga)
-- Circuit breakers and graceful degradation
-- Advanced debugging and monitoring
-
-**Ready to build bulletproof workflows? Let's continue! 🎉** 

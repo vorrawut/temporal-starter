@@ -210,15 +210,3 @@ class BreakingChangesWorkflowImpl : BreakingChangesWorkflow {
 - ✅ **Migration strategies** enable safe workflow evolution
 
 ---
-
-# 🚀 Next Steps
-
-**You now understand safe workflow evolution!**
-
-## **Lesson 14 will cover:**
-- Timers and cron workflows
-- Time-based workflow patterns
-- Scheduled recurring executions
-- Production scheduling strategies
-
-**Ready to master time-based workflows? Let's continue! 🎉** 
