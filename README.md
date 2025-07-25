@@ -1,5 +1,7 @@
 # Temporal Workflow Bootcamp
 
+GITBOOK: https://vorrawut.github.io/temporal-starter/
+
 **Master production-ready distributed systems with Temporal workflows**
 
 ## 🚀 Welcome to Your Journey
