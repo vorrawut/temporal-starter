@@ -1,7 +1,9 @@
 package com.temporal.runner
 
 import com.temporal.config.TemporalConfig
+import com.temporal.workflow.CalculatorWorkflow
 import com.temporal.workflow.HelloWorkflow
+import com.temporal.workflow.UserOnboardingWorkflow
 import io.temporal.client.WorkflowClient
 import io.temporal.client.WorkflowOptions
 import mu.KotlinLogging
@@ -29,16 +31,27 @@ class HelloWorkflowRunner(
         
         try {
             // Create a workflow stub - this is how we interact with workflows
-            val workflow = workflowClient.newWorkflowStub(
-                HelloWorkflow::class.java,
-                WorkflowOptions.newBuilder()
-                    .setTaskQueue(TemporalConfig.TASK_QUEUE)
-                    .setWorkflowId("hello-workflow-${System.currentTimeMillis()}")
-                    .build()
-            )
+//            val workflow = workflowClient.newWorkflowStub(
+//                HelloWorkflow::class.java,
+//                WorkflowOptions.newBuilder()
+//                    .setTaskQueue(TemporalConfig.TASK_QUEUE)
+//                    .setWorkflowId("hello-workflow-${System.currentTimeMillis()}")
+//                    .build()
+//            )
+//
+//            // Execute the workflow
+//            WorkflowClient.start { val result = workflow.sayHello("Temporal Learner")
 
-            // Execute the workflow
-            WorkflowClient.start { val result = workflow.sayHello("Temporal Learner")
+                val workflow = workflowClient.newWorkflowStub(
+                    UserOnboardingWorkflow::class.java,
+                    WorkflowOptions.newBuilder()
+                        .setTaskQueue(TemporalConfig.TASK_QUEUE)
+                        .setWorkflowId("hello-workflow-${System.currentTimeMillis()}")
+                        .build()
+                )
+
+                // Execute the workflow
+                WorkflowClient.start { val result = workflow.onboardUser("test@gmai.com")
 
                 // Print the result
                 logger.info { "✅ Workflow completed!" }

@@ -1,7 +1,12 @@
 package com.temporal.config
 
 import com.temporal.activity.GreetingActivityImpl
+import com.temporal.activity.MathActivityImpl
+import com.temporal.activity.UserValidationActivityImpl
+import com.temporal.workflow.CalculatorWorkflow
+import com.temporal.workflow.CalculatorWorkflowImpl
 import com.temporal.workflow.HelloWorkflowImpl
+import com.temporal.workflow.UserOnboardingWorkflowImpl
 import io.micrometer.observation.annotation.Observed
 import io.temporal.client.WorkflowClient
 import io.temporal.client.WorkflowClientOptions
@@ -66,6 +71,19 @@ class TemporalConfig {
     }
 
     /**
+     * Creates the activity implementation as a Spring bean.
+     */
+    @Bean
+    fun mathActivity(): MathActivityImpl {
+        return MathActivityImpl()
+    }
+
+    @Bean
+    fun userValidationActivity(): UserValidationActivityImpl {
+        return UserValidationActivityImpl()
+    }
+
+    /**
      * Starts the worker and registers workflow and activity implementations.
      */
     @Observed
@@ -77,10 +95,10 @@ class TemporalConfig {
         val worker: Worker = workerFactory.newWorker(TASK_QUEUE)
 
         // Register the workflow implementation
-        worker.registerWorkflowImplementationTypes(HelloWorkflowImpl::class.java)
+        worker.registerWorkflowImplementationTypes(UserOnboardingWorkflowImpl::class.java)
 
         // Register the activity implementation
-        worker.registerActivitiesImplementations(greetingActivity())
+        worker.registerActivitiesImplementations(userValidationActivity())
 
         // Start the worker factory
         workerFactory.start()
