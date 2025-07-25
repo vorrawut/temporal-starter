@@ -29,8 +29,8 @@
   "devDependencies": {
     "@honkit/honkit-plugin-fontsettings": "^6.0.3",
     "@honkit/honkit-plugin-highlight": "^6.0.3",
-    "honkit": "^6.0.3",
-    "honkit-plugin-mermaid": "^0.1.4"
+    "gitbook-plugin-mermaid-newface": "^4.1.0",
+    "honkit": "^6.0.3"
   },
   "engines": {
     "node": ">=14.0.0"

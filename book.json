@@ -11,7 +11,7 @@
   },
   "plugins": [
     "-highlight",
-    "mermaid",
+    "mermaid-newface",
     "-fontsettings"
   ],
   "pluginsConfig": {
@@ -19,6 +19,9 @@
       "theme": "white",
       "family": "sans",
       "size": 2
+    },
+    "mermaid-newface": {
+      "theme": "neutral"
     }
   },
   "variables": {
