@@ -1,91 +1,68 @@
-# Concept 3: Run Temporal Locally
+---
+marp: true
+theme: default
+paginate: true
+title: Concept 3: Run Temporal Locally
+---
 
-## Objective
+# Concept 3
+## Run Temporal Locally
 
-Understand Temporal's server architecture, learn how to run Temporal locally for development, and explore the tools available for monitoring and debugging workflows.
+🎯 **Objective:**  
+Understand Temporal server architecture, run Temporal locally for development, and explore monitoring and debugging tools.
 
-## Key Concepts
+---
 
-### 1. **Temporal Server Architecture**
+## 🏗️ Temporal Server Architecture Overview
 
-Temporal server consists of several key components working together:
-
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
-│                    Temporal Server                          │
+│                       Temporal Server                       │
 │                                                             │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────────────┐ │
-│  │   Frontend  │  │   History   │  │      Matching       │ │
-│  │   Service   │  │   Service   │  │       Service       │ │
-│  └─────────────┘  └─────────────┘  └─────────────────────┘ │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────────────┐  │
+│  │ Frontend    │  │ History     │  │ Matching            │  │
+│  │ Service     │  │ Service     │  │ Service             │  │
+│  └─────────────┘  └─────────────┘  └─────────────────────┘  │
 │                                                             │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────────────┐ │
-│  │   Worker    │  │  Internal   │  │      Database       │ │
-│  │   Service   │  │  Frontend   │  │   (SQLite/MySQL/    │ │
-│  │             │  │             │  │   PostgreSQL)       │ │
-│  └─────────────┘  └─────────────┘  └─────────────────────┘ │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────────────┐  │
+│  │ Worker      │  │ Internal    │  │ Database            │  │
+│  │ Service     │  │ Frontend    │  │ (SQLite/MySQL/Postgres)│
+│  └─────────────┘  └─────────────┘  └─────────────────────┘  │
 │                                                             │
 └─────────────────────────────────────────────────────────────┘
                                │
                                ▼
                     ┌─────────────────┐
                     │    Web UI       │
-                    │ (Port 8233)     │
+                    │  (Port 8233)    │
                     └─────────────────┘
 ```
 
-#### **Core Services**
+### Core Services at a Glance
 
-**Frontend Service** (Port 7233)
-- **Purpose**: Main API endpoint for workflow clients and workers
-- **Responsibilities**: Authentication, request routing, rate limiting
-- **Client Connection**: This is where your Spring Boot app connects
+- **Frontend Service (Port 7233):** Main API endpoint for clients and workers. Handles routing and authentication.
+- **History Service:** Stores workflow event history for replay and recovery.
+- **Matching Service:** Routes tasks to workers and manages task queues with load balancing.
+- **Worker Service:** Runs internal Temporal system workflows.
+- **Database:** Persistent storage layer (SQLite for dev, MySQL/Postgres for prod).
 
-**History Service**
-- **Purpose**: Stores and manages workflow execution history
-- **Responsibilities**: Event persistence, workflow state management
-- **Critical Role**: Enables workflow replay and recovery
+---
 
-**Matching Service**
-- **Purpose**: Routes workflow tasks to available workers
-- **Responsibilities**: Task queue management, load balancing
-- **Smart Routing**: Ensures tasks go to appropriate workers
+## ⚙️ Development vs Production
 
-**Worker Service**
-- **Purpose**: Internal worker for system workflows
-- **Responsibilities**: System maintenance, cleanup tasks
-- **Background**: Handles Temporal's own internal processes
+### Development Setup
 
-### 2. **Development vs Production Setup**
-
-#### **Development Setup (`temporal server start-dev`)**
 ```bash
 temporal server start-dev
 ```
 
-**What it provides:**
-- Single-node Temporal server
-- Built-in SQLite database
-- Web UI on port 8233
-- Default namespace configuration
-- No authentication required
-- Perfect for learning and local development
+- Single-node server with embedded SQLite DB
+- Web UI available on port 8233
+- Zero config, no auth—perfect for local dev and learning
 
-**Pros:**
-- ✅ Zero configuration required
-- ✅ Fast startup
-- ✅ No external dependencies
-- ✅ Built-in Web UI
+### Production Setup (Example with Docker Compose)
 
-**Cons:**
-- ❌ Not suitable for production
-- ❌ Limited scalability
-- ❌ No high availability
-- ❌ Data stored locally only
-
-#### **Production Setup**
 ```yaml
-# docker-compose.yml example
 version: '3.8'
 services:
   temporal:
@@ -101,229 +78,86 @@ services:
       - postgresql
 ```
 
-**Production features:**
 - Multi-node clustering
-- External database (PostgreSQL, MySQL, Cassandra)
-- Authentication and authorization
-- Metrics and monitoring
-- High availability
-- Horizontal scaling
+- External DB (Postgres, MySQL, Cassandra)
+- Authentication, monitoring, high availability, and scaling
 
-### 3. **Temporal CLI Commands**
+---
 
-#### **Server Management**
+## 🔧 Temporal CLI Quick Commands
+
+### Server
+
 ```bash
-# Start development server
 temporal server start-dev
-
-# Start with custom ports
 temporal server start-dev --port 7234 --http-port 8234
-
-# Start with specific database
 temporal server start-dev --db-filename temporal.db
 ```
 
-#### **Namespace Management**
+### Namespace Management
+
 ```bash
-# List namespaces
 temporal operator namespace list
-
-# Create namespace
 temporal operator namespace create my-namespace
-
-# Describe namespace
 temporal operator namespace describe default
 ```
 
-#### **Workflow Operations**
+### Workflow Operations
+
 ```bash
-# List workflows
 temporal workflow list
-
-# Show workflow details
 temporal workflow show --workflow-id my-workflow-id
-
-# Terminate workflow
 temporal workflow terminate --workflow-id my-workflow-id
-```
-
-### 4. **Temporal Web UI Features**
-
-#### **Workflows Section**
-- **Execution List**: All workflow executions with status
-- **Filters**: Search by workflow type, status, time range
-- **Details View**: Complete execution history and timeline
-- **Retry**: Ability to retry failed workflows
-
-#### **Task Queues Section**
-- **Worker Health**: See which workers are connected
-- **Queue Statistics**: Task processing rates and backlogs
-- **Partitioning**: View task queue partitions and distribution
-
-#### **Workers Section**
-- **Worker Registry**: All connected workers
-- **Capabilities**: What workflows/activities each worker can handle
-- **Resource Usage**: Worker capacity and current load
-
-#### **Schedules Section**
-- **Recurring Workflows**: Cron-like scheduled executions
-- **Schedule Management**: Create, pause, and modify schedules
-- **Execution History**: Past and upcoming scheduled runs
-
-### 5. **Local Development Best Practices**
-
-#### **Environment Setup**
-```bash
-# Create a startup script
-#!/bin/bash
-echo "Starting Temporal development environment..."
-temporal server start-dev --log-level info
-```
-
-#### **Data Persistence**
-```bash
-# Use custom database file for persistence
-temporal server start-dev --db-filename ./dev-temporal.db
-
-# This preserves your data between restarts
-```
-
-#### **Multiple Namespaces**
-```bash
-# Create separate namespaces for different projects
-temporal operator namespace create project-a
-temporal operator namespace create project-b
-```
-
-#### **Configuration Files**
-```yaml
-# .temporal/config.yaml
-version: 1
-contexts:
-  local:
-    address: localhost:7233
-    namespace: default
-  staging:
-    address: staging.temporal.company.com:7233
-    namespace: staging
-```
-
-### 6. **Monitoring and Debugging**
-
-#### **Health Checks**
-```bash
-# Check server health
-curl http://localhost:7233/health
-
-# Check web UI health  
-curl http://localhost:8233/health
-```
-
-#### **Logs and Metrics**
-```bash
-# Start with debug logging
-temporal server start-dev --log-level debug
-
-# Metrics endpoint
-curl http://localhost:7234/metrics
-```
-
-#### **Database Inspection**
-```bash
-# For SQLite database
-sqlite3 temporal.db ".tables"
-sqlite3 temporal.db "SELECT * FROM executions LIMIT 5;"
-```
-
-## Best Practices
-
-### ✅ Development Environment
-
-1. **Consistent Startup**
-   ```bash
-   # Create an alias for easy startup
-   alias temporal-dev='temporal server start-dev --log-level info'
-   ```
-
-2. **Data Backup**
-   ```bash
-   # Backup your development database periodically
-   cp temporal.db temporal-backup-$(date +%Y%m%d).db
-   ```
-
-3. **Port Management**
-   ```bash
-   # Check what's running on Temporal ports
-   lsof -i :7233  # Server port
-   lsof -i :8233  # Web UI port
-   ```
-
-### ✅ Workflow Development
-
-1. **Use Meaningful Workflow IDs**
-   ```kotlin
-   WorkflowOptions.newBuilder()
-       .setWorkflowId("user-onboarding-${userId}-${timestamp}")
-       .build()
-   ```
-
-2. **Monitor via Web UI**
-   - Always check the Web UI when debugging
-   - Use workflow search and filters effectively
-   - Review execution timelines for performance issues
-
-3. **Clean Development Data**
-   ```bash
-   # Reset development environment
-   rm temporal.db
-   temporal server start-dev
-   ```
-
-### ❌ Common Mistakes
-
-1. **Forgetting to Start Server**
-   - Always start Temporal server before your application
-   - Consider using Docker Compose for complex setups
-
-2. **Wrong Port Configuration**
-   - Server: 7233 (for client connections)
-   - Web UI: 8233 (for browser access)
-   - Don't confuse these ports
-
-3. **Database Corruption**
-   - Don't kill the server forcefully
-   - Always use Ctrl+C for graceful shutdown
-
-### 🔧 Troubleshooting Guide
-
-#### **Server Won't Start**
-```bash
-# Check for port conflicts
-lsof -i :7233
-lsof -i :8233
-
-# Kill conflicting processes
-kill $(lsof -t -i :7233)
-```
-
-#### **Database Issues**
-```bash
-# Remove corrupted database
-rm temporal.db
-
-# Start fresh
-temporal server start-dev
-```
-
-#### **Connection Issues**
-```bash
-# Test server connectivity
-curl -f http://localhost:7233/health
-
-# Check firewall settings
-telnet localhost 7233
 ```
 
 ---
 
-**Ready for workflows?** Now that you have Temporal running locally and understand the development environment, let's create your first workflow in Lesson 4! 
+## 🌐 Web UI Highlights
+
+- **Workflows:** Browse executions, filter, retry failures
+- **Task Queues:** Monitor worker health, queue backlog, partitions
+- **Workers:** See registered workers and their capabilities
+- **Schedules:** Manage recurring workflows and cron schedules
+
+---
+
+## 🛠️ Best Practices for Local Development
+
+- Use startup scripts or aliases for easy server launch
+- Persist your dev data with `--db-filename` option
+- Use separate namespaces per project
+- Maintain environment configs via `.temporal/config.yaml`
+
+---
+
+## 🛠️ Monitoring & Debugging Tips
+
+- Check health endpoints:  
+  `curl http://localhost:7233/health`  
+  `curl http://localhost:8233/health`
+- Enable debug logging for verbose output
+- Inspect SQLite DB directly if needed
+
+---
+
+## ✅ Tips & Common Pitfalls
+
+- Always start Temporal server before your app
+- Keep server and Web UI ports straight: 7233 and 8233
+- Shutdown gracefully to avoid DB corruption
+- Backup dev DB regularly
+
+---
+
+## 🔍 Troubleshooting
+
+- Check port conflicts:  
+  `lsof -i :7233`  
+  `lsof -i :8233`
+- Remove corrupted DB file and restart if needed
+- Verify network connectivity with `curl` or `telnet`
+
+---
+
+# 🚀 Next Steps
+Ready to create your first workflow and run it locally? Let’s dive into Lesson 4!

@@ -1,8 +1,19 @@
+---
+marp: true
+theme: default
+paginate: true
+title: Workshop 1: Introduction to Temporal
+---
+
 # Workshop 1: Introduction to Temporal
+
+---
 
 ## What we want to build
 
 In this lesson, we won't be writing any code yet. Instead, we'll build a solid understanding of what Temporal is, why it exists, and how it solves common problems in distributed systems. Think of this as laying the foundation before we start building.
+
+---
 
 ## Expecting Result
 
@@ -54,4 +65,4 @@ Since this is a theory lesson, there's nothing to run! Instead:
 3. **Think about** how Temporal might apply to systems you've worked on
 4. **Prepare your development environment** for the next lesson
 
-Ready to dive in? Start with the `concept.md` file to build your foundational understanding of Temporal! 
+Ready to dive in? Start with the `concept.md` file to build your foundational understanding of Temporal!
