@@ -10,33 +10,8 @@
     "summary": "SUMMARY.md"
   },
   "plugins": [
-    "github",
-    "edit-link",
-    "prism",
-    "-highlight",
-    "copy-code-button",
-    "expandable-chapters-small",
-    "anchors",
-    "back-to-top-button",
-    "theme-comscore"
+    "-highlight"
   ],
-  "pluginsConfig": {
-    "github": {
-      "url": "https://github.com/temporal-starter/temporal-workflow-bootcamp"
-    },
-    "edit-link": {
-      "base": "https://github.com/temporal-starter/temporal-workflow-bootcamp/edit/main",
-      "label": "Edit This Page"
-    },
-    "prism": {
-      "css": [
-        "prismjs/themes/prism-tomorrow.css"
-      ]
-    },
-    "theme-comscore": {
-      "showLevel": false
-    }
-  },
   "variables": {
     "version": "1.0.0",
     "course": "Temporal Workflow Bootcamp"

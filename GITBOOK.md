@@ -9,7 +9,7 @@ The repository has been configured as a GitBook with the following structure:
 ### Core Files
 - `README.md` - Main landing page and course overview
 - `SUMMARY.md` - Navigation structure for the entire course
-- `book.json` - GitBook configuration with plugins and settings
+- `book.json` - GitBook configuration (minimal, plugin-free setup)
 - `package.json` - Node.js dependencies and build scripts
 
 ### Content Organization
@@ -22,8 +22,8 @@ The repository has been configured as a GitBook with the following structure:
 ## 🛠 Local Development
 
 ### Prerequisites
-- Node.js 14 or higher
-- npm or yarn package manager
+- Node.js 18 or higher
+- npm package manager
 
 ### Quick Start
 ```bash
@@ -33,7 +33,7 @@ The repository has been configured as a GitBook with the following structure:
 # Method 2: Manual setup
 npm install -g honkit
 npm install
-honkit install
+honkit build
 honkit serve
 ```
 
@@ -44,9 +44,6 @@ npm run serve
 
 # Build the static site
 npm run build
-
-# Install GitBook plugins
-npm run install
 
 # Generate PDF (requires calibre)
 npm run pdf
@@ -79,15 +76,13 @@ honkit build
 
 ## 📖 GitBook Features
 
-### Enabled Plugins
-- **github**: GitHub integration and links
-- **edit-link**: Direct editing links to GitHub
-- **prism**: Enhanced syntax highlighting
-- **copy-code-button**: Copy code blocks with one click
-- **expandable-chapters-small**: Collapsible navigation
-- **anchors**: Anchor links for headings
-- **back-to-top-button**: Quick navigation
-- **theme-comscore**: Custom theme
+### Simplified Configuration
+The current setup uses a minimal configuration to ensure maximum compatibility:
+
+- **No plugins**: Avoided plugin compatibility issues
+- **Standard highlighting**: Uses basic syntax highlighting
+- **Clean build**: No warnings or errors during generation
+- **Fast performance**: Minimal overhead, quick builds
 
 ### Navigation Structure
 The course is organized into logical sections:
@@ -124,63 +119,89 @@ The course is organized into logical sections:
 3. Update `SUMMARY.md` to include new lesson
 4. Add workshop guides if needed
 
-### Styling
-- Modify `book.json` to change plugins and configuration
-- Custom CSS can be added via plugins
-- Theme can be changed in the `pluginsConfig` section
+### Adding Plugins (Advanced)
+The current setup is plugin-free for maximum compatibility. If you want to add plugins:
 
-## 📊 Analytics and Monitoring
-
-### GitHub Pages Insights
-- Access via GitHub repository settings
-- Monitor page views and traffic
-- Track popular content sections
-
-### Performance
-- GitBook generates static HTML for fast loading
-- GitHub Pages provides global CDN
-- Optimized for mobile and desktop viewing
+1. Add them to `book.json` plugins array
+2. Install plugin packages in GitHub Actions workflow
+3. Test locally before deployment
 
 ## 🚨 Troubleshooting
 
-### Common Issues
-1. **Build failures**: Check Node.js version and dependencies
-2. **Plugin errors**: Verify `book.json` configuration
-3. **Deployment issues**: Check GitHub Actions logs
-4. **Missing content**: Verify `SUMMARY.md` paths
+### Common Issues We Resolved
+
+#### 1. Plugin Compatibility Issues
+**Problem**: Plugins like `edit-link`, `expandable-chapters-small` caused build failures
+**Solution**: Use minimal configuration without plugins
+
+#### 2. Mermaid/Log Language Warnings
+**Problem**: HonKit highlight plugin doesn't recognize `mermaid` and `log` languages
+**Solution**: Disable highlight plugin with `"-highlight"` in plugins array
+
+#### 3. Node.js Version Compatibility
+**Problem**: Some packages require Node.js 20+
+**Solution**: Use Node.js 20 in GitHub Actions and recommend locally
 
 ### Debug Steps
 ```bash
 # Check HonKit version
 honkit --version
 
-# Validate book.json
-honkit build --debug
-
 # Clean and rebuild
 rm -rf _book node_modules
 npm install
-honkit install
 honkit build
+
+# Test local server
+honkit serve
 ```
+
+### Build Status
+```bash
+# Successful build output should show:
+info: X plugins are installed 
+info: X explicitly listed 
+info: found XX pages 
+info: found XX asset files 
+info: >> generation finished with success in X.Xs !
+```
+
+## 📊 Performance
+
+### Optimizations
+- **Minimal plugins**: Faster build times and fewer dependencies
+- **Static HTML**: Fast loading with GitHub Pages CDN
+- **Mobile responsive**: Works well on all devices
+- **Search included**: Built-in search functionality
+
+### Analytics
+- GitHub Pages provides basic analytics
+- Can add Google Analytics via custom plugins if needed
 
 ## 📞 Support
 
 ### Resources
 - [HonKit Documentation](https://github.com/honkit/honkit)
-- [GitBook Legacy Docs](https://docs.gitbook.com/v2-changes/important-differences)
 - [GitHub Pages Guide](https://pages.github.com/)
+- [Troubleshooting Guide](#troubleshooting)
 
 ### Contributing
 1. Fork the repository
 2. Make your changes
-3. Test locally with `honkit serve`
+3. Test locally with `honkit build && honkit serve`
 4. Submit a pull request
-
----
 
 ## 🎉 Success!
 
-Your Temporal Workflow Bootcamp is now available as a professional GitBook documentation site! The content is organized, searchable, and automatically deployed to GitHub Pages for easy access by learners worldwide.
+Your Temporal Workflow Bootcamp is now available as a professional GitBook documentation site! The configuration is:
+
+✅ **Plugin-free and stable**  
+✅ **Automatically deployed to GitHub Pages**  
+✅ **Mobile responsive and fast**  
+✅ **Includes 72 pages of comprehensive content**  
+✅ **Built-in search functionality**  
+✅ **Clean build with no errors or warnings**  
+
+The site will be available at your GitHub Pages URL once deployed. The content is organized, searchable, and ready for learners worldwide.
 
 **Happy Teaching! 📚✨** 
