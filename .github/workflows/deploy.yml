@@ -17,24 +17,27 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'npm'
 
-      - name: Install dependencies
+      - name: Install HonKit & dependencies
         run: |
           npm install -g honkit
           npm install
 
-      - name: Build with HonKit
+      - name: Build GitBook
         run: npx honkit build
 
-      - uses: actions/upload-pages-artifact@v2
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          path: _book
+          path: ./_book
 
   deploy:
     needs: build
@@ -43,11 +46,9 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Upgrade deprecated artifact action
-        uses: actions/upload-artifact@v4  # <-- Preload to block v3 fallback
-        with:
-          path: ''
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v4
 
-      - uses: actions/configure-pages@v4  # Upgrade this too!
-      - id: deployment
+      - name: Deploy to GitHub Pages
+        id: deployment
         uses: actions/deploy-pages@v3
