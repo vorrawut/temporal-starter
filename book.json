@@ -10,7 +10,8 @@
     "summary": "SUMMARY.md"
   },
   "plugins": [
-    "-highlight"
+    "-highlight",
+    "mermaid"
   ],
   "variables": {
     "version": "1.0.0",

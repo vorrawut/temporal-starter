@@ -27,9 +27,10 @@
   "author": "Temporal Workflow Bootcamp Team",
   "license": "MIT",
   "devDependencies": {
-    "honkit": "^6.0.3"
+    "honkit": "^6.0.3",
+    "honkit-plugin-mermaid": "^0.1.4"
   },
   "engines": {
     "node": ">=14.0.0"
   }
-} 
+}
