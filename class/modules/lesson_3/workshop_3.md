@@ -134,13 +134,8 @@ Now let's see if your **Lesson 2 application** can connect to Temporal!
 
 ## **Option 1: Run from IDE**
 1. Open your Lesson 2 project in your IDE
-2. Run `TemporalBootcampApplication.kt`
+2. Run `TemporalStarterApplication.kt`
 3. Watch the console output
-
-## **Option 2: Run from Command Line**
-```bash
-./gradlew bootRun --args="--spring.main.sources=com.temporal.workshop.lesson_2.TemporalBootcampApplication"
-```
 
 ---
 
@@ -160,20 +155,7 @@ Starting Temporal worker...
 
 ---
 
-# Step 6: Check Workers in Web UI
-
-1. **Go back to Temporal Web UI**: http://localhost:8233
-2. **Click on "Workers"** in the left sidebar
-3. **You should see your worker listed:**
-   - **Task Queue**: `lesson2-test-queue`
-   - **Identity**: Your computer's hostname + some ID
-   - **Status**: Should be green/healthy
-
-**Your worker is now registered and ready!**
-
----
-
-# Step 7: Explore the Web UI
+# Step 6: Explore the Web UI
 
 Take a few minutes to explore the different sections:
 
@@ -282,15 +264,3 @@ Open: http://localhost:8233
 - ✅ **Set up a complete development environment** for Temporal workflows
 
 ---
-
-# 🚀 Next Steps
-
-**You now have a fully functional Temporal development environment!**
-
-## **In Lesson 4:**
-- Create our first actual workflow
-- See it running in this setup
-- Watch the workflow execute in the Web UI
-- Understand the complete workflow lifecycle
-
-**Ready to build your first workflow? Let's create HelloWorkflow! 🎉** 

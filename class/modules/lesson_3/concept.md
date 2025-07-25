@@ -155,6 +155,14 @@ temporal operator namespace describe default
 
 ---
 
+🧠 What is namespace temporal-system?
+It’s the default internal namespace Temporal uses to run its own workflows — not yours.
+
+Think of it like Temporal’s “admin” namespace — 
+it’s where it handles system-level workflows, heartbeats, and background tasks that keep Temporal itself alive and healthy.
+
+---
+
 # CLI: Workflow Operations
 
 ```bash
@@ -222,10 +230,18 @@ echo "🔌 gRPC API: localhost:7233"
 
 ```bash
 # Check server health
-curl http://localhost:7233/health
+🔥 Temporal server by command runs on gRPC, not HTTP
+❌ curl http://localhost:7233/health
+❌ curl: (1) Received HTTP/0.9 when not allowed
+
+tctl cluster health 
+
+install ctl: https://docs.temporal.io/tctl-v1#install
 
 # Check Web UI health
 curl http://localhost:8233/health
+
+
 ```
 
 ## **Additional Tips:**
@@ -277,7 +293,6 @@ lsof -ti:7233 | xargs kill -9
 lsof -ti:8233 | xargs kill -9
 
 # Clean start
-rm temporal-dev.db
 temporal server start-dev
 ```
 
@@ -300,11 +315,3 @@ temporal server start-dev
 # 🚀 Next Steps
 
 **Your Temporal server is ready!**
-
-## **In Lesson 4, you'll:**
-- Create your first workflow and activity
-- See end-to-end execution
-- Use the Web UI to monitor your workflow
-- Understand the complete development cycle
-
-**Ready to create your first workflow? Let's dive into HelloWorkflow! 🎉**
