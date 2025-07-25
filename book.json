@@ -16,5 +16,9 @@
   "variables": {
     "version": "1.0.0",
     "course": "Temporal Workflow Bootcamp"
-  }
+  },
+  "scripts": [
+    "https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js",
+    "./scripts/init-mermaid.js"
+  ]
 } 
