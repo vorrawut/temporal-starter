@@ -5,7 +5,6 @@
 * [Welcome to Temporal Workflows](class/Introduction.md)
 * [Temporal Architecture Overview](class/temporal-architecture.md)
 * [Visual Introduction](class/intro-diagram.md)
-* [Course README](class/README.md)
 
 ## Core Modules
 
