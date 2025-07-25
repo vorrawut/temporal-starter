@@ -10,14 +10,8 @@
     "summary": "SUMMARY.md"
   },
   "plugins": [
-    "-highlight",
-    "copy-assets"
+    "-highlight"
   ],
-  "pluginsConfig": {
-    "copy-assets": {
-      "assets": ["scripts"]
-    }
-  },
   "variables": {
     "version": "1.0.0",
     "course": "Temporal Workflow Bootcamp"
