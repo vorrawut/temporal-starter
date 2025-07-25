@@ -1,0 +1,1785 @@
+
+<!DOCTYPE HTML>
+<html lang="en" >
+    <head>
+        <meta charset="UTF-8">
+        <title>Lesson 17 Solution · Temporal Workflow Bootcamp</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="HonKit 6.0.3">
+        <meta name="author" content="Temporal Workflow Bootcamp Team">
+        
+        
+    
+    <link rel="stylesheet" href="../../../../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../../../../gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../../../gitbook/@honkit/honkit-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../../../../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../../../../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="../../../" />
+    
+    
+    <link rel="prev" href="../lesson_16/" />
+    
+
+    </head>
+    <body>
+        
+<div class="book honkit-cloak">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        <li class="header">Introduction</li>
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../../../../">
+            
+                <a href="../../../../">
+            
+                    
+                    Introduction
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="../../../Introduction.html">
+            
+                <a href="../../../Introduction.html">
+            
+                    
+                    Welcome to Temporal Workflows
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="../../../temporal-architecture.html">
+            
+                <a href="../../../temporal-architecture.html">
+            
+                    
+                    Temporal Architecture Overview
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="../../../intro-diagram.html">
+            
+                <a href="../../../intro-diagram.html">
+            
+                    
+                    Visual Introduction
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">Core Modules</li>
+        
+        
+    
+
+    
+        
+        <li class="header">Lesson 1: Introduction to Temporal</li>
+        
+        
+    
+        <li class="chapter " data-level="3.1" data-path="../../../modules/lesson_1/concept.html">
+            
+                <a href="../../../modules/lesson_1/concept.html">
+            
+                    
+                    Concept
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.2" data-path="../../../modules/lesson_1/workshop_1.html">
+            
+                <a href="../../../modules/lesson_1/workshop_1.html">
+            
+                    
+                    Workshop
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">Lesson 2: Kotlin + Spring Boot + Temporal Setup</li>
+        
+        
+    
+        <li class="chapter " data-level="4.1" data-path="../../../modules/lesson_2/concept.html">
+            
+                <a href="../../../modules/lesson_2/concept.html">
+            
+                    
+                    Concept
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="4.2" data-path="../../../modules/lesson_2/workshop_2.html">
+            
+                <a href="../../../modules/lesson_2/workshop_2.html">
+            
+                    
+                    Workshop
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">Lesson 3: Run Temporal Locally</li>
+        
+        
+    
+        <li class="chapter " data-level="5.1" data-path="../../../modules/lesson_3/concept.html">
+            
+                <a href="../../../modules/lesson_3/concept.html">
+            
+                    
+                    Concept
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="5.2" data-path="../../../modules/lesson_3/workshop_3.html">
+            
+                <a href="../../../modules/lesson_3/workshop_3.html">
+            
+                    
+                    Workshop
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">Lesson 4: HelloWorkflow</li>
+        
+        
+    
+        <li class="chapter " data-level="6.1" data-path="../../../modules/lesson_4/concept.html">
+            
+                <a href="../../../modules/lesson_4/concept.html">
+            
+                    
+                    Concept
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="6.2" data-path="../../../modules/lesson_4/workshop_4.html">
+            
+                <a href="../../../modules/lesson_4/workshop_4.html">
+            
+                    
+                    Workshop
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">Lesson 5: Adding a Simple Activity</li>
+        
+        
+    
+        <li class="chapter " data-level="7.1" data-path="../../../modules/lesson_5/concept.html">
+            
+                <a href="../../../modules/lesson_5/concept.html">
+            
+                    
+                    Concept
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.2" data-path="../../../modules/lesson_5/workshop_5.html">
+            
+                <a href="../../../modules/lesson_5/workshop_5.html">
+            
+                    
+                    Workshop
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="7.3" data-path="../../../modules/lesson_5/diagram.html">
+            
+                <a href="../../../modules/lesson_5/diagram.html">
+            
+                    
+                    Diagram
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">Lesson 6: Workflow & Activity Separation</li>
+        
+        
+    
+        <li class="chapter " data-level="8.1" data-path="../../../modules/lesson_6/concept.html">
+            
+                <a href="../../../modules/lesson_6/concept.html">
+            
+                    
+                    Concept
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="8.2" data-path="../../../modules/lesson_6/workshop_6.html">
+            
+                <a href="../../../modules/lesson_6/workshop_6.html">
+            
+                    
+                    Workshop
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="8.3" data-path="../../../modules/lesson_6/diagram.html">
+            
+                <a href="../../../modules/lesson_6/diagram.html">
+            
+                    
+                    Diagram
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="8.4" data-path="../../../modules/lesson_6/parameter.html">
+            
+                <a href="../../../modules/lesson_6/parameter.html">
+            
+                    
+                    Parameters
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">Lesson 7: Workflow Input/Output</li>
+        
+        
+    
+        <li class="chapter " data-level="9.1" data-path="../../../modules/lesson_7/concept.html">
+            
+                <a href="../../../modules/lesson_7/concept.html">
+            
+                    
+                    Concept
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="9.2" data-path="../../../modules/lesson_7/workshop_7.html">
+            
+                <a href="../../../modules/lesson_7/workshop_7.html">
+            
+                    
+                    Workshop
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="9.3" data-path="../../../modules/lesson_7/diagram.html">
+            
+                <a href="../../../modules/lesson_7/diagram.html">
+            
+                    
+                    Diagram
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">Lesson 8: Activity Retry + Timeout</li>
+        
+        
+    
+        <li class="chapter " data-level="10.1" data-path="../../../modules/lesson_8/concept.html">
+            
+                <a href="../../../modules/lesson_8/concept.html">
+            
+                    
+                    Concept
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="10.2" data-path="../../../modules/lesson_8/workshop_8.html">
+            
+                <a href="../../../modules/lesson_8/workshop_8.html">
+            
+                    
+                    Workshop
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="10.3" data-path="../../../modules/lesson_8/diagram.html">
+            
+                <a href="../../../modules/lesson_8/diagram.html">
+            
+                    
+                    Diagram
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">Lesson 9: Error Handling in Workflows</li>
+        
+        
+    
+        <li class="chapter " data-level="11.1" data-path="../../../modules/lesson_9/concept.html">
+            
+                <a href="../../../modules/lesson_9/concept.html">
+            
+                    
+                    Concept
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="11.2" data-path="../../../modules/lesson_9/workshop_9.html">
+            
+                <a href="../../../modules/lesson_9/workshop_9.html">
+            
+                    
+                    Workshop
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="11.3" data-path="../../../modules/lesson_9/diagram.html">
+            
+                <a href="../../../modules/lesson_9/diagram.html">
+            
+                    
+                    Diagram
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">Lesson 10: Signals</li>
+        
+        
+    
+        <li class="chapter " data-level="12.1" data-path="../../../modules/lesson_10/concept.html">
+            
+                <a href="../../../modules/lesson_10/concept.html">
+            
+                    
+                    Concept
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="12.2" data-path="../../../modules/lesson_10/workshop_10.html">
+            
+                <a href="../../../modules/lesson_10/workshop_10.html">
+            
+                    
+                    Workshop
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="12.3" data-path="../../../modules/lesson_10/diagram.html">
+            
+                <a href="../../../modules/lesson_10/diagram.html">
+            
+                    
+                    Diagram
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">Lesson 11: Queries</li>
+        
+        
+    
+        <li class="chapter " data-level="13.1" data-path="../../../modules/lesson_11/concept.html">
+            
+                <a href="../../../modules/lesson_11/concept.html">
+            
+                    
+                    Concept
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="13.2" data-path="../../../modules/lesson_11/workshop_11.html">
+            
+                <a href="../../../modules/lesson_11/workshop_11.html">
+            
+                    
+                    Workshop
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="13.3" data-path="../../../modules/lesson_11/diagram.html">
+            
+                <a href="../../../modules/lesson_11/diagram.html">
+            
+                    
+                    Diagram
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">Lesson 12: Child Workflows & continueAsNew</li>
+        
+        
+    
+        <li class="chapter " data-level="14.1" data-path="../../../modules/lesson_12/concept.html">
+            
+                <a href="../../../modules/lesson_12/concept.html">
+            
+                    
+                    Concept
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="14.2" data-path="../../../modules/lesson_12/workshop_12.html">
+            
+                <a href="../../../modules/lesson_12/workshop_12.html">
+            
+                    
+                    Workshop
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="14.3" data-path="../../../modules/lesson_12/diagram.html">
+            
+                <a href="../../../modules/lesson_12/diagram.html">
+            
+                    
+                    Diagram
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">Lesson 13: Versioning with Workflow.getVersion()</li>
+        
+        
+    
+        <li class="chapter " data-level="15.1" data-path="../../../modules/lesson_13/concept.html">
+            
+                <a href="../../../modules/lesson_13/concept.html">
+            
+                    
+                    Concept
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="15.2" data-path="../../../modules/lesson_13/workshop_13.html">
+            
+                <a href="../../../modules/lesson_13/workshop_13.html">
+            
+                    
+                    Workshop
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">Lesson 14: Timers and Cron Workflows</li>
+        
+        
+    
+        <li class="chapter " data-level="16.1" data-path="../../../modules/lesson_14/concept.html">
+            
+                <a href="../../../modules/lesson_14/concept.html">
+            
+                    
+                    Concept
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="16.2" data-path="../../../modules/lesson_14/workshop_14.html">
+            
+                <a href="../../../modules/lesson_14/workshop_14.html">
+            
+                    
+                    Workshop
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="16.3" data-path="../../../modules/lesson_14/diagram.html">
+            
+                <a href="../../../modules/lesson_14/diagram.html">
+            
+                    
+                    Diagram
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">Lesson 15: External Service Integration</li>
+        
+        
+    
+        <li class="chapter " data-level="17.1" data-path="../../../modules/lesson_15/concept.html">
+            
+                <a href="../../../modules/lesson_15/concept.html">
+            
+                    
+                    Concept
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="17.2" data-path="../../../modules/lesson_15/workshop_15.html">
+            
+                <a href="../../../modules/lesson_15/workshop_15.html">
+            
+                    
+                    Workshop
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="17.3" data-path="../../../modules/lesson_15/diagram.html">
+            
+                <a href="../../../modules/lesson_15/diagram.html">
+            
+                    
+                    Diagram
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">Lesson 16: Testing + Production Readiness</li>
+        
+        
+    
+        <li class="chapter " data-level="18.1" data-path="../../../modules/lesson_16/concept.html">
+            
+                <a href="../../../modules/lesson_16/concept.html">
+            
+                    
+                    Concept
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="18.2" data-path="../../../modules/lesson_16/workshop_16.html">
+            
+                <a href="../../../modules/lesson_16/workshop_16.html">
+            
+                    
+                    Workshop
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="18.3" data-path="../../../modules/lesson_16/diagram.html">
+            
+                <a href="../../../modules/lesson_16/diagram.html">
+            
+                    
+                    Diagram
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">Lesson 17: Deployment</li>
+        
+        
+    
+        <li class="chapter " data-level="19.1" data-path="../../../modules/lesson_17/concept.html">
+            
+                <a href="../../../modules/lesson_17/concept.html">
+            
+                    
+                    Concept
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="19.2" data-path="../../../modules/lesson_17/workshop_17.html">
+            
+                <a href="../../../modules/lesson_17/workshop_17.html">
+            
+                    
+                    Workshop
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="19.3" data-path="../../../modules/lesson_17/diagram.html">
+            
+                <a href="../../../modules/lesson_17/diagram.html">
+            
+                    
+                    Diagram
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">Workshop Guides</li>
+        
+        
+    
+
+    
+        
+        <li class="header">Workshop Instructions</li>
+        
+        
+    
+        <li class="chapter " data-level="21.1" data-path="../../lesson_2/">
+            
+                <a href="../../lesson_2/">
+            
+                    
+                    Lesson 2 Workshop
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="21.2" data-path="../../lesson_3/">
+            
+                <a href="../../lesson_3/">
+            
+                    
+                    Lesson 3 Workshop
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="21.3" data-path="../../lesson_4/">
+            
+                <a href="../../lesson_4/">
+            
+                    
+                    Lesson 4 Workshop
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="21.4" data-path="../../lesson_5/">
+            
+                <a href="../../lesson_5/">
+            
+                    
+                    Lesson 5 Workshop
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="21.5" data-path="../../lesson_6/">
+            
+                <a href="../../lesson_6/">
+            
+                    
+                    Lesson 6 Workshop
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="21.6" data-path="../../lesson_7/">
+            
+                <a href="../../lesson_7/">
+            
+                    
+                    Lesson 7 Workshop
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="21.7" data-path="../../lesson_8/">
+            
+                <a href="../../lesson_8/">
+            
+                    
+                    Lesson 8 Workshop
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="21.8" data-path="../../lesson_9/">
+            
+                <a href="../../lesson_9/">
+            
+                    
+                    Lesson 9 Workshop
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="21.9" data-path="../../lesson_10/">
+            
+                <a href="../../lesson_10/">
+            
+                    
+                    Lesson 10 Workshop
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="21.10" data-path="../../lesson_15/">
+            
+                <a href="../../lesson_15/">
+            
+                    
+                    Lesson 15 Workshop
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="21.11" data-path="../../lesson_16/">
+            
+                <a href="../../lesson_16/">
+            
+                    
+                    Lesson 16 Workshop
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="21.12" data-path="../../lesson_17/">
+            
+                <a href="../../lesson_17/">
+            
+                    
+                    Lesson 17 Workshop
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">Workshop Solutions</li>
+        
+        
+    
+        <li class="chapter " data-level="22.1" data-path="../lesson_2/">
+            
+                <a href="../lesson_2/">
+            
+                    
+                    Lesson 2 Solution
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="22.2" data-path="../lesson_3/">
+            
+                <a href="../lesson_3/">
+            
+                    
+                    Lesson 3 Solution
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="22.3" data-path="../lesson_4/">
+            
+                <a href="../lesson_4/">
+            
+                    
+                    Lesson 4 Solution
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="22.4" data-path="../lesson_5/">
+            
+                <a href="../lesson_5/">
+            
+                    
+                    Lesson 5 Solution
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="22.5" data-path="../lesson_6/">
+            
+                <a href="../lesson_6/">
+            
+                    
+                    Lesson 6 Solution
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="22.6" data-path="../lesson_15/">
+            
+                <a href="../lesson_15/">
+            
+                    
+                    Lesson 15 Solution
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="22.7" data-path="../lesson_16/">
+            
+                <a href="../lesson_16/">
+            
+                    
+                    Lesson 16 Solution
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="22.8" data-path="./">
+            
+                <a href="./">
+            
+                    
+                    Lesson 17 Solution
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">Additional Resources</li>
+        
+        
+    
+        <li class="chapter " data-level="23.1" data-path="../../../">
+            
+                <a href="../../../">
+            
+                    
+                    Course README
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://github.com/honkit/honkit" target="blank" class="gitbook-link">
+            Published with HonKit
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href="../../../.." >Lesson 17 Solution</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h1 id="lesson-17-deployment--production-infrastructure---complete-solution">Lesson 17: Deployment &amp; Production Infrastructure - Complete Solution</h1>
+<h2 id="solution-overview">Solution Overview</h2>
+<p>This comprehensive solution demonstrates enterprise-grade deployment patterns for Temporal workflow applications. It includes everything needed to deploy, scale, and maintain Temporal applications in production environments using modern containerization and orchestration tools.</p>
+<h2 id="architecture-overview">Architecture Overview</h2>
+<h3 id="deployment-stack"><strong>Deployment Stack</strong></h3>
+<ol>
+<li><strong>Containerized Application</strong>: Multi-stage Docker build with security best practices</li>
+<li><strong>Local Development</strong>: Complete Docker Compose stack with all dependencies</li>
+<li><strong>Kubernetes Production</strong>: Full production deployment with proper resource management</li>
+<li><strong>Configuration Management</strong>: Environment-specific configuration with secrets handling</li>
+<li><strong>Monitoring</strong>: Health checks, metrics, and observability</li>
+<li><strong>Helm Chart</strong>: Package management for complex deployments</li>
+</ol>
+<h3 id="infrastructure-components"><strong>Infrastructure Components</strong></h3>
+<ul>
+<li><strong>PostgreSQL</strong>: Persistent database for Temporal</li>
+<li><strong>Temporal Server</strong>: Auto-setup Temporal with health checks</li>
+<li><strong>Temporal Web UI</strong>: Management interface</li>
+<li><strong>Worker Application</strong>: Your Kotlin Spring Boot application</li>
+<li><strong>Redis</strong>: Optional caching layer</li>
+<li><strong>Monitoring</strong>: Prometheus metrics and health endpoints</li>
+</ul>
+<h2 id="key-implementation-features">Key Implementation Features</h2>
+<h3 id="1-production-ready-dockerfile">1. <strong>Production-Ready Dockerfile</strong></h3>
+<pre><code class="lang-dockerfile"># Multi-stage build for optimal image size and security
+FROM gradle:7.6-jdk17 AS build
+WORKDIR /app
+
+# Layer caching optimization
+COPY build.gradle.kts settings.gradle.kts ./
+COPY gradle gradle/
+RUN gradle dependencies --no-daemon
+
+# Build application
+COPY src src/
+RUN gradle build -x test --no-daemon
+
+# Minimal runtime image
+FROM openjdk:17-jre-slim AS runtime
+RUN apt-get update &amp;&amp; apt-get install -y curl &amp;&amp; rm -rf /var/lib/apt/lists/*
+
+# Security: non-root user
+RUN groupadd -r temporal &amp;&amp; useradd -r -g temporal temporal
+WORKDIR /app
+COPY --from=build /app/build/libs/*.jar app.jar
+RUN chown -R temporal:temporal /app
+USER temporal
+
+# Container-optimized JVM settings
+ENV JAVA_OPTS="-XX:+UseContainerSupport -XX:MaxRAMPercentage=75.0 -XX:+UseG1GC"
+EXPOSE 8080
+ENTRYPOINT exec java $JAVA_OPTS -jar app.jar
+</code></pre>
+<p><strong>Key features:</strong></p>
+<ul>
+<li><strong>Multi-stage build</strong>: Reduces final image size by 60-70%</li>
+<li><strong>Security</strong>: Non-root user, minimal base image</li>
+<li><strong>Layer caching</strong>: Optimized for fast rebuilds</li>
+<li><strong>Container JVM tuning</strong>: Memory-aware garbage collection</li>
+</ul>
+<h3 id="2-comprehensive-docker-compose-stack">2. <strong>Comprehensive Docker Compose Stack</strong></h3>
+<pre><code class="lang-yaml">version: '3.8'
+
+services:
+  # Database with health checks
+  postgresql:
+    image: postgres:13
+    environment:
+      POSTGRES_PASSWORD: temporal
+      POSTGRES_USER: temporal
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U temporal"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Temporal server with proper dependencies
+  temporal:
+    image: temporalio/auto-setup:1.22.0
+    ports:
+      - "7233:7233"
+      - "8080:8080"
+    depends_on:
+      postgresql:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "tctl", "--address", "temporal:7233", "workflow", "list"]
+
+  # Worker application with health monitoring
+  temporal-worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - TEMPORAL_FRONTEND_ADDRESS=temporal:7233
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      temporal:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+</code></pre>
+<p><strong>Features:</strong></p>
+<ul>
+<li><strong>Health checks</strong>: Ensure proper startup order</li>
+<li><strong>Service dependencies</strong>: Temporal starts only after PostgreSQL is ready</li>
+<li><strong>Network isolation</strong>: Services communicate through internal networks</li>
+<li><strong>Volume persistence</strong>: Database data survives container restarts</li>
+</ul>
+<h3 id="3-production-kubernetes-deployment">3. <strong>Production Kubernetes Deployment</strong></h3>
+<h4 id="namespace-and-rbac"><strong>Namespace and RBAC</strong></h4>
+<pre><code class="lang-yaml">apiVersion: v1
+kind: Namespace
+metadata:
+  name: temporal-system
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: temporal-worker
+  namespace: temporal-system
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: temporal-worker-role
+  namespace: temporal-system
+rules:
+- apiGroups: [""]
+  resources: ["configmaps", "secrets"]
+  verbs: ["get", "list", "watch"]
+</code></pre>
+<h4 id="configuration-management"><strong>Configuration Management</strong></h4>
+<pre><code class="lang-yaml"># ConfigMap for non-sensitive configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: temporal-worker-config
+  namespace: temporal-system
+data:
+  application.yaml: |
+    temporal:
+      frontend.address: temporal-service:7233
+      namespace: default
+    management:
+      endpoints:
+        web:
+          exposure:
+            include: health,info,metrics,prometheus
+
+---
+# Secret for sensitive data
+apiVersion: v1
+kind: Secret
+metadata:
+  name: temporal-worker-secrets
+  namespace: temporal-system
+type: Opaque
+stringData:
+  database-password: "temporal"
+  external-api-key: "your-api-key-here"
+</code></pre>
+<h4 id="production-deployment"><strong>Production Deployment</strong></h4>
+<pre><code class="lang-yaml">apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: temporal-worker
+  namespace: temporal-system
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  template:
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+      containers:
+      - name: temporal-worker
+        image: temporal-worker:latest
+        resources:
+          limits:
+            memory: "1Gi"
+            cpu: "1000m"
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: 8080
+          initialDelaySeconds: 60
+        readinessProbe:
+          httpGet:
+            path: /actuator/health/readiness
+            port: 8080
+          initialDelaySeconds: 30
+</code></pre>
+<h3 id="4-helm-chart-for-advanced-deployment">4. <strong>Helm Chart for Advanced Deployment</strong></h3>
+<h4 id="chart-structure"><strong>Chart Structure</strong></h4>
+<pre><code>helm/
+├── Chart.yaml              # Chart metadata with dependencies
+├── values.yaml             # Configurable default values
+├── templates/
+│   ├── deployment.yaml     # Templated deployment manifest
+│   ├── service.yaml        # Service configuration
+│   ├── configmap.yaml      # Configuration management
+│   ├── secret.yaml         # Secrets management
+│   └── hpa.yaml           # Horizontal Pod Autoscaler
+</code></pre><h4 id="configurable-values"><strong>Configurable Values</strong></h4>
+<pre><code class="lang-yaml"># values.yaml
+replicaCount: 3
+
+image:
+  repository: temporal-worker
+  tag: latest
+  pullPolicy: IfNotPresent
+
+temporal:
+  frontendAddress: "temporal-service:7233"
+  namespace: "default"
+
+autoscaling:
+  enabled: true
+  minReplicas: 3
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 80
+
+postgresql:
+  enabled: true
+  auth:
+    username: temporal
+    password: temporal
+    database: temporal
+</code></pre>
+<h2 id="deployment-strategies">Deployment Strategies</h2>
+<h3 id="local-development-with-docker-compose"><strong>Local Development with Docker Compose</strong></h3>
+<pre><code class="lang-bash"># Quick start for development
+docker compose up -d
+
+# Access points
+# Application: http://localhost:8081
+# Temporal Web UI: http://localhost:8088
+# PostgreSQL: localhost:5432
+
+# Monitor services
+docker compose ps
+docker compose logs -f temporal-worker
+</code></pre>
+<h3 id="production-deployment-with-kubernetes"><strong>Production Deployment with Kubernetes</strong></h3>
+<pre><code class="lang-bash"># Deploy using kubectl
+kubectl apply -f k8s/ -n temporal-system
+
+# Deploy using Helm
+helm install temporal-worker ./helm \
+  --namespace temporal-system \
+  --create-namespace \
+  --values values-prod.yaml
+
+# Verify deployment
+kubectl get pods -n temporal-system
+kubectl get svc -n temporal-system
+</code></pre>
+<h3 id="scaling-and-management"><strong>Scaling and Management</strong></h3>
+<pre><code class="lang-bash"># Manual scaling
+kubectl scale deployment temporal-worker --replicas=5 -n temporal-system
+
+# Auto-scaling
+kubectl autoscale deployment temporal-worker \
+  --min=3 --max=10 --cpu-percent=80 -n temporal-system
+
+# Rolling updates
+kubectl set image deployment/temporal-worker \
+  temporal-worker=temporal-worker:v2.0.0 -n temporal-system
+
+# Rollback if needed
+kubectl rollout undo deployment/temporal-worker -n temporal-system
+</code></pre>
+<h2 id="monitoring-and-observability">Monitoring and Observability</h2>
+<h3 id="health-checks"><strong>Health Checks</strong></h3>
+<ul>
+<li><strong>Application</strong>: Spring Boot Actuator endpoints</li>
+<li><strong>Container</strong>: Docker health checks</li>
+<li><strong>Kubernetes</strong>: Liveness, readiness, and startup probes</li>
+<li><strong>Load Balancer</strong>: Service health monitoring</li>
+</ul>
+<h3 id="metrics-collection"><strong>Metrics Collection</strong></h3>
+<pre><code class="lang-yaml"># Prometheus annotations
+annotations:
+  prometheus.io/scrape: "true"
+  prometheus.io/port: "8080"
+  prometheus.io/path: "/actuator/prometheus"
+
+# Custom metrics
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+</code></pre>
+<h3 id="logging-configuration"><strong>Logging Configuration</strong></h3>
+<pre><code class="lang-yaml">logging:
+  level:
+    root: INFO
+    io.temporal: DEBUG
+  pattern:
+    console: '{"timestamp":"%d{ISO8601}","level":"%level","class":"%logger{40}","message":"%message"}%n'
+</code></pre>
+<h2 id="security-implementation">Security Implementation</h2>
+<h3 id="container-security"><strong>Container Security</strong></h3>
+<ul>
+<li><strong>Non-root user</strong>: All containers run as non-root</li>
+<li><strong>Minimal base images</strong>: Only necessary components included</li>
+<li><strong>Regular security scans</strong>: Automated vulnerability scanning</li>
+<li><strong>Secret management</strong>: Proper separation of secrets from configuration</li>
+</ul>
+<h3 id="kubernetes-security"><strong>Kubernetes Security</strong></h3>
+<ul>
+<li><strong>RBAC</strong>: Role-based access control for service accounts</li>
+<li><strong>Pod Security Context</strong>: Security constraints at pod level</li>
+<li><strong>Network Policies</strong>: Traffic isolation between namespaces</li>
+<li><strong>Secrets management</strong>: Encrypted at rest and in transit</li>
+</ul>
+<h3 id="production-hardening"><strong>Production Hardening</strong></h3>
+<pre><code class="lang-yaml">securityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  readOnlyRootFilesystem: true
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+    - ALL
+</code></pre>
+<h2 id="performance-optimization">Performance Optimization</h2>
+<h3 id="jvm-tuning-for-containers"><strong>JVM Tuning for Containers</strong></h3>
+<pre><code class="lang-bash">JAVA_OPTS="-XX:+UseContainerSupport 
+           -XX:MaxRAMPercentage=75.0 
+           -XX:+UseG1GC 
+           -XX:+UseStringDeduplication"
+</code></pre>
+<h3 id="resource-management"><strong>Resource Management</strong></h3>
+<pre><code class="lang-yaml">resources:
+  limits:
+    memory: "1Gi"      # Hard limit
+    cpu: "1000m"       # 1 CPU core
+  requests:
+    memory: "512Mi"    # Guaranteed memory
+    cpu: "500m"        # 0.5 CPU core reserved
+</code></pre>
+<h3 id="scaling-configuration"><strong>Scaling Configuration</strong></h3>
+<pre><code class="lang-yaml"># Horizontal Pod Autoscaler
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+spec:
+  minReplicas: 3
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 80
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80
+</code></pre>
+<h2 id="troubleshooting-guide">Troubleshooting Guide</h2>
+<h3 id="common-issues-and-solutions"><strong>Common Issues and Solutions</strong></h3>
+<h4 id="container-build-issues"><strong>Container Build Issues</strong></h4>
+<pre><code class="lang-bash"># Check Gradle wrapper permissions
+chmod +x gradlew
+
+# Build with verbose output
+docker build --no-cache --progress=plain -t temporal-worker .
+
+# Debug multi-stage build
+docker build --target=build -t temporal-worker-debug .
+</code></pre>
+<h4 id="service-connectivity-issues"><strong>Service Connectivity Issues</strong></h4>
+<pre><code class="lang-bash"># Check service resolution
+kubectl exec -it temporal-worker-xxx -- nslookup temporal-service
+
+# Test connectivity
+kubectl exec -it temporal-worker-xxx -- curl -v http://temporal-service:7233
+
+# Check logs
+kubectl logs -f deployment/temporal-worker -n temporal-system
+</code></pre>
+<h4 id="health-check-failures"><strong>Health Check Failures</strong></h4>
+<pre><code class="lang-bash"># Test health endpoint locally
+curl -v http://localhost:8080/actuator/health
+
+# Check health in container
+kubectl exec -it temporal-worker-xxx -- curl http://localhost:8080/actuator/health
+
+# Debug startup issues
+kubectl describe pod temporal-worker-xxx -n temporal-system
+</code></pre>
+<h2 id="production-readiness-checklist">Production Readiness Checklist</h2>
+<ul>
+<li>✅ <strong>Security</strong>: Non-root users, minimal images, RBAC configured</li>
+<li>✅ <strong>Monitoring</strong>: Health checks, metrics, logging configured</li>
+<li>✅ <strong>Scalability</strong>: HPA configured, resource limits set</li>
+<li>✅ <strong>Reliability</strong>: Rolling updates, health checks, restart policies</li>
+<li>✅ <strong>Configuration</strong>: Secrets management, environment separation</li>
+<li>✅ <strong>Performance</strong>: JVM tuning, resource optimization</li>
+<li>✅ <strong>Backup</strong>: Database backups, disaster recovery procedures</li>
+<li>✅ <strong>Documentation</strong>: Deployment guides, troubleshooting docs</li>
+</ul>
+<h2 id="key-learning-outcomes">Key Learning Outcomes</h2>
+<ol>
+<li><strong>Containerization Mastery</strong>: Complete understanding of Docker best practices</li>
+<li><strong>Orchestration Expertise</strong>: Production-ready Kubernetes deployments</li>
+<li><strong>Configuration Management</strong>: Proper separation of concerns</li>
+<li><strong>Security Awareness</strong>: Container and Kubernetes security patterns</li>
+<li><strong>Operational Excellence</strong>: Monitoring, scaling, and maintenance procedures</li>
+<li><strong>Deployment Automation</strong>: CI/CD ready infrastructure as code</li>
+</ol>
+<h2 id="graduation-achievement">Graduation Achievement</h2>
+<p>Completing this lesson means you have mastered:</p>
+<ul>
+<li>✅ Complete Temporal application lifecycle (development to production)</li>
+<li>✅ Modern containerization and orchestration practices</li>
+<li>✅ Production-grade security and monitoring patterns</li>
+<li>✅ Scalable deployment architectures</li>
+<li>✅ Infrastructure as code methodologies</li>
+</ul>
+<p><strong>🎉 Congratulations! You're now ready to deploy and maintain production-grade Temporal applications in any environment!</strong></p>
+<p>This completes your journey from Temporal workflow basics to enterprise deployment mastery. You now have all the skills needed to build, test, and deploy robust, scalable workflow applications in production environments. </p>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="../lesson_16/" class="navigation navigation-prev " aria-label="Previous page: Lesson 16 Solution">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="../../../" class="navigation navigation-next " aria-label="Next page: Course README">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"Lesson 17 Solution","level":"22.8","depth":1,"next":{"title":"Course README","level":"23.1","depth":1,"path":"class/README.md","ref":"class/README.md","articles":[]},"previous":{"title":"Lesson 16 Solution","level":"22.7","depth":1,"path":"class/workshop/answer/lesson_16/README.md","ref":"class/workshop/answer/lesson_16/README.md","articles":[]},"dir":"ltr"},"config":{"plugins":["-highlight"],"root":".","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","author":"Temporal Workflow Bootcamp Team","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{"version":"1.0.0","course":"Temporal Workflow Bootcamp"},"title":"Temporal Workflow Bootcamp","language":"en","gitbook":">=3.0.0","description":"Master production-ready distributed systems with Temporal workflows"},"file":{"path":"class/workshop/answer/lesson_17/README.md","mtime":"2025-07-25T08:54:23.792Z","type":"markdown"},"gitbook":{"version":"6.0.3","time":"2025-07-25T08:54:36.969Z"},"basePath":"../../../..","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <noscript>
+        <style>
+            .honkit-cloak {
+                display: block !important;
+            }
+        </style>
+    </noscript>
+    <script>
+        // Restore sidebar state as critical path for prevent layout shift
+        function __init__getSidebarState(defaultValue){
+            var baseKey = "";
+            var key = baseKey + ":sidebar";
+            try {
+                var value = localStorage[key];
+                if (value === undefined) {
+                    return defaultValue;
+                }
+                var parsed = JSON.parse(value);
+                return parsed == null ? defaultValue : parsed;
+            } catch (e) {
+                return defaultValue;
+            }
+        }
+        function __init__restoreLastSidebarState() {
+            var isMobile = window.matchMedia("(max-width: 600px)").matches;
+            if (isMobile) {
+                // Init last state if not mobile
+                return;
+            }
+            var sidebarState = __init__getSidebarState(true);
+            var book = document.querySelector(".book");
+            // Show sidebar if it enabled
+            if (sidebarState && book) {
+                book.classList.add("without-animation", "with-summary");
+            }
+        }
+
+        try {
+            __init__restoreLastSidebarState();
+        } finally {
+            var book = document.querySelector(".book");
+            book.classList.remove("honkit-cloak");
+        }
+    </script>
+    <script src="../../../../gitbook/gitbook.js"></script>
+    <script src="../../../../gitbook/theme.js"></script>
+    
+        
+        <script src="../../../../gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="../../../../gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="../../../../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="../../../../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="../../../../gitbook/@honkit/honkit-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+

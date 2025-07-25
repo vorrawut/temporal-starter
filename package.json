@@ -1,0 +1,35 @@
+{
+  "name": "temporal-workflow-bootcamp-docs",
+  "version": "1.0.0",
+  "description": "GitBook documentation for Temporal Workflow Bootcamp",
+  "scripts": {
+    "build": "honkit build",
+    "serve": "honkit serve",
+    "hon-install": "honkit install",
+    "pdf": "honkit pdf",
+    "epub": "honkit epub",
+    "mobi": "honkit mobi"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/temporal-starter/temporal-workflow-bootcamp"
+  },
+  "keywords": [
+    "temporal",
+    "workflows",
+    "distributed-systems",
+    "kotlin",
+    "spring-boot",
+    "gitbook",
+    "documentation",
+    "bootcamp"
+  ],
+  "author": "Temporal Workflow Bootcamp Team",
+  "license": "MIT",
+  "devDependencies": {
+    "honkit": "^6.0.3"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+} 

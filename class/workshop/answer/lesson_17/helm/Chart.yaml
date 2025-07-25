@@ -1,0 +1,34 @@
+apiVersion: v2
+name: temporal-worker
+description: A Helm chart for deploying Temporal Worker application built with Kotlin and Spring Boot
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
+
+keywords:
+  - temporal
+  - workflow
+  - kotlin
+  - spring-boot
+  - microservices
+
+home: https://github.com/your-org/temporal-worker
+sources:
+  - https://github.com/your-org/temporal-worker
+
+maintainers:
+  - name: Your Team
+    email: team@yourorg.com
+
+dependencies:
+  - name: postgresql
+    version: "11.9.13"
+    repository: https://charts.bitnami.com/bitnami
+    condition: postgresql.enabled
+  - name: redis
+    version: "17.3.7"
+    repository: https://charts.bitnami.com/bitnami
+    condition: redis.enabled
+
+annotations:
+  category: Workflow Engine 

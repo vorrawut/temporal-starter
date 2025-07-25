@@ -1,0 +1,119 @@
+version: '3.8'
+
+services:
+  # PostgreSQL database for Temporal
+  postgresql:
+    image: postgres:13
+    container_name: temporal-postgresql
+    environment:
+      POSTGRES_PASSWORD: temporal
+      POSTGRES_USER: temporal
+      POSTGRES_DB: temporal
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - temporal-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U temporal"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Temporal server with auto-setup
+  temporal:
+    image: temporalio/auto-setup:1.22.0
+    container_name: temporal-server
+    ports:
+      - "7233:7233"  # gRPC port
+      - "8080:8080"  # HTTP port for health checks
+    environment:
+      - DB=postgresql
+      - DB_PORT=5432
+      - POSTGRES_USER=temporal
+      - POSTGRES_PWD=temporal
+      - POSTGRES_SEEDS=postgresql
+      - DYNAMIC_CONFIG_FILE_PATH=config/dynamicconfig/development-sql.yaml
+      - ENABLE_ES=false
+      - SKIP_SCHEMA_SETUP=false
+    volumes:
+      - ./dynamicconfig:/etc/temporal/config/dynamicconfig
+    depends_on:
+      postgresql:
+        condition: service_healthy
+    networks:
+      - temporal-network
+    healthcheck:
+      test: ["CMD", "tctl", "--address", "temporal:7233", "workflow", "list"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+  # Temporal Web UI
+  temporal-web:
+    image: temporalio/web:1.15.0
+    container_name: temporal-web
+    environment:
+      - TEMPORAL_GRPC_ENDPOINT=temporal:7233
+      - TEMPORAL_PERMIT_WRITE_API=true
+    ports:
+      - "8088:8088"
+    depends_on:
+      temporal:
+        condition: service_healthy
+    networks:
+      - temporal-network
+
+  # Your Kotlin Spring Boot Temporal Worker Application
+  temporal-worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: temporal-worker-app
+    environment:
+      - TEMPORAL_FRONTEND_ADDRESS=temporal:7233
+      - TEMPORAL_NAMESPACE=default
+      - SPRING_PROFILES_ACTIVE=docker
+      - SERVER_PORT=8080
+      - LOGGING_LEVEL_ROOT=INFO
+      - LOGGING_LEVEL_IO_TEMPORAL=DEBUG
+      - TEMPORAL_WORKER_MAX_CONCURRENT_ACTIVITIES=10
+      - TEMPORAL_WORKER_MAX_CONCURRENT_WORKFLOWS=5
+    ports:
+      - "8081:8080"  # Expose on different port to avoid conflict
+    depends_on:
+      temporal:
+        condition: service_healthy
+    networks:
+      - temporal-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    restart: unless-stopped
+
+  # Redis for caching (optional, for production-like setup)
+  redis:
+    image: redis:7-alpine
+    container_name: temporal-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - temporal-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  temporal-network:
+    driver: bridge 

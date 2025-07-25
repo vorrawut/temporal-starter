@@ -1,0 +1,199 @@
+# Default values for temporal-worker.
+# This is a YAML-formatted file.
+
+# Global configuration
+global:
+  imageRegistry: ""
+  imagePullSecrets: []
+
+# Application image configuration
+image:
+  registry: docker.io
+  repository: temporal-worker
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+# Deployment configuration
+replicaCount: 3
+
+strategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxUnavailable: 1
+    maxSurge: 1
+
+# Service configuration
+service:
+  type: ClusterIP
+  port: 8080
+  targetPort: 8080
+  annotations: {}
+
+# Ingress configuration
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts:
+    - host: temporal-worker.local
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+
+# Resource configuration
+resources:
+  limits:
+    cpu: 1000m
+    memory: 1Gi
+  requests:
+    cpu: 500m
+    memory: 512Mi
+
+# Autoscaling configuration
+autoscaling:
+  enabled: false
+  minReplicas: 3
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+
+# Security configuration
+securityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  runAsGroup: 1000
+  fsGroup: 1000
+
+# Service account configuration
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+# Pod configuration
+podAnnotations:
+  prometheus.io/scrape: "true"
+  prometheus.io/port: "8080"
+  prometheus.io/path: "/actuator/prometheus"
+
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  runAsGroup: 1000
+  fsGroup: 1000
+
+# Node selection
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+# Health checks
+healthcheck:
+  enabled: true
+  livenessProbe:
+    initialDelaySeconds: 60
+    periodSeconds: 30
+    timeoutSeconds: 10
+    failureThreshold: 3
+  readinessProbe:
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 3
+  startupProbe:
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 10
+
+# Temporal configuration
+temporal:
+  frontendAddress: "temporal-service:7233"
+  namespace: "default"
+  worker:
+    taskQueue: "default-task-queue"
+    maxConcurrentActivities: 10
+    maxConcurrentWorkflows: 5
+    maxConcurrentLocalActivities: 10
+
+# Application configuration
+app:
+  profile: "kubernetes"
+  javaOpts: "-XX:+UseContainerSupport -XX:MaxRAMPercentage=75.0 -XX:+UseG1GC"
+  logging:
+    level:
+      root: INFO
+      temporal: DEBUG
+
+# External services configuration
+external:
+  database:
+    enabled: true
+    host: "postgresql"
+    port: 5432
+    name: "temporal"
+  redis:
+    enabled: true
+    host: "redis"
+    port: 6379
+
+# Secret configuration
+secrets:
+  create: true
+  data:
+    database-username: "temporal"
+    database-password: "temporal"
+    external-api-key: "your-api-key-here"
+    jwt-secret: "super-secure-jwt-signing-key"
+
+# ConfigMap configuration
+configMap:
+  create: true
+  data: {}
+
+# PostgreSQL dependency configuration
+postgresql:
+  enabled: true
+  auth:
+    postgresPassword: "temporal"
+    username: "temporal"
+    password: "temporal"
+    database: "temporal"
+  primary:
+    persistence:
+      enabled: true
+      size: 8Gi
+
+# Redis dependency configuration
+redis:
+  enabled: true
+  auth:
+    enabled: false
+  master:
+    persistence:
+      enabled: true
+      size: 2Gi
+
+# Monitoring configuration
+monitoring:
+  enabled: true
+  serviceMonitor:
+    enabled: false
+    additionalLabels: {}
+    annotations: {}
+
+# Volume configuration
+persistence:
+  enabled: true
+  storageClass: ""
+  accessMode: ReadWriteOnce
+  size: 1Gi
+  annotations: {}
+
+# Network policies
+networkPolicy:
+  enabled: false
+  policyTypes:
+    - Ingress
+    - Egress 
