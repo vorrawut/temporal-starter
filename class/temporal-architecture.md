@@ -127,8 +127,3 @@ Your mind is now prepared to tackle Temporal workflows with confidence.
 
 ---
 
-# Next Steps
-
-Continue to → **[Lesson 1: Hello Temporal]**
-
-*Now that you understand the architecture, let's start building!*

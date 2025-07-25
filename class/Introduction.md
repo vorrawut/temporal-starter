@@ -394,9 +394,3 @@ Let's build something amazing together!
 **Ready? Let's go! 🚀**
 
 ---
-
-# Next Steps
-
-Continue to → **[Lesson 1: Your First Temporal Workflow]**
-
-*Your journey to mastering Temporal starts now!*

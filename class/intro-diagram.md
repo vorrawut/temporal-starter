@@ -178,11 +178,3 @@ sequenceDiagram
 # 🎉 Ready to Build This Yourself?
 
 **You've seen the power of Temporal in action!**
-
-## Next Steps:
-1. Start with **Lesson 1: Hello Temporal**
-2. Learn the fundamentals step by step
-3. Build increasingly complex workflows
-4. Master production-ready patterns
-
-**Let's start building! 🚀** 
