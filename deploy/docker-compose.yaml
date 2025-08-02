@@ -1,5 +1,5 @@
-version: '3.8'
-
+# This is used for local development
+version: "3.5"
 services:
   # PostgreSQL database for Temporal
   postgresql:
