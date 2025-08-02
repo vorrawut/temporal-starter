@@ -23,8 +23,8 @@ interface AccountCreationActivity {
 /**
  * Result of account creation process.
  */
-data class CreationResult(
-    val success: Boolean,
-    val userId: String?,
-    val errorMessage: String?
-) 
+data class CreationResult @JsonCreator constructor(
+    @JsonProperty("success") val success: Boolean,
+    @JsonProperty("userId") val userId: String?,
+    @JsonProperty("errorMessage") val errorMessage: String?
+)

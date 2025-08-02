@@ -63,6 +63,13 @@ import javax.annotation.PostConstruct
 import javax.annotation.PreDestroy
 ```
 
+Add annotation 
+```
+@Configuration
+class TemporalConfig {
+}
+```
+
 ---
 
 # Step 3: Add Basic Properties

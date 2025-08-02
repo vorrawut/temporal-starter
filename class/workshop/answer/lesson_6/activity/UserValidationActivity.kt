@@ -23,7 +23,7 @@ interface UserValidationActivity {
 /**
  * Result of user validation process.
  */
-data class ValidationResult(
-    val isValid: Boolean,
-    val errorMessage: String?
-) 
+data class ValidationResult @JsonCreator constructor(
+    @JsonProperty("valid") val isValid: Boolean,
+    @JsonProperty("errorMessage") val errorMessage: String?
+)

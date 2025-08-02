@@ -88,9 +88,9 @@ interface UserValidationActivity {
     fun validateUser(email: String): ValidationResult
 }
 
-data class ValidationResult(
-    val isValid: Boolean,
-    val errorMessage: String?
+data class ValidationResult @JsonCreator constructor(
+    @JsonProperty("valid") val isValid: Boolean,
+    @JsonProperty("errorMessage") val errorMessage: String?
 )
 ```
 
@@ -160,10 +160,10 @@ interface AccountCreationActivity {
     fun createAccount(email: String): CreationResult
 }
 
-data class CreationResult(
-    val success: Boolean,
-    val userId: String?,
-    val errorMessage: String?
+data class CreationResult @JsonCreator constructor(
+    @JsonProperty("success") val success: Boolean,
+    @JsonProperty("userId") val userId: String?,
+    @JsonProperty("errorMessage") val errorMessage: String?
 )
 ```
 
